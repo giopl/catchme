@@ -8,6 +8,8 @@
     [creator]     NVARCHAR (30)  NOT NULL,
     [complexity]  INT            NULL,
     [due_date]    DATE           NULL,
+    [type] INT NULL, 
+    [severity] INT NULL, 
     PRIMARY KEY CLUSTERED ([task_id] ASC),
     CONSTRAINT [FK_task_project_id] FOREIGN KEY ([project_id]) REFERENCES [dbo].[project] ([project_id])
 );

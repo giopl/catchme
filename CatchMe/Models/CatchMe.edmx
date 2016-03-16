@@ -1,0 +1,586 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CatchMeDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="60" />
+          <Property Name="display_order" Type="int" />
+        </EntityType>
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="comment_id" />
+          </Key>
+          <Property Name="comment_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="task_id" Type="int" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="60" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="created_on" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="employee">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="empl_num" />
+          </Key>
+          <Property Name="user_id" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="empl_num" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="title_code" Type="char" MaxLength="3" />
+          <Property Name="fam_name" Type="varchar" MaxLength="50" />
+          <Property Name="given_name" Type="varchar" MaxLength="100" />
+          <Property Name="common_name" Type="varchar" MaxLength="50" />
+          <Property Name="gender" Type="char" MaxLength="1" />
+          <Property Name="position_code" Type="int" />
+          <Property Name="position_title" Type="varchar" MaxLength="100" />
+          <Property Name="bu_code" Type="varchar" MaxLength="12" />
+          <Property Name="bu_name" Type="varchar" MaxLength="100" />
+          <Property Name="tel_num" Type="varchar" MaxLength="50" />
+          <Property Name="is_active" Type="char" MaxLength="1" />
+          <Property Name="team" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="log">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="task_id" Type="int" Nullable="false" />
+          <Property Name="operation" Type="nvarchar" MaxLength="60" />
+          <Property Name="type" Type="nvarchar" MaxLength="60" />
+          <Property Name="logtime" Type="datetime" />
+          <Property Name="description" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="project_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" />
+          <Property Name="description" Type="nvarchar" MaxLength="300" />
+          <Property Name="is_active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="task">
+          <Key>
+            <PropertyRef Name="task_id" />
+          </Key>
+          <Property Name="task_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="int" Nullable="false" />
+          <Property Name="status" Type="int" />
+          <Property Name="test_status" Type="int" />
+          <Property Name="title" Type="nvarchar" MaxLength="500" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="creator" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="complexity" Type="int" />
+          <Property Name="due_date" Type="date" />
+          <Property Name="type" Type="int" />
+          <Property Name="severity" Type="int" />
+        </EntityType>
+        <EntityType Name="task_category">
+          <Key>
+            <PropertyRef Name="task_id" />
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="task_id" Type="int" Nullable="false" />
+          <Property Name="category_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="firstname" Type="nvarchar" MaxLength="60" />
+          <Property Name="lastname" Type="nvarchar" MaxLength="60" />
+          <Property Name="job_title" Type="nvarchar" MaxLength="60" />
+          <Property Name="team" Type="nvarchar" MaxLength="60" />
+          <Property Name="role" Type="int" Nullable="false" />
+          <Property Name="num_logins" Type="int" />
+          <Property Name="is_active" Type="bit" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="60" />
+          <Property Name="active_project" Type="int" />
+        </EntityType>
+        <Association Name="FK_comment_task_id">
+          <End Role="task" Type="Self.task" Multiplicity="1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comment_username">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_log_task_id">
+          <End Role="task" Type="Self.task" Multiplicity="1" />
+          <End Role="log" Type="Self.log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="log">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_log_username">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="log" Type="Self.log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="log">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_task_category_id">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="task_category" Type="Self.task_category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="category_id" />
+            </Principal>
+            <Dependent Role="task_category">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_task_project_id">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="task" Type="Self.task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="task">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_task_task_id">
+          <End Role="task" Type="Self.task" Multiplicity="1" />
+          <End Role="task_category" Type="Self.task_category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="task_category">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CatchMeDBModelStoreContainer">
+          <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="comment" EntityType="Self.comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="log" EntityType="Self.log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="task" EntityType="Self.task" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="task_category" EntityType="Self.task_category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="employee" EntityType="Self.employee" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [employee].[user_id] AS [user_id], 
+    [employee].[empl_num] AS [empl_num], 
+    [employee].[title_code] AS [title_code], 
+    [employee].[fam_name] AS [fam_name], 
+    [employee].[given_name] AS [given_name], 
+    [employee].[common_name] AS [common_name], 
+    [employee].[gender] AS [gender], 
+    [employee].[position_code] AS [position_code], 
+    [employee].[position_title] AS [position_title], 
+    [employee].[bu_code] AS [bu_code], 
+    [employee].[bu_name] AS [bu_name], 
+    [employee].[tel_num] AS [tel_num], 
+    [employee].[is_active] AS [is_active], 
+    [employee].[team] AS [team]
+    FROM [dbo].[employee] AS [employee]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_comment_task_id" Association="Self.FK_comment_task_id">
+            <End Role="task" EntitySet="task" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comment_username" Association="Self.FK_comment_username">
+            <End Role="user" EntitySet="user" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_log_task_id" Association="Self.FK_log_task_id">
+            <End Role="task" EntitySet="task" />
+            <End Role="log" EntitySet="log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_log_username" Association="Self.FK_log_username">
+            <End Role="user" EntitySet="user" />
+            <End Role="log" EntitySet="log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_task_category_id" Association="Self.FK_task_category_id">
+            <End Role="category" EntitySet="category" />
+            <End Role="task_category" EntitySet="task_category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_task_project_id" Association="Self.FK_task_project_id">
+            <End Role="project" EntitySet="project" />
+            <End Role="task" EntitySet="task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_task_task_id" Association="Self.FK_task_task_id">
+            <End Role="task" EntitySet="task" />
+            <End Role="task_category" EntitySet="task_category" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CatchMeDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="category_id" />
+          </Key>
+          <Property Name="category_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="display_order" Type="Int32" />
+          <NavigationProperty Name="tasks" Relationship="CatchMeDBModel.task_category" FromRole="category" ToRole="task" />
+        </EntityType>
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="comment_id" />
+          </Key>
+          <Property Name="comment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="created_on" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="user" Relationship="Self.FK_comment_username" FromRole="comment" ToRole="user" />
+          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="comment" ToRole="task" />
+        </EntityType>
+        <EntityType Name="log">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="operation" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="logtime" Type="DateTime" Precision="3" />
+          <Property Name="description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="user" Relationship="Self.FK_log_username" FromRole="log" ToRole="user" />
+          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_log_task_id" FromRole="log" ToRole="task" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="project_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tasks" Relationship="CatchMeDBModel.FK_task_project_id" FromRole="project" ToRole="task" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="firstname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="lastname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="job_title" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="team" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="role" Type="Int32" Nullable="false" />
+          <Property Name="num_logins" Type="Int32" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="active_project" Type="Int32" />
+          <NavigationProperty Name="comments" Relationship="Self.FK_comment_username" FromRole="user" ToRole="comment" />
+          <NavigationProperty Name="logs" Relationship="Self.FK_log_username" FromRole="user" ToRole="log" />
+        </EntityType>
+        <EntityType Name="employee">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="empl_num" />
+          </Key>
+          <Property Name="user_id" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="empl_num" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="title_code" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="fam_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="given_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="common_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="position_code" Type="Int32" />
+          <Property Name="position_title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="bu_code" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="bu_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="tel_num" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="is_active" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="team" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_comment_username">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_log_username">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="log" Type="Self.log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="log">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CatchMeDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="categories" EntityType="Self.category" />
+          <EntitySet Name="comments" EntityType="Self.comment" />
+          <EntitySet Name="logs" EntityType="Self.log" />
+          <EntitySet Name="projects" EntityType="Self.project" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <EntitySet Name="employees" EntityType="Self.employee" />
+          <AssociationSet Name="FK_comment_username" Association="Self.FK_comment_username">
+            <End Role="user" EntitySet="users" />
+            <End Role="comment" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_log_username" Association="Self.FK_log_username">
+            <End Role="user" EntitySet="users" />
+            <End Role="log" EntitySet="logs" />
+          </AssociationSet>
+          <EntitySet Name="tasks" EntityType="CatchMeDBModel.task" />
+          <AssociationSet Name="FK_comment_task_id" Association="CatchMeDBModel.FK_comment_task_id">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="comment" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_log_task_id" Association="CatchMeDBModel.FK_log_task_id">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="log" EntitySet="logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_task_project_id" Association="CatchMeDBModel.FK_task_project_id">
+            <End Role="project" EntitySet="projects" />
+            <End Role="task" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="task_category" Association="CatchMeDBModel.task_category">
+            <End Role="category" EntitySet="categories" />
+            <End Role="task" EntitySet="tasks" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="task">
+          <Key>
+            <PropertyRef Name="task_id" />
+          </Key>
+          <Property Name="task_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="test_status" Type="Int32" />
+          <Property Name="title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="creator" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="complexity" Type="Int32" />
+          <Property Name="due_date" Type="DateTime" Precision="0" />
+          <Property Name="type" Type="Int32" />
+          <Property Name="severity" Type="Int32" />
+          <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="task" ToRole="comment" />
+          <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_task_id" FromRole="task" ToRole="log" />
+          <NavigationProperty Name="project" Relationship="CatchMeDBModel.FK_task_project_id" FromRole="task" ToRole="project" />
+          <NavigationProperty Name="categories" Relationship="CatchMeDBModel.task_category" FromRole="task" ToRole="category" />
+        </EntityType>
+        <Association Name="FK_comment_task_id">
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
+          <End Type="CatchMeDBModel.comment" Role="comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_log_task_id">
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
+          <End Type="CatchMeDBModel.log" Role="log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="log">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_task_project_id">
+          <End Type="CatchMeDBModel.project" Role="project" Multiplicity="1" />
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="task">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="task_category">
+          <End Type="CatchMeDBModel.category" Role="category" Multiplicity="*" />
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CatchMeDBModelStoreContainer" CdmEntityContainer="CatchMeDBEntities">
+          <EntitySetMapping Name="categories">
+            <EntityTypeMapping TypeName="CatchMeDBModel.category">
+              <MappingFragment StoreEntitySet="category">
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="display_order" ColumnName="display_order" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="comments">
+            <EntityTypeMapping TypeName="CatchMeDBModel.comment">
+              <MappingFragment StoreEntitySet="comment">
+                <ScalarProperty Name="comment_id" ColumnName="comment_id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="created_on" ColumnName="created_on" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="logs">
+            <EntityTypeMapping TypeName="CatchMeDBModel.log">
+              <MappingFragment StoreEntitySet="log">
+                <ScalarProperty Name="log_id" ColumnName="log_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="operation" ColumnName="operation" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="logtime" ColumnName="logtime" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="projects">
+            <EntityTypeMapping TypeName="CatchMeDBModel.project">
+              <MappingFragment StoreEntitySet="project">
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="CatchMeDBModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="job_title" ColumnName="job_title" />
+                <ScalarProperty Name="team" ColumnName="team" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="num_logins" ColumnName="num_logins" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="active_project" ColumnName="active_project" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employees">
+            <EntityTypeMapping TypeName="CatchMeDBModel.employee">
+              <MappingFragment StoreEntitySet="employee">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="empl_num" ColumnName="empl_num" />
+                <ScalarProperty Name="title_code" ColumnName="title_code" />
+                <ScalarProperty Name="fam_name" ColumnName="fam_name" />
+                <ScalarProperty Name="given_name" ColumnName="given_name" />
+                <ScalarProperty Name="common_name" ColumnName="common_name" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="position_code" ColumnName="position_code" />
+                <ScalarProperty Name="position_title" ColumnName="position_title" />
+                <ScalarProperty Name="bu_code" ColumnName="bu_code" />
+                <ScalarProperty Name="bu_name" ColumnName="bu_name" />
+                <ScalarProperty Name="tel_num" ColumnName="tel_num" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="team" ColumnName="team" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tasks">
+            <EntityTypeMapping TypeName="CatchMeDBModel.task">
+              <MappingFragment StoreEntitySet="task">
+                <ScalarProperty Name="severity" ColumnName="severity" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="due_date" ColumnName="due_date" />
+                <ScalarProperty Name="complexity" ColumnName="complexity" />
+                <ScalarProperty Name="creator" ColumnName="creator" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="test_status" ColumnName="test_status" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="task_category" TypeName="CatchMeDBModel.task_category" StoreEntitySet="task_category">
+            <EndProperty Name="task">
+              <ScalarProperty Name="task_id" ColumnName="task_id" />
+            </EndProperty>
+            <EndProperty Name="category">
+              <ScalarProperty Name="category_id" ColumnName="category_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

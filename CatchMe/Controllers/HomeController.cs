@@ -8,9 +8,14 @@ namespace CatchMe.Controllers
 {
     public class HomeController : Controller
     {
+
+        log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public ActionResult Index()
         {
-            return View();
+            log.Debug("Hello World");
+            
+            //return View();
+            return RedirectToAction("Index","Tasks");
         }
 
         public ActionResult About()

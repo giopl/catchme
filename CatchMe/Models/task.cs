@@ -30,6 +30,8 @@ namespace CatchMe.Models
         public string creator { get; set; }
         public Nullable<int> complexity { get; set; }
         public Nullable<System.DateTime> due_date { get; set; }
+        public Nullable<int> type { get; set; }
+        public Nullable<int> severity { get; set; }
     
         public virtual ICollection<comment> comments { get; set; }
         public virtual ICollection<log> logs { get; set; }

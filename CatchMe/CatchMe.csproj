@@ -47,10 +47,14 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -121,75 +125,107 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\TasksController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\CatchMeEntities.Context.cs">
+    <Compile Include="Helpers\AppEnums.cs" />
+    <Compile Include="Helpers\CacheHelper.cs" />
+    <Compile Include="Helpers\ConfigurationHelper.cs" />
+    <Compile Include="Helpers\EmailHelper.cs" />
+    <Compile Include="Helpers\SelectItems.cs" />
+    <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="Helpers\UserSession.cs" />
+    <Compile Include="Models\CatchMe.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CatchMeEntities.Context.tt</DependentUpon>
+      <DependentUpon>CatchMe.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CatchMeEntities.cs">
+    <Compile Include="Models\CatchMe.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CatchMeEntities.tt</DependentUpon>
+      <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CatchMeEntities.Designer.cs">
+    <Compile Include="Models\CatchMe.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CatchMeEntities.edmx</DependentUpon>
+      <DependentUpon>CatchMe.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\category.cs">
-      <DependentUpon>CatchMeEntities.tt</DependentUpon>
+      <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\comment.cs">
-      <DependentUpon>CatchMeEntities.tt</DependentUpon>
+      <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\employee.cs">
-      <DependentUpon>CatchMeEntities.tt</DependentUpon>
+      <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\log.cs">
-      <DependentUpon>CatchMeEntities.tt</DependentUpon>
+      <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\project.cs">
-      <DependentUpon>CatchMeEntities.tt</DependentUpon>
+      <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\task.cs">
-      <DependentUpon>CatchMeEntities.tt</DependentUpon>
+      <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs">
-      <DependentUpon>CatchMeEntities.tt</DependentUpon>
+      <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\bug.png" />
+    <Content Include="Images\butterfly-catching.jpg" />
+    <Content Include="notes\catchme_create.sql" />
+    <Content Include="notes\catchme_data.sql" />
+    <EntityDeploy Include="Models\CatchMe.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CatchMe.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\CatchMe.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CatchMe.edmx</DependentUpon>
+      <LastGenOutput>CatchMe.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\CatchMe.edmx.diagram">
+      <DependentUpon>CatchMe.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\CatchMe.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CatchMe.edmx</DependentUpon>
+      <LastGenOutput>CatchMe.cs</LastGenOutput>
+    </Content>
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\CatchMeEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CatchMeEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\CatchMeEntities.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CatchMeEntities.edmx</DependentUpon>
-      <LastGenOutput>CatchMeEntities.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\CatchMeEntities.edmx.diagram">
-      <DependentUpon>CatchMeEntities.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\CatchMeEntities.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CatchMeEntities.edmx</DependentUpon>
-      <LastGenOutput>CatchMeEntities.cs</LastGenOutput>
-    </Content>
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\bootstrap3-typeahead.js" />
+    <Content Include="Scripts\bootstrap3-typeahead.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -216,15 +252,33 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Admin\CreateProject.cshtml" />
+    <Content Include="Views\Admin\DeleteProject.cshtml" />
+    <Content Include="Views\Admin\Details.cshtml" />
+    <Content Include="Views\Admin\EditProject.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Users\Create.cshtml" />
+    <Content Include="Views\Users\Delete.cshtml" />
+    <Content Include="Views\Users\Details.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Tasks\Create.cshtml" />
+    <Content Include="Views\Tasks\Delete.cshtml" />
+    <Content Include="Views\Tasks\Details.cshtml" />
+    <Content Include="Views\Tasks\Edit.cshtml" />
+    <Content Include="Views\Tasks\Index.cshtml" />
+    <Content Include="Views\Categories\Create.cshtml" />
+    <Content Include="Views\Categories\Delete.cshtml" />
+    <Content Include="Views\Categories\Details.cshtml" />
+    <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Admin\AddUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\Meta\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>

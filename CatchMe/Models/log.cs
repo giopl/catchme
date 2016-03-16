@@ -22,7 +22,7 @@ namespace CatchMe.Models
         public Nullable<System.DateTime> logtime { get; set; }
         public string description { get; set; }
     
-        public virtual task task { get; set; }
         public virtual user user { get; set; }
+        public virtual task task { get; set; }
     }
 }
