@@ -193,7 +193,6 @@
     <Content Include="Images\bug.png" />
     <Content Include="Images\butterfly-catching.jpg" />
     <Content Include="notes\catchme_create.sql" />
-    <Content Include="notes\catchme_data.sql" />
     <EntityDeploy Include="Models\CatchMe.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>CatchMe.Designer.cs</LastGenOutput>
