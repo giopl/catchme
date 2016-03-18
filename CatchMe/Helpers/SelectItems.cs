@@ -99,6 +99,18 @@ namespace CatchMe.Helpers
 
 
 
+        public static List<SelectListItem> RoleItemList(string selected = "")
+        {
+            List<SelectListItem> List = new List<SelectListItem>();
+            List.Add(new SelectListItem() { Text = "Business", Value = "0", Selected = selected == "0" });
+            List.Add(new SelectListItem() { Text = "Developer", Value = "1", Selected = selected == "1" });
+            List.Add(new SelectListItem() { Text = "Admin", Value = "2", Selected = selected == "2" });
+            
+
+            return List;
+        }
+
+
 
     }
 

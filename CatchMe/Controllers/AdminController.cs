@@ -18,8 +18,18 @@ namespace CatchMe.Controllers
         // GET: Projects
         public ActionResult Index()
         {
+
+            var users = db.users.ToList();
+
+            ViewBag.Users = users;
+
             return View(db.projects.ToList());
+
+
         }
+
+
+        
 
 
         public ActionResult AddUser(string user)
@@ -133,11 +143,25 @@ namespace CatchMe.Controllers
 
 
 
+
+
         [HttpPost]
-        public ActionResult AddUser(user user)
+        [ValidateAntiForgeryToken]
+        public ActionResult AddUser([Bind(Include = "username,firstname,lastname,job_title,team, role,email,active_project")] user user)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                user.is_active = true;
+                db.users.Add(user);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+            return View(user);
         }
+
+
+        
 
 
 

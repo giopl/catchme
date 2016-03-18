@@ -2,44 +2,131 @@
 
 @{
     ViewBag.Title = "Index";
+
+    var users = ViewBag.Users as List<CatchMe.Models.user>;
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.is_active)
-        </th>
-        <th></th>
-    </tr>
+<style>
+    .bigger {
+    font-size:1.2em;
+    }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.is_active)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.project_id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.project_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.project_id })
-        </td>
-    </tr>
-}
+    .grey  {
+    
+    background: #DDDDDD;
+    }
+</style>
+<br /><br />
+<div class="container">
 
-</table>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs bigger " role="tablist">
+        <li role="presentation" class="active"><a href="#projects" aria-controls="projects" role="tab" data-toggle="tab">Projects</a></li>
+        <li role="presentation"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">Users</a></li>
+        </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="projects">
+
+
+
+            <br />
+            <p>
+                <a href="@Url.Action("CreateProject", "Admin")" class="btn btn-primary btn-sm"><span class="fa fa-plus-circle"></span> Add Project</a>
+            </p>
+            <table class="table">
+                <tr class="grey">
+                    <th>
+                        @Html.DisplayNameFor(model => model.name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.description)
+                    </th>
+                    <th>
+                        Delete
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.description)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("DeleteProject","Admin")">[Delete]</a>
+                        </td>
+                        
+                    </tr>
+                }
+
+            </table>
+  
+        
+        </div>
+        <div role="tabpanel" class="tab-pane" id="users">
+
+            <br/>
+            <p>
+                <a href="@Url.Action("AddUser", "Admin")" class="btn btn-primary btn-sm"><span class="fa fa-user-plus"></span>&nbsp;Add User</a>
+            </p>
+
+
+            <table class="table">
+                <tr class="grey">
+                    <th>
+                        Username
+                    </th>
+                    <th>
+                        Fullname
+                    </th>
+                    <th>
+                        Title
+                    </th>
+
+                    <th>
+                        Team
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in users)
+                {
+                    <tr>
+                        <td>
+                            
+                            @item.username
+                        </td>
+                        <td>
+                            @item.fullname
+                        </td>
+
+                        <td>
+                            @item.job_title
+                        </td>
+                        <td>
+                            @item.team
+                        </td>
+                        
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.user_id}) |
+                            @Html.ActionLink("Details", "Details", new { id = item.user_id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.user_id })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+
+        </div>
+        
+    </div>
+
+</div>
