@@ -15,14 +15,14 @@ namespace CatchMe.Models
     public partial class log
     {
         public int log_id { get; set; }
-        public string username { get; set; }
+        public int user_id { get; set; }
         public int task_id { get; set; }
         public string operation { get; set; }
         public string type { get; set; }
         public Nullable<System.DateTime> logtime { get; set; }
         public string description { get; set; }
     
-        public virtual user user { get; set; }
         public virtual task task { get; set; }
+        public virtual user user { get; set; }
     }
 }

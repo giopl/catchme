@@ -12,14 +12,11 @@ namespace CatchMe.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class comment
+    public partial class task_user
     {
-        public int comment_id { get; set; }
-        public int task_id { get; set; }
         public int user_id { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public Nullable<System.DateTime> created_on { get; set; }
+        public int task_id { get; set; }
+        public Nullable<int> role { get; set; }
     
         public virtual task task { get; set; }
         public virtual user user { get; set; }

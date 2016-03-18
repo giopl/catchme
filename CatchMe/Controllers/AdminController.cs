@@ -22,36 +22,112 @@ namespace CatchMe.Controllers
         }
 
 
-        public ActionResult AddUser()
+        public ActionResult AddUser(string user)
         {
+
+
+            if (string.IsNullOrWhiteSpace(user))
+            {
+
+                return RedirectToAction("FindUser");
+            }
+
+            employee emp = db.employees.Where(x=>x.user_id == user).FirstOrDefault();
+
+
+            var founduser = new user
+            {
+                firstname = emp.common_name,
+                lastname = emp.fam_name,
+                username = emp.user_id,
+                email = string.Format("{0}@local.mcb", emp.user_id),
+                job_title = emp.position_title,
+                team = emp.team
+            };
+
+
+            
+
+            ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+
+
+            return View(founduser);
+        }
+
+
+        public ActionResult FindUser()
+        {
+
             return View();
         }
 
 
-        public ContentResult FindUser(string q)
+        [HttpPost]
+        public ActionResult FindUser(user addeduser)
         {
-            ContentResult result = new ContentResult();
 
-            var users = db.employees.Where(x => x.user_id.StartsWith(q)).ToList();
+            
+            var isUserExist = db.users.Where(x => x.username == addeduser.username).FirstOrDefault();
 
-
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("[");
-            foreach (var u in users)
+            if (isUserExist != null)
             {
-                sb.AppendFormat(@"""{0} - {1}"",", u.user_id, string.Concat(u.given_name," ", u.fam_name) );
+                ViewBag.Error = "User Exists";
+                return View();
+            }
+
+
+            var employee =db.employees.Where(x => x.user_id == addeduser.username );
+            if (employee != null )
+            {
+
+                return RedirectToAction("AddUser", new { user = addeduser.username });
 
             }
 
-            sb.Length--;
-            sb.Append("]");
-
-            result.Content = sb.ToString();
-
-            return result;
+            ViewBag.Error = "User Not Found";
+            return View();
 
         }
+
+
+
+        //public ActionResult FindUser(string q)
+        //{
+        //    ContentResult result = new ContentResult();
+
+        //    var users = db.employees.Where(x => x.user_id.StartsWith(q)).ToList();
+
+
+        //    var userlist = new List<string>();
+
+
+        //    StringBuilder sb = new StringBuilder();
+        //    sb.Append("[");
+        //    foreach (var u in users)
+        //    {
+
+        //        var fullname = string.Concat(u.user_id, "- ", u.common_name, " ", u.fam_name.Replace("'", ""));
+
+        //        userlist.Add(fullname);
+        //        sb.AppendFormat(@"'{0} - {1}',", u.user_id, fullname );
+
+        //    }
+
+        //    sb.Length--;
+        //    sb.Append("]");
+
+        //   // result.Content = @"['Amsterdam','Washington', 'Sydney', 'Beijing', 'Cairo']";
+
+
+
+        //    //return Json(userlist, JsonRequestBehavior.AllowGet);
+ 
+            
+        //    result.Content = sb.ToString();
+
+        //    return result;
+
+        //}
 
 
 

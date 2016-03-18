@@ -17,9 +17,11 @@ namespace CatchMe.Models
         public user()
         {
             this.comments = new HashSet<comment>();
+            this.task_user = new HashSet<task_user>();
             this.logs = new HashSet<log>();
         }
     
+        public int user_id { get; set; }
         public string username { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
@@ -32,6 +34,8 @@ namespace CatchMe.Models
         public Nullable<int> active_project { get; set; }
     
         public virtual ICollection<comment> comments { get; set; }
+        public virtual project project { get; set; }
+        public virtual ICollection<task_user> task_user { get; set; }
         public virtual ICollection<log> logs { get; set; }
     }
 }
