@@ -34,18 +34,26 @@ namespace CatchMe.Controllers
                 UserSession.Current.IsValid = true;
                 UserSession.Current.Role = founduser.role;
                 UserSession.Current.Username = founduser.username;
+                UserSession.Current.UserId = founduser.user_id;
+
                 UserSession.Current.Fullname = founduser.fullname;
                 UserSession.Current.Firstname = founduser.firstname;
             }
             else {
 
                 UserSession.Current.Firstname = _user;
-
+                return RedirectToAction("NoAccess");
+                
             }
 
             //return View();
             return RedirectToAction("Index","Tasks");
         }
 
+
+        public ActionResult NoAccess()
+        {
+            return View();
+        }
     }
 }

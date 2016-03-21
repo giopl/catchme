@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CatchMe.Models;
+using CatchMe.Helpers;
 
 namespace CatchMe.Controllers
 {
@@ -17,9 +18,55 @@ namespace CatchMe.Controllers
         // GET: Tasks
         public ActionResult Index()
         {
-            var tasks = db.tasks.Include(t => t.project);
-            return View(tasks.ToList());
+
+            var user_id = UserSession.Current.UserId;
+
+            var user = db.users.Find(user_id);
+
+            var active_project = user.active_project.HasValue?  user.active_project.Value : 0;
+
+            var projects = db.projectUsers.Where(x => x.user_id == user_id).ToList();
+
+            if (!user.active_project.HasValue)
+            {
+                if (projects.Count > 0)
+                {
+                    active_project = projects.FirstOrDefault().project_id;
+                    SetActiveProject(active_project);
+                }
+                else 
+                {
+
+                    return RedirectToAction("NoProject");
+                }
+            }
+
+
+            var tasks = db.tasks.Include(t => t.project).Where(p=>p.project_id == active_project).ToList();
+            return View(tasks);
         }
+
+
+        public ActionResult NoProject()
+        {
+            return View();
+        }
+
+        private void SetActiveProject(int projectId)
+        {
+            var user = db.users.Find(UserSession.Current.UserId);
+
+            user.active_project = projectId;
+            
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                
+            
+            
+
+
+        }
+
 
         // GET: Tasks/Details/5
         public ActionResult Details(int? id)

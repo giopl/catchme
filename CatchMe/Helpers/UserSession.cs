@@ -19,7 +19,8 @@ namespace CatchMe.Helpers
             ReadOnlyMode = false;
             UserId = 0;
             Role = 0;
-
+            CurrentProject = string.Empty;
+            CurrentProjectId = 0;
         }
 
 
@@ -54,11 +55,13 @@ namespace CatchMe.Helpers
         public string Username { get; set; }
         public string Fullname { get; set; }
         public string Firstname { get; set; }
+        public string CurrentProject { get; set; }
         
         public string UserImage { get; set; }
 
 
         public int Role { get; set; }
+        public int CurrentProjectId { get; set; }
 
         /// <summary>
         /// Clears the current session.
