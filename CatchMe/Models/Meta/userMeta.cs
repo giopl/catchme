@@ -34,7 +34,7 @@ namespace CatchMe.Models
 
         public virtual ICollection<comment> comments { get; set; }
         public virtual project project { get; set; }
-        public virtual ICollection<task_user> task_user { get; set; }
+        public virtual ICollection<taskUser> task_user { get; set; }
         public virtual ICollection<log> logs { get; set; }
 
 
@@ -50,6 +50,29 @@ namespace CatchMe.Models
             {
                 return string.Concat(firstname, " ", lastname);
             }
+        }
+
+
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            var t = obj as user;
+            if (t == null)
+                return false;
+            if (user_id == t.user_id)
+                return true;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash += (hash * 43) + user_id.GetHashCode();
+
+            return hash;
+
         }
 
     

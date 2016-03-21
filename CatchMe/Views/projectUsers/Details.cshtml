@@ -1,0 +1,42 @@
+﻿@model CatchMe.Models.projectUser
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>projectUser</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.role)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.role)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.project.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.project.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.user.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.user.username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

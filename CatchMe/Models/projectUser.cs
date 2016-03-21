@@ -12,22 +12,13 @@ namespace CatchMe.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class project
+    public partial class projectUser
     {
-        public project()
-        {
-            this.tasks = new HashSet<task>();
-            this.project_user = new HashSet<projectUser>();
-            this.users = new HashSet<user>();
-        }
-    
+        public int user_id { get; set; }
         public int project_id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public bool is_active { get; set; }
+        public Nullable<int> role { get; set; }
     
-        public virtual ICollection<task> tasks { get; set; }
-        public virtual ICollection<projectUser> project_user { get; set; }
-        public virtual ICollection<user> users { get; set; }
+        public virtual project project { get; set; }
+        public virtual user user { get; set; }
     }
 }

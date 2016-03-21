@@ -125,9 +125,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\projectUsersController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -167,14 +169,19 @@
     <Compile Include="Models\log.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Meta\projectMeta.cs" />
+    <Compile Include="Models\Meta\taskMeta.cs" />
     <Compile Include="Models\Meta\userMeta.cs" />
     <Compile Include="Models\project.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\projectUser.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\task.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\task_user.cs">
+    <Compile Include="Models\taskUser.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs">
@@ -189,6 +196,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\select2.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -241,6 +249,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\select2.full.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -261,7 +270,7 @@
     <Content Include="Views\Admin\DeleteProject.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
     <Content Include="Views\Admin\EditProject.cshtml" />
-    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\ListProjects.cshtml" />
     <Content Include="Views\Tasks\Create.cshtml" />
     <Content Include="Views\Tasks\Delete.cshtml" />
     <Content Include="Views\Tasks\Details.cshtml" />
@@ -279,9 +288,17 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\projectUsers\Create.cshtml" />
+    <Content Include="Views\projectUsers\Delete.cshtml" />
+    <Content Include="Views\projectUsers\Details.cshtml" />
+    <Content Include="Views\projectUsers\Edit.cshtml" />
+    <Content Include="Views\projectUsers\Index.cshtml" />
+    <Content Include="Views\Admin\ListUsers.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

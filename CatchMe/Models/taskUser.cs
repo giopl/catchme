@@ -12,7 +12,7 @@ namespace CatchMe.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class task_user
+    public partial class taskUser
     {
         public int user_id { get; set; }
         public int task_id { get; set; }

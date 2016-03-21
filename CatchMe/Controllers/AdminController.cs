@@ -19,6 +19,14 @@ namespace CatchMe.Controllers
         public ActionResult Index()
         {
 
+
+            return RedirectToAction("ListProjects");
+
+
+        }
+        public ActionResult ListProjects()
+        {
+
             var users = db.users.ToList();
 
             ViewBag.Users = users;
@@ -27,7 +35,10 @@ namespace CatchMe.Controllers
 
 
         }
-
+        public ActionResult ListUsers()
+        {
+            return View(db.users.ToList());
+        }
 
         
 
@@ -65,6 +76,40 @@ namespace CatchMe.Controllers
         }
 
 
+
+        // GET: Users/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            user user = db.users.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        // POST: Users/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "username,firstname,lastname,job_title,team,role,num_logins,is_active,email,active_project")] user user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(user);
+        }
+
+
+
         public ActionResult FindUser()
         {
 
@@ -86,8 +131,8 @@ namespace CatchMe.Controllers
             }
 
 
-            var employee =db.employees.Where(x => x.user_id == addeduser.username );
-            if (employee != null )
+            var employee = db.employees.Where(x => x.user_id == addeduser.username).ToList() ;
+            if (employee != null && employee.Count == 1 )
             {
 
                 return RedirectToAction("AddUser", new { user = addeduser.username });
@@ -151,6 +196,8 @@ namespace CatchMe.Controllers
         {
             if (ModelState.IsValid)
             {
+                
+
                 user.is_active = true;
                 db.users.Add(user);
                 db.SaveChanges();
@@ -195,10 +242,12 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateProject([Bind(Include = "project_id,name,description,is_active")] project project)
+        public ActionResult CreateProject([Bind(Include = "project_id,name,description")] project project)
         {
+            
             if (ModelState.IsValid)
             {
+                project.is_active = true;
                 db.projects.Add(project);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -208,19 +257,79 @@ namespace CatchMe.Controllers
         }
 
         // GET: Projects/Edit/5
-        public ActionResult EditProject(int? id)
+        public ActionResult EditProject(int? id, int tab=1)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             project project = db.projects.Find(id);
+
+
+            var pu=  project.project_user.ToList();
+
+            ViewBag.Tab = tab;
+
+            IList<user> project_users = new List<user>();
+
+            foreach (var usr in pu)
+            {
+                user u = new user { user_id = usr.user_id };
+                project_users.Add(u);
+                
+            }
+
+            var user_id = db.users.ToList();
+
+
+            //remove existing users from list
+            user_id = user_id.Except(project_users).ToList();
+
+            ViewBag.user_id = new SelectList(user_id, "user_id", "fullname");
+
+
+
             if (project == null)
             {
                 return HttpNotFound();
             }
             return View(project);
         }
+
+
+        // POST: projectUsers/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddUserToProject([Bind(Include = "user_id,project_id")] projectUser projectUser)
+        {
+            if (ModelState.IsValid)
+            {
+                db.projectUsers.Add(projectUser);
+                db.SaveChanges();
+                return RedirectToAction("EditProject", new { id = projectUser.project_id, tab = 2 });
+            }
+
+            ViewBag.project_id = new SelectList(db.projects, "project_id", "name", projectUser.project_id);
+            ViewBag.user_id = new SelectList(db.users, "user_id", "username", projectUser.user_id);
+            return View(projectUser);
+        }
+
+
+        // POST: projectUsers/Delete/5
+        
+
+        public ActionResult RemoveUserFromProject(int project_id, int user_id)
+        {
+            projectUser projectUser = db.projectUsers.Where(x=>x.project_id == project_id && x.user_id == user_id).FirstOrDefault();
+            db.projectUsers.Remove(projectUser);
+            db.SaveChanges();
+            return RedirectToAction("EditProject" ,new { id = project_id, tab =2 });
+        }
+
+
+
 
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -233,7 +342,7 @@ namespace CatchMe.Controllers
             {
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("ListProjects");
             }
             return View(project);
         }

@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [dbo].[user] (
+    [user_id]        INT           IDENTITY (100, 1) NOT NULL,
     [username]       NVARCHAR (30) NOT NULL,
     [firstname]      NVARCHAR (60) NULL,
     [lastname]       NVARCHAR (60) NULL,
@@ -9,6 +10,9 @@
     [is_active]      BIT           DEFAULT ((1)) NOT NULL,
     [email]          NVARCHAR (60) NULL,
     [active_project] INT           NULL,
-    PRIMARY KEY CLUSTERED ([username] ASC)
+    PRIMARY KEY CLUSTERED ([user_id] ASC),
+    CONSTRAINT [FK_user_project_id] FOREIGN KEY ([active_project]) REFERENCES [dbo].[project] ([project_id])
 );
+
+
 

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+@using session = CatchMe.Helpers.UserSession
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -22,12 +24,12 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     
-                    <li><a href="@Url.Action("Index","Tasks")" title="create task"><span class="fa fa-home"></span> </a></li>
-                    <li><a href="@Url.Action("Create","Tasks")" title="create task"><span class="fa fa-plus-circle"></span> </a></li>
-                    <li><a href="@Url.Action("Index","Projects")" title="create task"><span class="fa fa-wifi"></span> </a></li>
+                    <li><a href="@Url.Action("Index","Tasks")" title="Home"><span class="fa fa-home"></span> </a></li>
+                    <li><a href="@Url.Action("Create","Tasks")" title="create task"><span class="fa fa-tasks"></span> </a></li>
+                    <li><a href="@Url.Action("Index","Admin")" title="Admin"><span class="fa fa-wrench"></span> </a></li>
                     
                 </ul>
-                <p class="nav navbar-text navbar-right">Hello, @User.Identity.Name!</p>
+                <p class="nav navbar-text navbar-right">Hello, @session.Current.Firstname!</p>
             </div>
         </div>
     </div>

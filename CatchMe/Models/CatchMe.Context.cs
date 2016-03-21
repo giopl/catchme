@@ -26,12 +26,13 @@ namespace CatchMe.Models
         }
     
         public virtual DbSet<category> categories { get; set; }
-        public virtual DbSet<comment> comments { get; set; }
         public virtual DbSet<project> projects { get; set; }
         public virtual DbSet<task> tasks { get; set; }
-        public virtual DbSet<task_user> task_user { get; set; }
+        public virtual DbSet<taskUser> taskUsers { get; set; }
         public virtual DbSet<employee> employees { get; set; }
-        public virtual DbSet<log> logs { get; set; }
+        public virtual DbSet<comment> comments { get; set; }
+        public virtual DbSet<projectUser> projectUsers { get; set; }
         public virtual DbSet<user> users { get; set; }
+        public virtual DbSet<log> logs { get; set; }
     }
 }

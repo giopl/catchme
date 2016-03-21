@@ -2,59 +2,153 @@
 
 @{
     ViewBag.Title = "Edit";
+
+    var tab = ViewBag.Tab ;
 }
 
-<h2>Edit</h2>
+<h2>Edit @Model.name</h2>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs bigger " role="tablist">
+        <li role="presentation" class="@(tab==1?"active":"")"><a href="#project" aria-controls="project" role="tab" data-toggle="tab">Project Details</a></li>
+        <li role="presentation" class="@(tab==2?"active":"")"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">Project Users</a></li>
+    </ul>
 
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>project</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.project_id)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane @(tab==1?"active":"")" id="project">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.is_active, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.is_active)
-                    @Html.ValidationMessageFor(model => model.is_active, "", new { @class = "text-danger" })
+                <div class="form-horizontal">
+                    <h4>project</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.project_id)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.is_active, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                @Html.EditorFor(model => model.is_active)
+                                @Html.ValidationMessageFor(model => model.is_active, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
+        <div role="tabpanel" class="tab-pane @(tab==2?"active":"")" id="users">
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+            <br /><br />
+            @using (Html.BeginForm("AddUserToProject", "Admin", FormMethod.Post, new { @class = "form-inline" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="project_id" value="@Model.project_id" />
+                <div class="form-group">
+                    <label for="user">User</label>
+                    @Html.DropDownList("user_id", null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.is_active, "", new { @class = "text-danger" })
+
+
+                </div>
+
+                <input type="submit" class="btn btn-default" value="Add User" />
+            }
+
+            @*@using (Html.BeginForm("AddUserToProject","Admin",FormMethod.Post))
+            {
+                <div class="form-horizontal">
+
+
+                <div class="form-group">
+                    <label class="control-label">Add User</label>
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.DropDownList("user_id", null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.is_active, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                 <div class="form-group">
+                     <div class="col-md-offset-2 col-md-10">
+                         <input type="submit" value="Save" class="btn btn-default" />
+                     </div>
+                 </div>
+                </div>
+                }*@
+
+
+
+
+
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Username
+                        </th>
+
+                        <th>
+                            Fullname
+                        </th>
+                        <th>
+                            Role
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.project_user)
+                    {
+                        <tr>
+                            <td>@user.user.username</td>
+                            <td>@user.user.fullname</td>
+                            <td>@user.user.role</td>
+                            <td><a href="@Url.Action("RemoveUserFromProject", new  { project_id = Model.project_id, user_id = user.user_id })" onclick="return confirm('Are you sure?')">Remove</a></td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
 </div>
+        
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+
+        
+
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+            }

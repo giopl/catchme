@@ -15,8 +15,10 @@ namespace CatchMe.Helpers
             IsValid = false;
             Username = string.Empty;
             Fullname = string.Empty;
+            Firstname = string.Empty;
             ReadOnlyMode = false;
             UserId = 0;
+            Role = 0;
 
         }
 
@@ -51,9 +53,12 @@ namespace CatchMe.Helpers
         public int UserId { get; set; }
         public string Username { get; set; }
         public string Fullname { get; set; }
+        public string Firstname { get; set; }
         
         public string UserImage { get; set; }
 
+
+        public int Role { get; set; }
 
         /// <summary>
         /// Clears the current session.

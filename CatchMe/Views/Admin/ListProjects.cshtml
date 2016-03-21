@@ -39,7 +39,7 @@
             <table class="table">
                 <tr class="grey">
                     <th>
-                        @Html.DisplayNameFor(model => model.name)
+                        @Html.DisplayNameFor(model => model.name) 
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.description)
@@ -54,7 +54,7 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.name)
+                            @Html.DisplayFor(modelItem => item.name) <a href="@Url.Action("EditProject", new { id = item.project_id })"><sup>Edit</sup></a>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.description)

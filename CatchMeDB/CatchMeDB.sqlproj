@@ -69,5 +69,7 @@
     <Build Include="dbo\Tables\employee.sql" />
     <Build Include="dbo\Tables\comment.sql" />
     <Build Include="dbo\Tables\category.sql" />
+    <Build Include="dbo\Tables\task_user.sql" />
+    <Build Include="dbo\Tables\project_user.sql" />
   </ItemGroup>
 </Project>

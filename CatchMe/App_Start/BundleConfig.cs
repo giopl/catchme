@@ -21,12 +21,15 @@ namespace CatchMe
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/bootstrap3-typeahead.js",                      
+                      "~/Scripts/bootstrap3-typeahead.js",
+                //https://select2.github.io/
+                      "~/Scripts/select2.full.js",                      
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/font-awesome.css",
+                      "~/Content/select2.css",
                       "~/Content/site.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
