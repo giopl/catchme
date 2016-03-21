@@ -129,7 +129,6 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\projectUsersController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -173,9 +172,6 @@
     <Compile Include="Models\Meta\taskMeta.cs" />
     <Compile Include="Models\Meta\userMeta.cs" />
     <Compile Include="Models\project.cs">
-      <DependentUpon>CatchMe.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\projectUser.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\task.cs">
@@ -288,11 +284,6 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
-    <Content Include="Views\projectUsers\Create.cshtml" />
-    <Content Include="Views\projectUsers\Delete.cshtml" />
-    <Content Include="Views\projectUsers\Details.cshtml" />
-    <Content Include="Views\projectUsers\Edit.cshtml" />
-    <Content Include="Views\projectUsers\Index.cshtml" />
     <Content Include="Views\Admin\ListUsers.cshtml" />
     <Content Include="Views\Admin\EditUser.cshtml" />
     <Content Include="Views\Home\NoAccess.cshtml" />

@@ -25,13 +25,13 @@ namespace CatchMe.Controllers
 
             var active_project = user.active_project.HasValue?  user.active_project.Value : 0;
 
-            var projects = db.projectUsers.Where(x => x.user_id == user_id).ToList();
+            var myprojects = user.projects;
 
             if (!user.active_project.HasValue)
             {
-                if (projects.Count > 0)
+                if (myprojects.Count > 0)
                 {
-                    active_project = projects.FirstOrDefault().project_id;
+                    active_project = myprojects.FirstOrDefault().project_id;
                     SetActiveProject(active_project);
                 }
                 else 

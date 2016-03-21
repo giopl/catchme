@@ -266,18 +266,11 @@ namespace CatchMe.Controllers
             project project = db.projects.Find(id);
 
 
-            var pu=  project.project_user.ToList();
+            //var pu=  project.project_user.ToList();
 
             ViewBag.Tab = tab;
-
-            IList<user> project_users = new List<user>();
-
-            foreach (var usr in pu)
-            {
-                user u = new user { user_id = usr.user_id };
-                project_users.Add(u);
-                
-            }
+                       
+            var project_users = project.users;
 
             var user_id = db.users.ToList();
 
@@ -302,18 +295,27 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddUserToProject([Bind(Include = "user_id,project_id")] projectUser projectUser)
+        public ActionResult AddUserToProject(int project_id, int user_id)
         {
+
+            var user = db.users.Find(user_id);
+            var project = db.projects.Find(project_id);
+            project.users.Add(user);
             if (ModelState.IsValid)
             {
-                db.projectUsers.Add(projectUser);
+
+
+                db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("EditProject", new { id = projectUser.project_id, tab = 2 });
+                
+
+                
+                return RedirectToAction("EditProject", new { id = project_id, tab = 2 });
             }
 
-            ViewBag.project_id = new SelectList(db.projects, "project_id", "name", projectUser.project_id);
-            ViewBag.user_id = new SelectList(db.users, "user_id", "username", projectUser.user_id);
-            return View(projectUser);
+            ViewBag.project_id = new SelectList(db.projects, "project_id", "name",project_id);
+            ViewBag.user_id = new SelectList(db.users, "user_id", "username", user_id);
+            return View(project);
         }
 
 
@@ -322,10 +324,25 @@ namespace CatchMe.Controllers
 
         public ActionResult RemoveUserFromProject(int project_id, int user_id)
         {
-            projectUser projectUser = db.projectUsers.Where(x=>x.project_id == project_id && x.user_id == user_id).FirstOrDefault();
-            db.projectUsers.Remove(projectUser);
-            db.SaveChanges();
-            return RedirectToAction("EditProject" ,new { id = project_id, tab =2 });
+
+
+            var user = db.users.Find(user_id);
+            var project = db.projects.Find(project_id);
+            project.users.Remove(user);
+            if (ModelState.IsValid)
+            {
+
+                db.Entry(project).State = EntityState.Modified;
+                db.SaveChanges();
+
+
+
+                return RedirectToAction("EditProject", new { id = project_id, tab = 2 });
+            }
+
+            ViewBag.project_id = new SelectList(db.projects, "project_id", "name", project_id);
+            ViewBag.user_id = new SelectList(db.users, "user_id", "username", user_id);
+            return View(project);
         }
 
 

@@ -10,9 +10,10 @@
     [is_active]      BIT           DEFAULT ((1)) NOT NULL,
     [email]          NVARCHAR (60) NULL,
     [active_project] INT           NULL,
-    PRIMARY KEY CLUSTERED ([user_id] ASC),
-    CONSTRAINT [FK_user_project_id] FOREIGN KEY ([active_project]) REFERENCES [dbo].[project] ([project_id])
+    PRIMARY KEY CLUSTERED ([user_id] ASC)
 );
+
+
 
 
 

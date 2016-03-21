@@ -14,17 +14,14 @@
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_task_id" />
         <AssociationConnector Association="CatchMeDBModel.task_category" />
         <EntityTypeShape EntityType="CatchMeDBModel.comment" Width="1.5" PointX="8.25" PointY="8.875" />
-        <EntityTypeShape EntityType="CatchMeDBModel.projectUser" Width="1.5" PointX="8.25" PointY="12.75" />
-        <EntityTypeShape EntityType="CatchMeDBModel.user" Width="1.5" PointX="3" PointY="10.75" />
         <EntityTypeShape EntityType="CatchMeDBModel.log" Width="1.5" PointX="5.25" PointY="9.75" />
         <AssociationConnector Association="CatchMeDBModel.FK_comment_task_id" />
-        <AssociationConnector Association="CatchMeDBModel.FK_comment_user_id" />
-        <AssociationConnector Association="CatchMeDBModel.FK_project_user_project_id" />
-        <AssociationConnector Association="CatchMeDBModel.FK_user_project_id" />
-        <AssociationConnector Association="CatchMeDBModel.FK_project_user_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_log_task_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.user" Width="1.5" PointX="3" PointY="10.75" />
+        <AssociationConnector Association="CatchMeDBModel.FK_comment_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_log_user_id" />
+        <AssociationConnector Association="CatchMeDBModel.project_user" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

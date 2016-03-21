@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CatchMe.Helpers
 {
@@ -21,6 +22,7 @@ namespace CatchMe.Helpers
             Role = 0;
             CurrentProject = string.Empty;
             CurrentProjectId = 0;
+            MyProjects = null;
         }
 
 
@@ -49,6 +51,9 @@ namespace CatchMe.Helpers
         }
 
         //public bool IsTeamLeader { get; set; }
+
+        public SelectList MyProjects { get; set; }
+
         public bool IsValid { get; set; }
         public bool ReadOnlyMode { get; set; }
         public int UserId { get; set; }
