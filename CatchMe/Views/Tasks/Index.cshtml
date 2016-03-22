@@ -1,14 +1,23 @@
 ﻿@model IEnumerable<CatchMe.Models.task>
 
+@using session = CatchMe.Helpers.UserSession
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Catch Me";
 }
 
-<h2>Index</h2>
+<div>
+    <div class="pull-left"><h2>@session.Current.CurrentProject</h2></div>
+    <div class="pull-right">
+       @if(session.Current.MyProjects.Count() > 1)
+       {           
+        @Html.DropDownList("project_id", null, htmlAttributes: new { @class = "projectselect pull-right" })           
+       }
+    </div>
+</div>
 
-<p>
+@*<p>
     @Html.ActionLink("Create New", "Create")
-</p>
+</p>*@
 <table class="table">
     <tr>
         <th>
@@ -73,3 +82,18 @@
 }
 
 </table>
+
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+            $(".projectselect").select2({
+                minimumResultsForSearch: Infinity
+            });
+
+
+        });
+
+    </script>
+    }

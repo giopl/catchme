@@ -200,6 +200,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\bug.png" />
     <Content Include="Images\butterfly-catching.jpg" />
+    <Content Include="Images\dropdown.png" />
+    <Content Include="Images\dropdown32.png" />
     <Content Include="notes\catchme_create.sql" />
     <EntityDeploy Include="Models\CatchMe.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -267,10 +269,10 @@
     <Content Include="Views\Admin\Details.cshtml" />
     <Content Include="Views\Admin\EditProject.cshtml" />
     <Content Include="Views\Admin\ListProjects.cshtml" />
-    <Content Include="Views\Tasks\Create.cshtml" />
-    <Content Include="Views\Tasks\Delete.cshtml" />
-    <Content Include="Views\Tasks\Details.cshtml" />
-    <Content Include="Views\Tasks\Edit.cshtml" />
+    <Content Include="Views\Tasks\CreateTask.cshtml" />
+    <Content Include="Views\Tasks\DeleteTask.cshtml" />
+    <Content Include="Views\Tasks\TaskDetails.cshtml" />
+    <Content Include="Views\Tasks\EditTask.cshtml" />
     <Content Include="Views\Tasks\Index.cshtml" />
     <Content Include="Views\Categories\Create.cshtml" />
     <Content Include="Views\Categories\Delete.cshtml" />

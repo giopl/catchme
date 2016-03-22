@@ -54,3 +54,34 @@ textarea {
     background-color: #CCCCCC;
     border-color: #CCCCCC;
 }
+
+
+    select.projectselect {
+   
+   width:200px;
+   
+   border:none!important;
+   border-radius: 0;
+   font-weight:500;
+   
+   height: 50px;
+   -webkit-appearance: none;
+   
+    /*width: 240px;
+   height: 34px;
+   overflow: hidden;
+   background: url('/Images/dropdown.png') no-repeat right #FFF;*/
+   
+
+   }
+
+select.select2 {
+width:200px;
+}
+
+
+    .border-red { border: 1px solid red;}    
+    .border-green { border: 1px solid green;}    
+    .border-orange { border: 1px solid green;}    
+    
+    .border-blue { border: 1px solid blue;}

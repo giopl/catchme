@@ -11,7 +11,7 @@ using CatchMe.Helpers;
 
 namespace CatchMe.Controllers
 {
-    public class TasksController : Controller
+    public class TasksController : BaseController
     {
         private CatchMeDBEntities db = new CatchMeDBEntities();
 
@@ -41,6 +41,7 @@ namespace CatchMe.Controllers
                 }
             }
 
+            ViewBag.project_id = new SelectList(myprojects, "project_id", "name");
 
             var tasks = db.tasks.Include(t => t.project).Where(p=>p.project_id == active_project).ToList();
             return View(tasks);
@@ -69,7 +70,7 @@ namespace CatchMe.Controllers
 
 
         // GET: Tasks/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult TaskDetails(int? id)
         {
             if (id == null)
             {
@@ -84,7 +85,7 @@ namespace CatchMe.Controllers
         }
 
         // GET: Tasks/Create
-        public ActionResult Create()
+        public ActionResult CreateTask()
         {
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
             return View();
@@ -95,7 +96,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,due_date")] task task)
+        public ActionResult CreateTask([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,due_date")] task task)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +110,7 @@ namespace CatchMe.Controllers
         }
 
         // GET: Tasks/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult EditTask(int? id)
         {
             if (id == null)
             {
@@ -129,7 +130,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,due_date")] task task)
+        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,due_date")] task task)
         {
             if (ModelState.IsValid)
             {
@@ -142,7 +143,7 @@ namespace CatchMe.Controllers
         }
 
         // GET: Tasks/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult DeleteTask(int? id)
         {
             if (id == null)
             {
@@ -157,9 +158,9 @@ namespace CatchMe.Controllers
         }
 
         // POST: Tasks/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteTask")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteTaskConfirmed(int id)
         {
             task task = db.tasks.Find(id);
             db.tasks.Remove(task);

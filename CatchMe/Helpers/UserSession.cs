@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using CatchMe.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -52,7 +54,7 @@ namespace CatchMe.Helpers
 
         //public bool IsTeamLeader { get; set; }
 
-        public SelectList MyProjects { get; set; }
+        public IList<project> MyProjects { get; set; }
 
         public bool IsValid { get; set; }
         public bool ReadOnlyMode { get; set; }

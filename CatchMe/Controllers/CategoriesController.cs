@@ -10,7 +10,7 @@ using CatchMe.Models;
 
 namespace CatchMe.Controllers
 {
-    public class CategoriesController : Controller
+    public class CategoriesController : BaseController
     {
         private CatchMeDBEntities db = new CatchMeDBEntities();
 

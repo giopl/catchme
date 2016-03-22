@@ -40,15 +40,15 @@ namespace CatchMe.Controllers
                 UserSession.Current.Firstname = founduser.firstname;
                 UserSession.Current.CurrentProjectId = founduser.active_project.Value;
 
+                var myProjects = founduser.projects.ToList();
+
+                UserSession.Current.MyProjects = myProjects;
                 if(UserSession.Current.CurrentProjectId  > 0)
                 {
                     UserSession.Current.CurrentProject = db.projects.Find(UserSession.Current.CurrentProjectId).name;
+                    
 
-
-                    var myProjects = founduser.projects;
-
-
-                    ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+                    ViewBag.project_id = new SelectList(myProjects, "project_id", "name");
                     
                 }
             }

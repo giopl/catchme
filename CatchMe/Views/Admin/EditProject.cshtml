@@ -72,37 +72,23 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="project_id" value="@Model.project_id" />
                 <div class="form-group">
-                    <label for="user">User</label>
-                    @Html.DropDownList("user_id", null, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.is_active, "", new { @class = "text-danger" })
+                    
+                    <div class="input-group select2-bootstrap-prepend">
+                        <span class="input-group-addon">
+                            <span class="fa fa-user-plus"></span>
 
+                        </span>
 
-                </div>
-
-                <input type="submit" class="btn btn-default" value="Add User" />
-            }
-
-            @*@using (Html.BeginForm("AddUserToProject","Admin",FormMethod.Post))
-            {
-                <div class="form-horizontal">
-
-
-                <div class="form-group">
-                    <label class="control-label">Add User</label>
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.DropDownList("user_id", null, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.is_active, "", new { @class = "text-danger" })
+                        @Html.DropDownList("user_id", null, new { @class = "select2" })
                         </div>
+
+                    
+
+                        @Html.ValidationMessageFor(model => model.is_active, "", new { @class = "text-danger" })
                     </div>
-                </div>
-                 <div class="form-group">
-                     <div class="col-md-offset-2 col-md-10">
-                         <input type="submit" value="Save" class="btn btn-default" />
-                     </div>
-                 </div>
-                </div>
-                }*@
+
+                <button type="submit" class="btn btn-link"><span style="color:#0c0;font-size:1.3em" class="fa fa-check-circle"></span></button>
+            }
 
 
 
@@ -125,12 +111,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var user in Model.project_user)
+                    @foreach (var user in Model.users)
                     {
                         <tr>
-                            <td>@user.user.username</td>
-                            <td>@user.user.fullname</td>
-                            <td>@user.user.role</td>
+                            <td>@user.username</td>
+                            <td>@user.fullname</td>
+                            <td>@user.role</td>
                             <td><a href="@Url.Action("RemoveUserFromProject", new  { project_id = Model.project_id, user_id = user.user_id })" onclick="return confirm('Are you sure?')">Remove</a></td>
                         </tr>
                     }
@@ -151,4 +137,11 @@
 
             @section Scripts {
                 @Scripts.Render("~/bundles/jqueryval")
+                <script>
+                    $(document).ready(function () {
+
+                        $('.select2').select2();
+                    })
+                </script>
+
             }

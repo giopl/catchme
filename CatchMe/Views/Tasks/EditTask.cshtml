@@ -1,10 +1,10 @@
 ﻿@model CatchMe.Models.task
-
+@using session = CatchMe.Helpers.UserSession
 @{
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Edit @session.Current.CurrentProject</h2>
 
 
 @using (Html.BeginForm())

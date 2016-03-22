@@ -11,7 +11,7 @@ using System.Text;
 
 namespace CatchMe.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         private CatchMeDBEntities db = new CatchMeDBEntities();
 
