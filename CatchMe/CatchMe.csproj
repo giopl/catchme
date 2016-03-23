@@ -236,6 +236,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap3-typeahead.js" />
     <Content Include="Scripts\bootstrap3-typeahead.min.js" />
+    <Content Include="Scripts\custom\shared.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -273,7 +274,7 @@
     <Content Include="Views\Tasks\DeleteTask.cshtml" />
     <Content Include="Views\Tasks\TaskDetails.cshtml" />
     <Content Include="Views\Tasks\EditTask.cshtml" />
-    <Content Include="Views\Tasks\Index.cshtml" />
+    <Content Include="Views\Tasks\TaskList.cshtml" />
     <Content Include="Views\Categories\Create.cshtml" />
     <Content Include="Views\Categories\Delete.cshtml" />
     <Content Include="Views\Categories\Details.cshtml" />

@@ -33,7 +33,7 @@ namespace CatchMe.Models
         public Nullable<int> active_project { get; set; }
 
         public virtual ICollection<comment> comments { get; set; }
-        public virtual project project { get; set; }
+        public virtual ICollection<project> projects { get; set; }
         public virtual ICollection<taskUser> task_user { get; set; }
         public virtual ICollection<log> logs { get; set; }
 

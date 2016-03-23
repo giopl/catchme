@@ -15,18 +15,27 @@ namespace CatchMe.Controllers
     {
         private CatchMeDBEntities db = new CatchMeDBEntities();
 
-        // GET: Tasks
         public ActionResult Index()
         {
+            return RedirectToAction("TaskList");
+        }
 
+        // GET: Tasks
+        public ActionResult TaskList(int? id=null)
+        {
+
+            //find current user
             var user_id = UserSession.Current.UserId;
-
             var user = db.users.Find(user_id);
 
+            //find user's active project
             var active_project = user.active_project.HasValue?  user.active_project.Value : 0;
 
+            //find user's projects
             var myprojects = user.projects;
 
+
+            // if no project found set user's active project by using the first one on the list
             if (!user.active_project.HasValue)
             {
                 if (myprojects.Count > 0)
@@ -34,6 +43,7 @@ namespace CatchMe.Controllers
                     active_project = myprojects.FirstOrDefault().project_id;
                     SetActiveProject(active_project);
                 }
+                    //if no  projects found for user redirect to page NoProject
                 else 
                 {
 
@@ -41,9 +51,22 @@ namespace CatchMe.Controllers
                 }
             }
 
+
+
+            //return list of projects for user
             ViewBag.project_id = new SelectList(myprojects, "project_id", "name");
 
-            var tasks = db.tasks.Include(t => t.project).Where(p=>p.project_id == active_project).ToList();
+
+            if(id.HasValue && id.Value != active_project)
+            {
+                SetActiveProject(id.Value);
+                active_project = id.Value;
+            }
+            
+        
+            // find list of tasks for active project
+            var tasks = db.tasks.Include(t => t.project).Where(p => p.project_id == active_project).ToList();
+
             return View(tasks);
         }
 

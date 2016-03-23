@@ -10,7 +10,7 @@
     <div class="pull-right">
        @if(session.Current.MyProjects.Count() > 1)
        {           
-        @Html.DropDownList("project_id", null, htmlAttributes: new { @class = "projectselect pull-right" })           
+        @Html.DropDownList("project_id", null, htmlAttributes: new { @class = "projectselect pull-right changeproject" })           
        }
     </div>
 </div>
@@ -91,6 +91,22 @@
             $(".projectselect").select2({
                 minimumResultsForSearch: Infinity
             });
+
+
+            $('body').on('change', '.changeproject', function () {
+                var project_id = $(this).val();
+                alert(project_id);
+
+
+                // similar behavior as an HTTP redirect
+                window.location.replace(getVirtualDir()+"Tasks/Tasklist/"+project_id);
+
+                // similar behavior as clicking on a link
+                //window.location.href = "http://stackoverflow.com";
+                
+            });
+
+
 
 
         });
