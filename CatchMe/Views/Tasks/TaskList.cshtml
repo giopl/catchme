@@ -3,11 +3,13 @@
 @using session = CatchMe.Helpers.UserSession
 @{
     ViewBag.Title = "Catch Me";
+
+    
 }
 
 <div>
     <div class="pull-left"><h2>@session.Current.CurrentProject</h2></div>
-    <div class="pull-right">
+    <div class="pull-right" style="margin-top:20px;">
        @if(session.Current.MyProjects.Count() > 1)
        {           
         @Html.DropDownList("project_id", null, htmlAttributes: new { @class = "projectselect pull-right changeproject" })           

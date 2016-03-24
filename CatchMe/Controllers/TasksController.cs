@@ -53,16 +53,19 @@ namespace CatchMe.Controllers
 
 
 
-            //return list of projects for user
-            ViewBag.project_id = new SelectList(myprojects, "project_id", "name");
-
+            
 
             if(id.HasValue && id.Value != active_project)
             {
                 SetActiveProject(id.Value);
                 active_project = id.Value;
             }
-            
+
+
+            //return list of projects for user
+            ViewBag.project_id = new SelectList(myprojects, "project_id", "name",active_project);
+
+
         
             // find list of tasks for active project
             var tasks = db.tasks.Include(t => t.project).Where(p => p.project_id == active_project).ToList();
@@ -78,13 +81,27 @@ namespace CatchMe.Controllers
 
         private void SetActiveProject(int projectId)
         {
-            var user = db.users.Find(UserSession.Current.UserId);
+            try
+            {
+                var user = db.users.Find(UserSession.Current.UserId);
 
-            user.active_project = projectId;
-            
+                user.active_project = projectId;
+
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
+
+                // change the user session accordingly
+                var project = db.projects.Find(projectId);
+                UserSession.Current.CurrentProject = project.name;
+                UserSession.Current.CurrentProjectId = projectId;
                 
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+            
             
             
 
