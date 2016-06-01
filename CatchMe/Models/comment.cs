@@ -21,7 +21,7 @@ namespace CatchMe.Models
         public string description { get; set; }
         public Nullable<System.DateTime> created_on { get; set; }
     
-        public virtual task task { get; set; }
         public virtual user user { get; set; }
+        public virtual task task { get; set; }
     }
 }

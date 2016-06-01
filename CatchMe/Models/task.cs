@@ -16,10 +16,10 @@ namespace CatchMe.Models
     {
         public task()
         {
-            this.task_user = new HashSet<taskUser>();
-            this.categories = new HashSet<category>();
             this.comments = new HashSet<comment>();
             this.logs = new HashSet<log>();
+            this.task_user = new HashSet<taskUser>();
+            this.categories = new HashSet<category>();
         }
     
         public int task_id { get; set; }
@@ -33,11 +33,12 @@ namespace CatchMe.Models
         public Nullable<System.DateTime> due_date { get; set; }
         public Nullable<int> type { get; set; }
         public Nullable<int> severity { get; set; }
+        public Nullable<int> priority { get; set; }
     
+        public virtual ICollection<comment> comments { get; set; }
         public virtual project project { get; set; }
+        public virtual ICollection<log> logs { get; set; }
         public virtual ICollection<taskUser> task_user { get; set; }
         public virtual ICollection<category> categories { get; set; }
-        public virtual ICollection<comment> comments { get; set; }
-        public virtual ICollection<log> logs { get; set; }
     }
 }

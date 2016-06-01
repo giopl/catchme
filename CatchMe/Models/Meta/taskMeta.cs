@@ -6,8 +6,12 @@ using System.Web;
 
 namespace CatchMe.Models
 {
-    public class taskMeta
+    public class taskMeta    
     {
+
+
+
+
     }
 
 

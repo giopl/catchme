@@ -214,17 +214,26 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateTask([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,due_date")] task task)
+        public ActionResult CreateTask([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,priority,due_date")] task task)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.tasks.Add(task);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                if (ModelState.IsValid)
+                {
+                    db.tasks.Add(task);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
 
-            ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
-            return View(task);
+                ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
+                return View(task);
+            }
+            catch (Exception e)
+            {
+                
+                throw;
+            }
+            
         }
 
         // GET: Tasks/Edit/5
@@ -248,7 +257,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,due_date")] task task)
+        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,priority,due_date")] task task)
         {
             if (ModelState.IsValid)
             {
