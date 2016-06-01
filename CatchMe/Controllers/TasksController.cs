@@ -128,6 +128,84 @@ namespace CatchMe.Controllers
         public ActionResult CreateTask()
         {
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+
+
+            List<OptionItem> statuses = new List<OptionItem>();
+            statuses.Add(new OptionItem { name = "None", value = 0 });
+            statuses.Add(new OptionItem { name = "New", value = 1 });
+            statuses.Add(new OptionItem { name = "Open", value = 2 });
+            statuses.Add(new OptionItem { name = "In Progress", value = 3 });
+            statuses.Add(new OptionItem { name = "Completed", value = 4 });
+            statuses.Add(new OptionItem { name = "On Hold", value = 5 });
+            statuses.Add(new OptionItem { name = "Cancelled", value = 6 });
+            statuses.Add(new OptionItem { name = "Closed", value = 7 });
+            statuses.Add(new OptionItem { name = "Problem", value = 8 });
+            
+            ViewBag.status = new SelectList(statuses, "value", "name");
+
+
+            List<OptionItem> teststatuses = new List<OptionItem>();
+            teststatuses.Add(new OptionItem { name = "None", value = 0 });
+            teststatuses.Add(new OptionItem { name = "Not Tested", value = 1 });
+            teststatuses.Add(new OptionItem { name = "Ready to Test", value = 2 });
+            teststatuses.Add(new OptionItem { name = "Re-Test", value = 3 });
+            teststatuses.Add(new OptionItem { name = "Passed", value = 4 });
+            teststatuses.Add(new OptionItem { name = "Failed", value = 5 });
+            teststatuses.Add(new OptionItem { name = "Incomplete", value = 6 });
+            teststatuses.Add(new OptionItem { name = "Cannot TEst", value = 7 });
+
+
+
+
+
+            List<OptionItem> complexities = new List<OptionItem>();
+            complexities.Add(new OptionItem { name = "None", value = 0 });
+            complexities.Add(new OptionItem { name = "Low", value = 1 });
+            complexities.Add(new OptionItem { name = "Medium", value = 2 });
+            complexities.Add(new OptionItem { name = "High", value = 3 });
+            complexities.Add(new OptionItem { name = "Very High", value = 4 });
+
+
+            List<OptionItem> types= new List<OptionItem>();
+            types.Add(new OptionItem { name = "None", value = 0 });
+            types.Add(new OptionItem { name = "Development", value = 1 });
+            types.Add(new OptionItem { name = "Change", value = 2 });
+            types.Add(new OptionItem { name = "Bug", value = 3 });
+            types.Add(new OptionItem { name = "Failure", value = 4 });
+            types.Add(new OptionItem { name = "Test", value = 5 });
+            types.Add(new OptionItem { name = "Investigation", value = 6 });
+
+
+            List<OptionItem> severities = new List<OptionItem>();
+            severities.Add(new OptionItem { name = "None", value = 0 });            
+            severities.Add(new OptionItem { name = "Low", value = 1 });
+            severities.Add(new OptionItem { name = "Medium", value = 2 });
+            severities.Add(new OptionItem { name = "High", value = 3 });
+            severities.Add(new OptionItem { name = "Very High", value = 4 });
+
+            List<OptionItem> priorities = new List<OptionItem>();
+            priorities.Add(new OptionItem { name = "None", value = 0 });
+            priorities.Add(new OptionItem { name = "Low", value = 1 });
+            priorities.Add(new OptionItem { name = "Medium", value = 2 });
+            priorities.Add(new OptionItem { name = "High", value = 3 });
+            priorities.Add(new OptionItem { name = "Immediate", value = 4 });
+
+
+
+
+            ViewBag.test_status = new SelectList(teststatuses, "value", "name");
+            ViewBag.complexity = new SelectList(complexities, "value", "name");
+            ViewBag.type= new SelectList(types, "value", "name");
+            ViewBag.severity = new SelectList(severities, "value", "name");
+            ViewBag.priority = new SelectList(priorities, "value", "name");
+
+
+            
+            //ViewBag.type = new SelectList(db.projects, "severity", "name");
+            //ViewBag.severity = new SelectList(db.projects, "severity", "name");
+
+
+
             return View();
         }
 

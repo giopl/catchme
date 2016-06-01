@@ -171,6 +171,7 @@
     <Compile Include="Models\Meta\projectMeta.cs" />
     <Compile Include="Models\Meta\taskMeta.cs" />
     <Compile Include="Models\Meta\userMeta.cs" />
+    <Compile Include="Models\OptionItem.cs" />
     <Compile Include="Models\project.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
