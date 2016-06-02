@@ -331,7 +331,8 @@ namespace CatchMe.Controllers
                 {
                     task_id = task.task_id,
                     title = task.title,
-                    description = task.description
+                    description = task.description,
+                    
 
                     //TODO add other fields here
                 };
