@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CatchMe.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -50,6 +51,16 @@ namespace CatchMe.Models
             {
                 return string.Concat(firstname, " ", lastname);
             }
+        }
+
+
+        public string RoleDesc
+        {
+            get
+            {
+                    return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.RoleEnum), role).ToString(), false);
+            }
+
         }
 
 

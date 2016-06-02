@@ -124,12 +124,9 @@ namespace CatchMe.Controllers
             return View(task);
         }
 
-        // GET: Tasks/Create
-        public ActionResult CreateTask()
+
+        private List<OptionItem> getStatuses()
         {
-            ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
-
-
             List<OptionItem> statuses = new List<OptionItem>();
             statuses.Add(new OptionItem { name = "None", value = 0 });
             statuses.Add(new OptionItem { name = "New", value = 1 });
@@ -140,9 +137,12 @@ namespace CatchMe.Controllers
             statuses.Add(new OptionItem { name = "Cancelled", value = 6 });
             statuses.Add(new OptionItem { name = "Closed", value = 7 });
             statuses.Add(new OptionItem { name = "Problem", value = 8 });
-            
-            ViewBag.status = new SelectList(statuses, "value", "name");
+            return statuses;
+        }
 
+
+        private List<OptionItem> getTestStatuses()        
+        {
 
             List<OptionItem> teststatuses = new List<OptionItem>();
             teststatuses.Add(new OptionItem { name = "None", value = 0 });
@@ -152,11 +152,13 @@ namespace CatchMe.Controllers
             teststatuses.Add(new OptionItem { name = "Passed", value = 4 });
             teststatuses.Add(new OptionItem { name = "Failed", value = 5 });
             teststatuses.Add(new OptionItem { name = "Incomplete", value = 6 });
-            teststatuses.Add(new OptionItem { name = "Cannot TEst", value = 7 });
+            teststatuses.Add(new OptionItem { name = "Cannot Test", value = 7 });
+            return teststatuses;
 
+        }
 
-
-
+        private List<OptionItem> getComplexities()
+        {
 
             List<OptionItem> complexities = new List<OptionItem>();
             complexities.Add(new OptionItem { name = "None", value = 0 });
@@ -164,9 +166,16 @@ namespace CatchMe.Controllers
             complexities.Add(new OptionItem { name = "Medium", value = 2 });
             complexities.Add(new OptionItem { name = "High", value = 3 });
             complexities.Add(new OptionItem { name = "Very High", value = 4 });
+            return complexities;
 
 
-            List<OptionItem> types= new List<OptionItem>();
+        }
+
+
+        private List<OptionItem> getTypes()
+        {
+
+            List<OptionItem> types = new List<OptionItem>();
             types.Add(new OptionItem { name = "None", value = 0 });
             types.Add(new OptionItem { name = "Development", value = 1 });
             types.Add(new OptionItem { name = "Change", value = 2 });
@@ -174,14 +183,27 @@ namespace CatchMe.Controllers
             types.Add(new OptionItem { name = "Failure", value = 4 });
             types.Add(new OptionItem { name = "Test", value = 5 });
             types.Add(new OptionItem { name = "Investigation", value = 6 });
+            return types;
+        }
+
+
+
+        private List<OptionItem> getSeverities()
+        {
 
 
             List<OptionItem> severities = new List<OptionItem>();
-            severities.Add(new OptionItem { name = "None", value = 0 });            
+            severities.Add(new OptionItem { name = "None", value = 0 });
             severities.Add(new OptionItem { name = "Low", value = 1 });
             severities.Add(new OptionItem { name = "Medium", value = 2 });
             severities.Add(new OptionItem { name = "High", value = 3 });
             severities.Add(new OptionItem { name = "Very High", value = 4 });
+
+            return severities;
+        }
+
+        private List<OptionItem> getPriorities()
+        {
 
             List<OptionItem> priorities = new List<OptionItem>();
             priorities.Add(new OptionItem { name = "None", value = 0 });
@@ -190,19 +212,23 @@ namespace CatchMe.Controllers
             priorities.Add(new OptionItem { name = "High", value = 3 });
             priorities.Add(new OptionItem { name = "Immediate", value = 4 });
 
+            return priorities;
+        }
 
 
 
-            ViewBag.test_status = new SelectList(teststatuses, "value", "name");
-            ViewBag.complexity = new SelectList(complexities, "value", "name");
-            ViewBag.type= new SelectList(types, "value", "name");
-            ViewBag.severity = new SelectList(severities, "value", "name");
-            ViewBag.priority = new SelectList(priorities, "value", "name");
 
 
-            
-            //ViewBag.type = new SelectList(db.projects, "severity", "name");
-            //ViewBag.severity = new SelectList(db.projects, "severity", "name");
+        // GET: Tasks/Create
+        public ActionResult CreateTask()
+        {
+            ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+            ViewBag.status = new SelectList(getStatuses(), "value", "name");
+            ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name");
+            ViewBag.complexity = new SelectList(getComplexities(), "value", "name");
+            ViewBag.type= new SelectList(getTypes(), "value", "name");
+            ViewBag.severity = new SelectList(getSeverities(), "value", "name");
+            ViewBag.priority = new SelectList(getPriorities(), "value", "name");
 
 
 
@@ -218,13 +244,34 @@ namespace CatchMe.Controllers
         {
             try
             {
+
+                task.created_by = UserSession.Current.UserId;
+                task.created_on = DateTime.Now;
+
                 if (ModelState.IsValid)
                 {
                     db.tasks.Add(task);
                     db.SaveChanges();
+
+
+                    comment comment = new comment
+                    {
+                        task_id = task.task_id,
+                        user_id = task.created_by.Value,
+                        title = task.title,
+                        created_on = task.created_on,
+                        description = task.description
+                    };
+
+                    db.comments.Add(comment);
+                    db.SaveChanges();
+
+
+
                     return RedirectToAction("Index");
                 }
 
+                
                 ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
                 return View(task);
             }
@@ -244,6 +291,18 @@ namespace CatchMe.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             task task = db.tasks.Find(id);
+
+
+            ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
+            ViewBag.status = new SelectList(getStatuses(), "value", "name", task.status );
+            ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name", task.test_status);
+            ViewBag.complexity = new SelectList(getComplexities(), "value", "name", task.complexity);
+            ViewBag.type = new SelectList(getTypes(), "value", "name", task.type);
+            ViewBag.severity = new SelectList(getSeverities(), "value", "name", task.severity);
+            ViewBag.priority = new SelectList(getPriorities(), "value", "name", task.priority);
+
+
+
             if (task == null)
             {
                 return HttpNotFound();
@@ -259,13 +318,37 @@ namespace CatchMe.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,priority,due_date")] task task)
         {
+
+
+            var oldtask = db.tasks.Find(task.task_id);
+
             if (ModelState.IsValid)
             {
                 db.Entry(task).State = EntityState.Modified;
                 db.SaveChanges();
+
+                taskHist hist = new taskHist
+                {
+                    task_id = task.task_id,
+                    title = task.title,
+                    description = task.description
+
+                    //TODO add other fields here
+                };
+                db.taskHists.Add(hist);
+
+
                 return RedirectToAction("Index");
             }
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
+            ViewBag.status = new SelectList(getStatuses(), "value", "name", task.status);
+            ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name", task.test_status);
+            ViewBag.complexity = new SelectList(getComplexities(), "value", "name", task.complexity);
+            ViewBag.type = new SelectList(getTypes(), "value", "name", task.type);
+            ViewBag.severity = new SelectList(getSeverities(), "value", "name", task.severity);
+            ViewBag.priority = new SelectList(getPriorities(), "value", "name", task.priority);
+
+
             return View(task);
         }
 

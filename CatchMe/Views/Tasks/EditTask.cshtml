@@ -1,10 +1,11 @@
 ﻿@model CatchMe.Models.task
 @using session = CatchMe.Helpers.UserSession
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Task";
 }
 
-<h2>Edit @session.Current.CurrentProject</h2>
+<h2>Edit Task #@Model.task_id - @Model.title </h2>
+<h4 class="text-muted">@session.Current.CurrentProject - created by @Model.user.fullname on @Model.</h4>
 
 
 @using (Html.BeginForm())
@@ -12,36 +13,29 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>task</h4>
+        <h4>
+        
+            @Html.Raw(Model.description.Replace(Environment.NewLine, "<br/>"))        
+        
+        </h4>
+
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.task_id)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.project_id, "project_id", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("project_id", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.project_id, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @Html.HiddenFor(model => model.project_id)
 
         <div class="form-group">
             @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.status, new { htmlAttributes = new { @class = "form-control" } })
+                
+                @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.test_status, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.test_status, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.test_status, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
+
+        <div class="form-group" style="display:none">
             @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
@@ -49,26 +43,38 @@
             </div>
         </div>
 
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.test_status, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("test_status", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.test_status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
         <div class="form-group">
             @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.description,  new { @class = "form-control" } )
                 @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.creator, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.creator, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.creator, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.initiator, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.complexity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control" })
+
+
                 @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -76,7 +82,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker" } })
                 @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -95,4 +101,11 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            $('.datepicker').datepicker();
+        });
+    </script>
 }

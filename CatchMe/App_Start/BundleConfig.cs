@@ -23,7 +23,8 @@ namespace CatchMe
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/bootstrap3-typeahead.js",
                 //https://select2.github.io/
-                      "~/Scripts/select2.full.js",                      
+                      "~/Scripts/plugins/select2.js",
+                      "~/Scripts/plugins/readmore.js",                      
                       "~/Scripts/respond.js"));
 
 

@@ -78,7 +78,7 @@ namespace CatchMe.Controllers
 
 
         // GET: Users/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult EditUser(int? id)
         {
             if (id == null)
             {
@@ -89,6 +89,9 @@ namespace CatchMe.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.active_project = new SelectList(db.projects, "project_id", "name", user.active_project);
+
             return View(user);
         }
 
@@ -97,7 +100,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "username,firstname,lastname,job_title,team,role,num_logins,is_active,email,active_project")] user user)
+        public ActionResult EditUser([Bind(Include = "username,firstname,lastname,job_title,team,role,num_logins,is_active,email,active_project")] user user)
         {
             if (ModelState.IsValid)
             {
@@ -105,6 +108,9 @@ namespace CatchMe.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+
             return View(user);
         }
 

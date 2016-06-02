@@ -4,15 +4,9 @@
 @{
     ViewBag.Title = "Create";
 
-
-
-
-    //List<SelectListItem> statusList = CatchMe.Helpers.SelectItems.StatusItemList;
-
-        
         }
 
-        <h2>Create Task for [Project]</h2>
+        <h2><span class="fa fa-plus-circle"></span>&nbsp;New Task for @session.Current.CurrentProject</h2>
 
 
         @using (Html.BeginForm())
@@ -37,7 +31,7 @@
                     @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         
-                        @Html.DropDownList("status", null, new { htmlAttributes = new { @class = "form-control" } })                        
+                        @Html.DropDownList("status", null, new { @class = "form-control"  })                        
                         @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -46,7 +40,7 @@
                     @Html.LabelFor(model => model.test_status, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         
-                        @Html.DropDownList("test_status", null, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.DropDownList("test_status", null,  new { @class = "form-control" } )
                         @Html.ValidationMessageFor(model => model.test_status, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -68,17 +62,17 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.creator, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.creator, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.creator, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.initiator, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.DropDownList("complexity", null, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.DropDownList("complexity", null,  new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -88,7 +82,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.DropDownList("priority", null, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.DropDownList("priority", null, new { @class = "form-control" } )
                         @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
                     </div>
                 </div>

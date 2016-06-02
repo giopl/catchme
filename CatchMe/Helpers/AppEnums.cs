@@ -21,62 +21,28 @@ namespace CatchMe.Helpers
         #endregion
 
 
-        public enum HotelTab
+        public enum StatusEnum
         {
-            DETAILS = 0,
-            ROOMS,
-            CONTACTS,
-            MARKETS,
-            GUESTS_AGE,
-            FEATURES,
-            GALLERY,
-            SUPPLEMENTS,
-            CHARGES,
-            PACKAGES
+            None = 0,
+            New,
+            Open,
+            In_Progress,
+            Completed,
+            On_Hold,
+            Cancelled,
+            Closed,
+            Problem
 
         }
 
-        public enum RoomTab
+
+        public enum RoleEnum
         {
-            UPLOAD,
-            GALLERY,
-            OCCUPANCIES,
-            FEATURES,
-            BASE_PRICE
+            Business = 0,
+            Developer,
+            Admin
 
 
-        }
-
-        public enum UserTab
-        {
-            GALLERY,
-            RESETPASSWORD,
-            EDITROLE
-        }
-
-        public enum VehicleTab
-        {
-            GALLERY
-        }
-
-        public enum ProviderTab
-        {
-            GALLERY,
-            VEHICLES,
-            ACTIVITIES,
-            CONTACTS
-        }
-
-        public enum ActivityTab
-        {
-            GALLERY
-        }
-
-        public enum UserPreference
-        {
-            GALLERY,
-            USERPREF,
-            CHANGEPASSWORD
         }
 
 

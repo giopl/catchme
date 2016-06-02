@@ -20,6 +20,7 @@ namespace CatchMe.Models
             this.task_user = new HashSet<taskUser>();
             this.logs = new HashSet<log>();
             this.projects = new HashSet<project>();
+            this.tasks = new HashSet<task>();
         }
     
         public int user_id { get; set; }
@@ -38,5 +39,6 @@ namespace CatchMe.Models
         public virtual ICollection<taskUser> task_user { get; set; }
         public virtual ICollection<log> logs { get; set; }
         public virtual ICollection<project> projects { get; set; }
+        public virtual ICollection<task> tasks { get; set; }
     }
 }

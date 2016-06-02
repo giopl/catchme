@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<CatchMe.Models.task>
 
 @using session = CatchMe.Helpers.UserSession
+@using appenums = CatchMe.Helpers.AppEnums
 @{
     ViewBag.Title = "Catch Me";
 
@@ -35,10 +36,10 @@
             @Html.DisplayNameFor(model => model.description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.creator)
+            @Html.DisplayNameFor(model => model.initiator)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.complexity)
+            @Html.DisplayNameFor(model => model.priority)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.due_date)
@@ -52,22 +53,28 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.status)
+            
+
+            <span class="label label-@(item.StatusDescLabel)">@Html.DisplayFor(modelItem => item.StatusDesc)</span>
+
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.test_status)
+            @Html.DisplayFor(modelItem => item.TestStatusDesc)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.title)
         </td>
         <td>
+            <span class="readmore">
             @Html.DisplayFor(modelItem => item.description)
+
+            </span>
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.creator)
+            @Html.DisplayFor(modelItem => item.initiator)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.complexity)
+            @Html.DisplayFor(modelItem => item.PriorityDesc)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.due_date)
@@ -76,7 +83,7 @@
             @Html.DisplayFor(modelItem => item.project.name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.task_id }) |
+            @Html.ActionLink("Edit", "EditTask", new { id=item.task_id }) |
             @Html.ActionLink("Details", "Details", new { id=item.task_id }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.task_id })
         </td>
@@ -109,6 +116,11 @@
             });
 
 
+            $('.readmore').readmore({
+                speed: 75,
+                collapsedHeight: 40,
+                lessLink: '<a href="#">Read less</a>'
+            });
 
 
         });
