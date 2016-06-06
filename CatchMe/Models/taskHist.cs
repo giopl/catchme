@@ -21,7 +21,7 @@ namespace CatchMe.Models
         public Nullable<int> test_status { get; set; }
         public string title { get; set; }
         public string description { get; set; }
-        public string creator { get; set; }
+        public string initiator { get; set; }
         public Nullable<int> complexity { get; set; }
         public Nullable<System.DateTime> due_date { get; set; }
         public Nullable<int> type { get; set; }
