@@ -370,13 +370,14 @@ namespace CatchMe.Controllers
                     complexity = oldtask.complexity != task.complexity ? oldtask.complexity : null,
                     priority = oldtask.priority != task.priority ? oldtask.priority : null,
                     due_date = oldtask.due_date != task.due_date ? oldtask.due_date : null,
-                    created_on = oldtask.created_on
+                    created_on = DateTime.Now,
+                    created_by = UserSession.Current.UserId
                     
                 };
                 db.taskHists.Add(hist);
                 db.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("EditTask", new { id = task.task_id });
             }
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
             ViewBag.status = new SelectList(getStatuses(), "value", "name", task.status);

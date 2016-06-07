@@ -64,11 +64,33 @@
 
             }
 
+            <h4>Task History</h4>
+            <table class="table">
+                <tr>
+                    <td>date</td>
+                    <td>status</td>
+                    <td>test</td>
+                    <td>type</td>
+                    <td>priority</td>
+                       <td>severity</td> 
+                </tr>
+                @foreach (var hist in Model.task_hist)
+                {
+                    <tr>
+                        <td>
+                            @hist.created_on
+                        </td>
+                        <td>@hist.StatusDesc</td>
+                        
+                        <td>@hist.TestStatusDesc</td>
+                        <td>@hist.TypeDesc</td>
+                        <td>@hist.PriorityDesc</td>
+                        <td>@hist.SeverityDesc</td>
+                    </tr>
+                }
 
-            @foreach (var hist in Model.task_hist)
-            { 
-                @hist.created_on @hist.complexity
-            }
+            </table>
+            
 
                 
                 </div> <!-- fisrt col -->

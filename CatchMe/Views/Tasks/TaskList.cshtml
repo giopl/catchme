@@ -60,8 +60,8 @@
             @Html.DisplayFor(modelItem => item.TestStatusDesc)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.title)
-        </td>
+            <a href="@Url.Action("EditTask", new {  id = item.task_id})">@Html.DisplayFor(modelItem => item.title)</a>
+</td>
         <td>
             <span class="readmore">
             @Html.DisplayFor(modelItem => item.description)
