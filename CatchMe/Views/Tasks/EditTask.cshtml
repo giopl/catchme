@@ -8,26 +8,86 @@
 <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user.fullname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") </h5>
 
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
+
+
+
+    
 
         <div class="row">
             <div class="col-md-8">
 
+                <a href="#" class="showsection"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>
+                <section style="display:none">
+
+                    @using (Html.BeginForm("CreateComment", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="">
+                            <h4>Comments</h4>
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <input type="hidden" name="task_id" value="@Model.task_id" />
+
+                            <div class="form-group">
+                                @*<label class="control-label col-md-2">Title</label>*@
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" name="title" placeholder="Title (optional)" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <textarea class="form-control" name="description"  placeholder="comment"></textarea>
+
+                                </div>
+                                </div>
+                            <div class="form-group">
+                                <div class="col-md-2 ">
+                                    <input type="submit" class="btn btn-danger" value="save" />
+                                </div>
+                            </div>
+                            </div>
+                    }
+
+                </section>
+
+            @foreach (var comment in Model.comments)
+            {
+                <div class="task-title">@comment.title - </div>
+                <small>@comment.user.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
                 <h4>
-                    @Html.Raw(Model.description.Replace(Environment.NewLine, "<br/>"))
+                    @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))                    
                 </h4>
-            </div> <!-- fisrt col -->
+          <hr />
+
+            }
+
+
+            @foreach (var hist in Model.task_hist)
+            { 
+                @hist.created_on @hist.complexity
+            }
+
+                
+                </div> <!-- fisrt col -->
+
+
+
             <div class="col-md-4">
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.task_id)
                 @Html.HiddenFor(model => model.project_id)
+                @Html.HiddenFor(model => model.created_on)
+                @Html.HiddenFor(model => model.created_by)
+                @Html.HiddenFor(model => model.description)
 
-                <div class="form-group">
+                <div class="form-group pad20">
                     @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
 
@@ -38,72 +98,85 @@
 
 
 
-                <div class="form-group" style="display:none">
-                    @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-4" })
-                    <div class="col-md-8">
-                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+    <div class="form-group  pad20">
+        @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.test_status, htmlAttributes: new { @class = "control-label col-md-4" })
-                    <div class="col-md-8">
-                        @Html.DropDownList("test_status", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.test_status, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+    <div class="form-group  pad20">
+        @Html.LabelFor(model => model.test_status, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.DropDownList("test_status", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.test_status, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
 
-                <div class="form-group">
+                @*<div class="form-group">
                     @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
                         @Html.TextAreaFor(model => model.description, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
                     </div>
-                </div>
+                </div>*@
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-4" })
-                    <div class="col-md-8">
-                        @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.initiator, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+    <div class="form-group  pad20">
+        @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.initiator, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-4" })
-                    <div class="col-md-8">
-                        @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control" })
+    <div class="form-group pad20">
+        @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control" })
 
 
-                        @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+            @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-4" })
-                    <div class="col-md-8">
-                        @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker" } })
-                        @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-md-offset-5 col-md-6">
-                        <input type="submit" value="Save" class="btn btn-info" />
-                        <input type="reset" value="Reset" class="btn btn-default" />
-                    </div>
-                </div>
-            </div>
+    <div class="form-group pad20">
+        @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control" })
 
+
+            @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group  pad20">
+        @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker" } })
+            @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group pad20">
+        <div class="col-md-offset-4 col-md-8 text-center">
+
+            <input type="submit" value="Save" class="btn btn-info" />
+            <input type="reset" value="Reset" class="btn btn-default" />
+        </div>
+    </div>
+
+}
         </div><!-- second col-->
 
     </div> <!--end row-->
 
+        
 
-}
 
 <div>
     @Html.ActionLink("Back to List", "Index")
@@ -120,7 +193,10 @@
     <script>
         $(document).ready(function () {
 
-            $('.datepicker').datepicker();
+            $('body').on('click', '.showsection', function () {
+                $(this).next('section').toggle();
+            });
+
         });
     </script>
 }

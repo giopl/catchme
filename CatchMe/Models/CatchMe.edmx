@@ -111,7 +111,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
             <PropertyRef Name="task_hist_id" />
           </Key>
           <Property Name="task_hist_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="task_id" Type="int" />
+          <Property Name="task_id" Type="int" Nullable="false" />
           <Property Name="project_id" Type="int" />
           <Property Name="status" Type="int" />
           <Property Name="test_status" Type="int" />
@@ -232,6 +232,18 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
             </Principal>
             <Dependent Role="task_category">
               <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_task_hist_task_id">
+          <End Role="task" Type="Self.task" Multiplicity="1" />
+          <End Role="task_hist" Type="Self.task_hist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="task_hist">
+              <PropertyRef Name="task_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -362,6 +374,10 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
             <End Role="category" EntitySet="category" />
             <End Role="task_category" EntitySet="task_category" />
           </AssociationSet>
+          <AssociationSet Name="FK_task_hist_task_id" Association="Self.FK_task_hist_task_id">
+            <End Role="task" EntitySet="task" />
+            <End Role="task_hist" EntitySet="task_hist" />
+          </AssociationSet>
           <AssociationSet Name="FK_task_project_id" Association="Self.FK_task_project_id">
             <End Role="project" EntitySet="project" />
             <End Role="task" EntitySet="task" />
@@ -437,6 +453,10 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
             <End Role="task" EntitySet="tasks" />
           </AssociationSet>
           <EntitySet Name="taskHists" EntityType="CatchMeDBModel.taskHist" />
+          <AssociationSet Name="FK_task_hist_task_id" Association="CatchMeDBModel.FK_task_hist_task_id">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="task_hist" EntitySet="taskHists" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -603,6 +623,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
           <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="task" ToRole="user" />
           <NavigationProperty Name="task_user" Relationship="CatchMeDBModel.FK_task_user_task_id" FromRole="task" ToRole="taskUser" />
           <NavigationProperty Name="categories" Relationship="CatchMeDBModel.task_category" FromRole="task" ToRole="category" />
+          <NavigationProperty Name="task_hist" Relationship="CatchMeDBModel.FK_task_hist_task_id" FromRole="task" ToRole="task_hist" />
         </EntityType>
         <Association Name="FK_comment_task_id">
           <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
@@ -673,7 +694,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
             <PropertyRef Name="task_hist_id" />
           </Key>
           <Property Name="task_hist_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="task_id" Type="Int32" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
           <Property Name="project_id" Type="Int32" />
           <Property Name="status" Type="Int32" />
           <Property Name="test_status" Type="Int32" />
@@ -687,7 +708,20 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
           <Property Name="priority" Type="Int32" />
           <Property Name="created_by" Type="Int32" />
           <Property Name="created_on" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_task_hist_task_id" FromRole="task_hist" ToRole="task" />
         </EntityType>
+        <Association Name="FK_task_hist_task_id">
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
+          <End Type="CatchMeDBModel.taskHist" Role="task_hist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="task_hist">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

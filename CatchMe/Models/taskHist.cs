@@ -15,7 +15,7 @@ namespace CatchMe.Models
     public partial class taskHist
     {
         public int task_hist_id { get; set; }
-        public Nullable<int> task_id { get; set; }
+        public int task_id { get; set; }
         public Nullable<int> project_id { get; set; }
         public Nullable<int> status { get; set; }
         public Nullable<int> test_status { get; set; }
@@ -29,5 +29,7 @@ namespace CatchMe.Models
         public Nullable<int> priority { get; set; }
         public Nullable<int> created_by { get; set; }
         public Nullable<System.DateTime> created_on { get; set; }
+    
+        public virtual task task { get; set; }
     }
 }

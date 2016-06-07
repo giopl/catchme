@@ -35,6 +35,54 @@ namespace CatchMe.Helpers
 
         }
 
+        public enum TestStatusEnum
+        {
+            None = 0,
+            Not_Tested,
+            Ready_To_Test,
+            ReTest,
+            Passed,
+            Failed,
+            Incomplete,
+            Cannot_Test
+            
+
+        }
+
+        public enum PriorityEnum
+        {
+            None = 0,
+            Low,
+            Medium,
+            High,
+            Immediate
+        }
+
+
+        public enum SeverityComplexityEnum
+        {
+            None = 0,
+            Low,
+            Medium,
+            High,
+            Very_High
+        }
+
+        
+
+
+
+        public enum TypeEnum
+        {
+            None = 0,
+            Development,
+            Change,
+            Bug,
+            Failure,
+            Test,
+            Investigation
+        }
+
 
         public enum RoleEnum
         {

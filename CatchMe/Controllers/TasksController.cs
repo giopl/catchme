@@ -235,6 +235,33 @@ namespace CatchMe.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateComment([Bind(Include = "task_id,title,description")] comment comment)
+        {
+            try
+            {
+                comment.user_id = UserSession.Current.UserId;
+                comment.created_on = DateTime.Now;
+
+                if (ModelState.IsValid)
+                {
+                    db.comments.Add(comment);
+                    db.SaveChanges();
+
+                }
+
+                return RedirectToAction("EditTask", new { id = comment.task_id });
+                    
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+
         // POST: Tasks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -316,11 +343,13 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,priority,due_date")] task task)
+        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,title,description,initiator,complexity,priority,due_date,created_on,created_by")] task task)
         {
+                
+
+            var oldtask = db.tasks.AsNoTracking().Where(x=>x.task_id == task.task_id).FirstOrDefault();
 
 
-            var oldtask = db.tasks.Find(task.task_id);
 
             if (ModelState.IsValid)
             {
@@ -329,15 +358,23 @@ namespace CatchMe.Controllers
 
                 taskHist hist = new taskHist
                 {
-                    task_id = task.task_id,
-                    title = task.title,
-                    description = task.description,
                     
+                    task_id = task.task_id,
 
-                    //TODO add other fields here
+                    project_id = task.project_id,
+                    status = oldtask.status != task.status ? oldtask.status : null,
+                    test_status = oldtask.test_status != task.test_status ? oldtask.test_status : null,
+                    title = oldtask.title,
+                    description = oldtask.description,
+                    initiator = oldtask.initiator != task.initiator? oldtask.initiator : null,
+                    complexity = oldtask.complexity != task.complexity ? oldtask.complexity : null,
+                    priority = oldtask.priority != task.priority ? oldtask.priority : null,
+                    due_date = oldtask.due_date != task.due_date ? oldtask.due_date : null,
+                    created_on = oldtask.created_on
+                    
                 };
                 db.taskHists.Add(hist);
-
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }

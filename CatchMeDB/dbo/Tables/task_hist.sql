@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[task_hist] (
     [task_hist_id] INT            IDENTITY (100, 1) NOT NULL,
-    [task_id]      INT            NULL,
+    [task_id]      INT            NOT NULL,
     [project_id]   INT            NULL,
     [status]       INT            NULL,
     [test_status]  INT            NULL,
@@ -14,8 +14,11 @@
     [priority]     INT            NULL,
     [created_by]   INT            NULL,
     [created_on]   DATETIME       NULL,
-    PRIMARY KEY CLUSTERED ([task_hist_id] ASC)
+    PRIMARY KEY CLUSTERED ([task_hist_id] ASC),
+    CONSTRAINT [FK_task_hist_task_id] FOREIGN KEY ([task_id]) REFERENCES [dbo].[task] ([task_id])
 );
+
+
 
 
 

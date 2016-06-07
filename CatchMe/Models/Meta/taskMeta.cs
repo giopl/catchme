@@ -31,7 +31,7 @@ namespace CatchMe.Models
         [DisplayName("Description")]
         public string description { get; set; }
 
-        [DisplayName("Created By")]
+        [DisplayName("Initiator")]
         public string initiator { get; set; }
 
 
@@ -127,7 +127,7 @@ namespace CatchMe.Models
                 if (test_status.HasValue)
                 {
 
-                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.StatusEnum), test_status).ToString(), false);
+                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.TestStatusEnum), test_status).ToString(), false);
                 }
                 else
                 {
@@ -147,7 +147,7 @@ namespace CatchMe.Models
                 if (priority.HasValue)
                 {
 
-                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.StatusEnum), priority).ToString(), false);
+                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.PriorityEnum), priority).ToString(), false);
                 }
                 else
                 {
@@ -165,7 +165,7 @@ namespace CatchMe.Models
             {
                 if (complexity.HasValue)
                 {
-                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.StatusEnum), complexity).ToString(), false);
+                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.SeverityComplexityEnum), complexity).ToString(), false);
 
                 }
                 else
@@ -185,7 +185,7 @@ namespace CatchMe.Models
                 if (type.HasValue)
                 {
 
-                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.StatusEnum), type).ToString(), false);
+                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.TypeEnum), type).ToString(), false);
                 }
                 else
                 {
@@ -204,7 +204,7 @@ namespace CatchMe.Models
                 if (severity.HasValue)
                 {
 
-                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.StatusEnum), severity).ToString(), false);
+                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.SeverityComplexityEnum), severity).ToString(), false);
                 }
                 else
                 {

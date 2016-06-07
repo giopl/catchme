@@ -38,7 +38,7 @@ body {
 input,
 select,
 textarea {
-    max-width: 280px;
+    /*max-width: 280px;*/
 }
 
 
@@ -80,8 +80,26 @@ width:200px;
 }
 
 
+/* override */
+.pad20 {
+    padding: 20px 0;
+
+}
+
+.task-title {
+    font-size:24px;
+    font-weight:500;
+}
+
+.status {
+width:100px;
+}
+
+/* miscellanesous*/
+
     .border-red { border: 1px solid red;}    
     .border-green { border: 1px solid green;}    
     .border-orange { border: 1px solid green;}    
     
     .border-blue { border: 1px solid blue;}
+
