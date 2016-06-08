@@ -128,6 +128,15 @@
         </div>
     </div>
 
+    <div class="form-group pad20">
+        @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+
+            @Html.DropDownList("type", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
 
     <div class="form-group  pad20">
         @Html.LabelFor(model => model.test_status, htmlAttributes: new { @class = "control-label col-md-4" })

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CatchMe.Models
 {
@@ -18,6 +19,8 @@ namespace CatchMe.Models
         [StringLength(100)]
         public string name { get; set; }
 
+
+        
         [DisplayName("Description")]
         [StringLength(300)]
         [DataType(DataType.MultilineText)]

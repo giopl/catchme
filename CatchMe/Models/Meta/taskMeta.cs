@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CatchMe.Models
 {
@@ -15,6 +16,8 @@ namespace CatchMe.Models
 
         [DisplayName("Task Id")]
         public int task_id { get; set; }
+
+
 
         [DisplayName("Projet")]
         public int project_id { get; set; }
@@ -28,6 +31,8 @@ namespace CatchMe.Models
         [DisplayName("Title")]
         public string title { get; set; }
 
+        [AllowHtml]
+        [DataType(DataType.MultilineText)]
         [DisplayName("Description")]
         public string description { get; set; }
 

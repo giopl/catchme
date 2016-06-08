@@ -197,7 +197,7 @@ namespace CatchMe.Controllers
             severities.Add(new OptionItem { name = "Low", value = 1 });
             severities.Add(new OptionItem { name = "Medium", value = 2 });
             severities.Add(new OptionItem { name = "High", value = 3 });
-            severities.Add(new OptionItem { name = "Very High", value = 4 });
+            severities.Add(new OptionItem { name = "Critical", value = 4 });
 
             return severities;
         }
@@ -295,6 +295,31 @@ namespace CatchMe.Controllers
 
 
 
+
+                    taskHist hist = new taskHist
+                    {
+
+                        task_id = task.task_id,
+
+                        project_id = task.project_id,
+                        status = task.status.HasValue? task.status.Value.ToString():"0" ,
+                        test_status = task.test_status.HasValue?  task.test_status.Value.ToString():"0" ,
+                        title = task.title,
+                        description = task.description,
+                        initiator = task.initiator ,
+                        complexity = task.complexity.HasValue? task.complexity.Value.ToString():"0" ,
+                        priority = task.priority.HasValue? task.priority.Value.ToString():"0" ,
+                        due_date = task.due_date.HasValue?task.due_date.Value.ToString("yyyy MM dd") : "",
+                        created_on = task.created_on,
+                        created_by = task.created_by,
+                        hist_status = 0
+
+                    };
+                    db.taskHists.Add(hist);
+                    db.SaveChanges();
+
+
+
                     return RedirectToAction("Index");
                 }
 
@@ -362,14 +387,18 @@ namespace CatchMe.Controllers
                     task_id = task.task_id,
 
                     project_id = task.project_id,
-                    status = oldtask.status != task.status ? oldtask.status : null,
-                    test_status = oldtask.test_status != task.test_status ? oldtask.test_status : null,
-                    title = oldtask.title,
-                    description = oldtask.description,
-                    initiator = oldtask.initiator != task.initiator? oldtask.initiator : null,
-                    complexity = oldtask.complexity != task.complexity ? oldtask.complexity : null,
-                    priority = oldtask.priority != task.priority ? oldtask.priority : null,
-                    due_date = oldtask.due_date != task.due_date ? oldtask.due_date : null,
+                    status = oldtask.status != task.status ? string.Concat(oldtask.status,">",task.status) : null,
+                    test_status = oldtask.test_status != task.test_status ? string.Concat(oldtask.test_status,">",task.status) : null,
+                    title = string.Concat(oldtask.title,">",task.title),
+                    description = string.Concat(oldtask.description,">",task.description),
+                    initiator = oldtask.initiator != task.initiator? string.Concat(oldtask.initiator,">",task.initiator) : null,
+                    complexity = oldtask.complexity != task.complexity ? string.Concat(oldtask.complexity,">",task.complexity) : null,
+                    priority = oldtask.priority != task.priority ? string.Concat(oldtask.priority,">",task.priority) : null,
+                    due_date = oldtask.due_date != task.due_date ? 
+                        string.Concat((oldtask.due_date.HasValue?oldtask.due_date.Value.ToString("yyyy MM dd"):""),
+                                        ">",
+                        (task.due_date.HasValue?task.due_date.Value.ToString("yyyy MM dd"):""))
+                        : null,
                     created_on = DateTime.Now,
                     created_by = UserSession.Current.UserId
                     

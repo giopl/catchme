@@ -113,18 +113,19 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
           <Property Name="task_hist_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="task_id" Type="int" Nullable="false" />
           <Property Name="project_id" Type="int" />
-          <Property Name="status" Type="int" />
-          <Property Name="test_status" Type="int" />
+          <Property Name="status" Type="nvarchar" MaxLength="10" />
+          <Property Name="test_status" Type="nvarchar" MaxLength="10" />
           <Property Name="title" Type="nvarchar" MaxLength="500" />
           <Property Name="description" Type="nvarchar(max)" />
           <Property Name="initiator" Type="nvarchar" MaxLength="100" />
-          <Property Name="complexity" Type="int" />
-          <Property Name="due_date" Type="date" />
-          <Property Name="type" Type="int" />
-          <Property Name="severity" Type="int" />
-          <Property Name="priority" Type="int" />
+          <Property Name="complexity" Type="nvarchar" MaxLength="10" />
+          <Property Name="due_date" Type="nvarchar" MaxLength="30" />
+          <Property Name="type" Type="nvarchar" MaxLength="10" />
+          <Property Name="severity" Type="nvarchar" MaxLength="10" />
+          <Property Name="priority" Type="nvarchar" MaxLength="10" />
           <Property Name="created_by" Type="int" />
           <Property Name="created_on" Type="datetime" />
+          <Property Name="hist_status" Type="int" />
         </EntityType>
         <EntityType Name="task_user">
           <Key>
@@ -696,18 +697,19 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
           <Property Name="task_hist_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="task_id" Type="Int32" Nullable="false" />
           <Property Name="project_id" Type="Int32" />
-          <Property Name="status" Type="Int32" />
-          <Property Name="test_status" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="test_status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="initiator" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="complexity" Type="Int32" />
-          <Property Name="due_date" Type="DateTime" Precision="0" />
-          <Property Name="type" Type="Int32" />
-          <Property Name="severity" Type="Int32" />
-          <Property Name="priority" Type="Int32" />
+          <Property Name="complexity" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="due_date" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="severity" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="priority" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="created_by" Type="Int32" />
           <Property Name="created_on" Type="DateTime" Precision="3" />
+          <Property Name="hist_status" Type="Int32" />
           <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_task_hist_task_id" FromRole="task_hist" ToRole="task" />
         </EntityType>
         <Association Name="FK_task_hist_task_id">
@@ -857,6 +859,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
           <EntitySetMapping Name="taskHists">
             <EntityTypeMapping TypeName="CatchMeDBModel.taskHist">
               <MappingFragment StoreEntitySet="task_hist">
+                <ScalarProperty Name="hist_status" ColumnName="hist_status" />
                 <ScalarProperty Name="created_on" ColumnName="created_on" />
                 <ScalarProperty Name="created_by" ColumnName="created_by" />
                 <ScalarProperty Name="priority" ColumnName="priority" />
