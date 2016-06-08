@@ -18,25 +18,29 @@
     </div>
 </div>
 
+<style>
+    .red {
+        background:red;
+    }
+</style>
 @*<p>
     @Html.ActionLink("Create New", "Create")
 </p>*@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.status)
+            Id
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.test_status)
-        </th>
+        
         <th>
             @Html.DisplayNameFor(model => model.title)
         </th>
-        <th style="width:20%">
-            @Html.DisplayNameFor(model => model.description)
-        </th>
+        <td>
+            type
+        </td>
+
         <th>
-            Initiator
+            Raised By
         </th>
         <th>
             @Html.DisplayNameFor(model => model.priority)
@@ -50,24 +54,16 @@
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            
-
-            <div class="status label label-@(item.StatusDescLabel)">@Html.DisplayFor(modelItem => item.StatusDesc)</div>
-
+        <td>                        
+            <span class="text-muted">#@item.task_id</span>    
         </td>
+        <td>@item.TypeDesc</td>
         <td>
-            @Html.DisplayFor(modelItem => item.TestStatusDesc)
-        </td>
-        <td>
-            <a href="@Url.Action("EditTask", new {  id = item.task_id})">@Html.DisplayFor(modelItem => item.title)</a>
-</td>
-        <td>
-            <span class="readmore">
-            @Html.DisplayFor(modelItem => item.description)
+            <div class="readmore">
+                <div class="rectangle @item.StateColor"></div><a href="@Url.Action("EditTask", new {  id = item.task_id})">@Html.DisplayFor(modelItem => item.title)</a>
+            </div>
 
-            </span>
-        </td>
+            </td>
         <td>
             @Html.DisplayFor(modelItem => item.initiator)
         </td>

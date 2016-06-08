@@ -91,6 +91,24 @@ namespace CatchMe.Models
         
         }
 
+        public string StateColor
+        {
+            get
+            {
+                if (status.HasValue)
+                {
+
+                    var StateColor = AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.StatusEnum), status).ToString(), false);
+                    return StateColor.Replace(" ","").Trim().ToLower();
+                }
+                else
+                {
+                    return "none";
+                }
+            }
+
+        }
+
 
         public string StatusDescLabel
         {

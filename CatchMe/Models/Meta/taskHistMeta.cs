@@ -48,7 +48,29 @@ namespace CatchMe.Models
           if (!string.IsNullOrWhiteSpace(value))
                 {
 
-                    return AppEnums.DescEnum(Enum.ToObject(type, test_status).ToString(), false);
+                    if (value.Length > 1 && value.Contains(">"))
+                    {
+                        string[] vals = value.Split('>');
+
+                        if (vals.Length == 2)
+                        {
+
+                            int one = 0;
+                            int two = 0;
+                            Int32.TryParse(vals[0], out one);
+                            Int32.TryParse(vals[1], out two);
+                            
+                            var oldval = AppEnums.DescEnum(Enum.ToObject(type, one).ToString(), false);
+                            var newval = AppEnums.DescEnum(Enum.ToObject(type, two).ToString(), false);
+
+                            return string.Concat(oldval, " > ", newval);
+
+                        }
+
+                    }
+
+
+                    return AppEnums.DescEnum(Enum.ToObject(type, Convert.ToInt32(value)).ToString(), false);
                 }
                 else
                 {
@@ -108,8 +130,8 @@ namespace CatchMe.Models
 
                 if (!string.IsNullOrWhiteSpace(test_status))
                 {
-
-                    return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.TestStatusEnum), test_status).ToString(), false);
+                    
+                    return GetDesc(test_status, typeof(AppEnums.TestStatusEnum));
                 }
                 else
                 {
@@ -129,7 +151,8 @@ namespace CatchMe.Models
                 if (!string.IsNullOrWhiteSpace(priority))
                 {
 
-                    return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.PriorityEnum), priority).ToString(), false);
+                  return  GetDesc(priority, typeof(AppEnums.PriorityEnum));
+                    
                 }
                 else
                 {
@@ -147,7 +170,8 @@ namespace CatchMe.Models
             {
                 if (!string.IsNullOrWhiteSpace(complexity))
                 {
-                    return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.SeverityComplexityEnum), complexity).ToString(), false);
+                    return GetDesc(complexity, typeof(AppEnums.SeverityComplexityEnum));
+                    
 
                 }
                 else
@@ -166,8 +190,8 @@ namespace CatchMe.Models
             {
                 if (!string.IsNullOrWhiteSpace(type))
                 {
-
-                    return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.TypeEnum), type).ToString(), false);
+                    return GetDesc(type, typeof(AppEnums.TypeEnum));
+                    
                 }
                 else
                 {
@@ -185,8 +209,8 @@ namespace CatchMe.Models
             {
                 if (!string.IsNullOrWhiteSpace(severity))
                 {
-
-                    return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.SeverityComplexityEnum), severity).ToString(), false);
+                    return GetDesc(severity, typeof(AppEnums.SeverityComplexityEnum));
+                    
                 }
                 else
                 {

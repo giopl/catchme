@@ -7,13 +7,6 @@
 <h2>Edit Task #@Model.task_id - @Model.title </h2>
 <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user.fullname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") </h5>
 
-
-
-
-
-
-    
-
         <div class="row">
             <div class="col-md-8">
 
@@ -53,7 +46,7 @@
 
                 </section>
 
-            @foreach (var comment in Model.comments)
+            @foreach (var comment in Model.comments.OrderByDescending(x=>x.created_on))
             {
                 <div class="task-title">@comment.title - </div>
                 <small>@comment.user.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
@@ -74,13 +67,13 @@
                     <td>priority</td>
                        <td>severity</td> 
                 </tr>
-                @foreach (var hist in Model.task_hist)
+                @foreach (var hist in Model.task_hist.OrderByDescending(x=>x.created_on))
                 {
                     <tr>
                         <td>
                             @hist.created_on
                         </td>
-                        <td>@hist.StatusDesc</td>
+                        <td> @(hist.hist_status==0?"Task Created > ":"") @hist.StatusDesc</td>
                         
                         <td>@hist.TestStatusDesc</td>
                         <td>@hist.TypeDesc</td>

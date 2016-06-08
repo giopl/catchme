@@ -252,6 +252,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\plugins\list.js" />
+    <Content Include="Scripts\plugins\nicEdit.js" />
+    <Content Include="Scripts\plugins\nicEditorIcons.gif" />
     <Content Include="Scripts\plugins\readmore.js" />
     <Content Include="Scripts\plugins\select2.js" />
     <Content Include="Scripts\respond.js" />

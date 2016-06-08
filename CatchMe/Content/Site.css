@@ -95,6 +95,35 @@ width:200px;
 width:100px;
 }
 
+.rectangle {
+	width: 8px;
+	height: 20px;	
+    float:left;
+    margin-right:5px;
+}
+	
+.open{
+    background: #428BCA;
+}
+
+
+.problem, .new  {
+    background: #D9534F;
+}
+
+.inprogress {
+    background: #F0AD4E;
+}
+
+.completed {
+    background: #5CB85C;
+}
+.none, .completed {
+    background: #777777;
+
+}
+
+
 /* miscellanesous*/
 
     .border-red { border: 1px solid red;}    

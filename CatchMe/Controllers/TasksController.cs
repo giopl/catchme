@@ -267,7 +267,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateTask([Bind(Include = "task_id,project_id,status,test_status,title,description,creator,complexity,priority,due_date")] task task)
+        public ActionResult CreateTask([Bind(Include = "task_id,project_id,status,test_status,title,description,initiator,type,complexity,severity,priority,due_date")] task task)
         {
             try
             {
@@ -368,7 +368,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,title,description,initiator,complexity,priority,due_date,created_on,created_by")] task task)
+        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,type,title,description,initiator,complexity,priority,due_date,created_on,created_by")] task task)
         {
                 
 
@@ -400,7 +400,8 @@ namespace CatchMe.Controllers
                         (task.due_date.HasValue?task.due_date.Value.ToString("yyyy MM dd"):""))
                         : null,
                     created_on = DateTime.Now,
-                    created_by = UserSession.Current.UserId
+                    created_by = UserSession.Current.UserId,
+                    hist_status = 1
                     
                 };
                 db.taskHists.Add(hist);
