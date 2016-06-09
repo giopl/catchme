@@ -53,6 +53,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
@@ -238,6 +240,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="notes\catchme_data.7z" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="notes\todo.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap3-typeahead.js" />

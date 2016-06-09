@@ -17,34 +17,37 @@
                     {
                         @Html.AntiForgeryToken()
 
-                        <div class="">
-                            <h4>Comments</h4>
-                            <hr />
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <h4>Comments</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                            <input type="hidden" name="task_id" value="@Model.task_id" />
+        <input type="hidden" name="task_id" value="@Model.task_id" />
 
-                            <div class="form-group">
-                                @*<label class="control-label col-md-2">Title</label>*@
-                                <div class="col-md-12">
-                                    <input type="text" class="form-control" name="title" placeholder="Title (optional)" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <textarea class="form-control" name="description"  placeholder="comment"></textarea>
+        <div class="form-group">
+            <label class="col-md-2">Title</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="title" placeholder="Title (optional)" />
+            </div>
+        </div>
+        <div class="form-group">            
+           <label class="col-md-2">Description</label>
+               <div class="col-md-10">
+                   <textarea name="description" id="niceditor" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment"></textarea>
+                </div>
+        </div>
 
-                                </div>
-                                </div>
-                            <div class="form-group">
-                                <div class="col-md-2 ">
-                                    <input type="submit" class="btn btn-danger" value="save" />
-                                </div>
-                            </div>
-                            </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10 text-center">
+                <input type="submit" class="btn btn-danger" value="save" />
+                <input type="reset" class="btn btn-default" id="closeAddComment" value="close" />
+            </div>
+        </div>
+    </div>
                     }
 
-                </section>
+</section>
 
             @foreach (var comment in Model.comments.OrderByDescending(x=>x.created_on))
             {
@@ -220,6 +223,14 @@
             $('body').on('click', '.showsection', function () {
                 $(this).next('section').toggle();
             });
+
+
+
+            $('body').on('click', '#closeAddComment', function () {
+                $(this).closest('section').hide();
+            });
+
+            
 
         });
     </script>

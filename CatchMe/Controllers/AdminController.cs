@@ -8,12 +8,16 @@ using System.Web;
 using System.Web.Mvc;
 using CatchMe.Models;
 using System.Text;
+using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
+using log4net;
 
 namespace CatchMe.Controllers
 {
     public class AdminController : BaseController
     {
         private CatchMeDBEntities db = new CatchMeDBEntities();
+        log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         // GET: Projects
         public ActionResult Index()
@@ -55,13 +59,16 @@ namespace CatchMe.Controllers
 
             employee emp = db.employees.Where(x=>x.user_id == user).FirstOrDefault();
 
+            //if ldap is on
+
 
             var founduser = new user
             {
                 firstname = emp.common_name,
                 lastname = emp.fam_name,
                 username = emp.user_id,
-                email = string.Format("{0}@local.mcb", emp.user_id),
+                //email = string.Format("{0}@local.mcb", emp.user_id),
+                email = getUserCommonName(emp.user_id),
                 job_title = emp.position_title,
                 team = emp.team
             };
@@ -77,6 +84,35 @@ namespace CatchMe.Controllers
 
 
 
+        private string getUserCommonName(string user)
+        {
+            
+
+            try
+            {
+                using (var context = new PrincipalContext(ContextType.Domain))
+                {
+                    //log.Info(string.Concat("connected to server: ", context.ConnectedServer));
+                    var principal = UserPrincipal.FindByIdentity(context, user);
+
+
+                    var firstName = principal.GivenName;
+                    var lastName = principal.Surname;
+                    var email = principal.EmailAddress;
+
+                    return email;
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error("[getUserCommonName] - Exception Caught" + e.ToString());
+                throw;
+            }
+        }
+
+
+
+
         // GET: Users/Edit/5
         public ActionResult EditUser(int? id)
         {
@@ -89,6 +125,7 @@ namespace CatchMe.Controllers
             {
                 return HttpNotFound();
             }
+
 
             ViewBag.active_project = new SelectList(db.projects, "project_id", "name", user.active_project);
 
@@ -138,6 +175,8 @@ namespace CatchMe.Controllers
 
 
             var employee = db.employees.Where(x => x.user_id == addeduser.username).ToList() ;
+
+
             if (employee != null && employee.Count == 1 )
             {
 

@@ -1,0 +1,8 @@
+﻿1. add assigned to me
+2. add multiple assignees (select2)
+3. add list.js function to filter list
+4. allow system to remember filters
+5. add attachment of files
+6. add emailing functionality
+7. add email address to users table
+8. add pagination

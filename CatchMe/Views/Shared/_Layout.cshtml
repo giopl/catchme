@@ -46,8 +46,18 @@
     @RenderSection("scripts", required: false)
 
     <script type="text/javascript">    
-            bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-    
+
+        bkLib.onDomLoaded(function () {
+
+            nicEditors.allTextAreas();
+            //nicEditors.findEditor('myArea2');
+        });
+
+        
+        
+
+
+
     </script>
 
 </body>
