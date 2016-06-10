@@ -102,12 +102,12 @@ width:100px;
     margin-right:5px;
 }
 	
-.open{
+.active,.onhold,.investigation{
     background: #428BCA;
 }
 
 
-.problem, .new  {
+.problem, .failed  {
     background: #D9534F;
 }
 
@@ -115,10 +115,10 @@ width:100px;
     background: #F0AD4E;
 }
 
-.completed {
+.completed,.passed,.closed {
     background: #5CB85C;
 }
-.none, .completed {
+.new,  .noissue {
     background: #777777;
 
 }

@@ -478,7 +478,7 @@ namespace CatchMe.Controllers
                     task_id = task.task_id,
 
                     project_id = task.project_id,
-                    status = oldtask.status != task.status ? string.Concat(oldtask.status,">",task.status) : null,
+                    status = oldtask.status != task.status ? string.Concat(oldtask.status, ">", task.status) : task.status.Value.ToString(),
                     test_status = oldtask.test_status != task.test_status ? string.Concat(oldtask.test_status,">",task.status) : null,
                     title = string.Concat(oldtask.title,">",task.title),
                     description = string.Concat(oldtask.description,">",task.description),
