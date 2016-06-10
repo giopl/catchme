@@ -23,15 +23,17 @@ namespace CatchMe.Helpers
 
         public enum StatusEnum
         {
-            None = 0,
-            New,
-            Open,
-            In_Progress,
+            
+            New = 0,
+            Active,
+            Investigation,
             Completed,
             On_Hold,
-            Cancelled,
-            Closed,
-            Problem
+            Problem,
+            No_Issue,
+            Passed,
+            Failed,
+            Closed
 
         }
 

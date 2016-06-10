@@ -6,3 +6,38 @@
 6. add emailing functionality
 7. add email address to users table
 8. add pagination
+
+
+
+state    assigned
+New -->  developer  (Read only) 
+Active -> development (becomes editable)
+Completed --> developer 
+ON Hold --> developer (Read only)
+Test Passed -> (Tester) --> 
+Test Failed - > active (tester) -->
+Closed
+
+new		> active		> completed		> test passed	> closed
+										> test failed	> active
+						> problem
+						> on hold		
+						> problem		> active	
+						> no issue		> closed	
+
+		> investigation	> active		
+						> no issue		
+						> problem		
+
+permission precedence
+---------------------
+	         New = 0,	active,investigation
+1	            Active,	Completed|On Hold|Problem|No Issue|New
+2	            Investigation,	Active|On Hold|No Issue|Problem
+3	            Completed,	Pass | Failed
+4	            On_Hold,	Active
+5	            Problem,	Active
+6	            No_Issue,	Active|Closed
+7	            Passed,	Closed
+8	            Failed,	Active
+9	            Closed	Active

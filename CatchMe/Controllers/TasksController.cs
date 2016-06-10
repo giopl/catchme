@@ -125,18 +125,102 @@ namespace CatchMe.Controllers
         }
 
 
-        private List<OptionItem> getStatuses()
+        private List<OptionItem> getStatuses(int val)
         {
+
+
+
+
             List<OptionItem> statuses = new List<OptionItem>();
-            statuses.Add(new OptionItem { name = "None", value = 0 });
-            statuses.Add(new OptionItem { name = "New", value = 1 });
-            statuses.Add(new OptionItem { name = "Open", value = 2 });
-            statuses.Add(new OptionItem { name = "In Progress", value = 3 });
-            statuses.Add(new OptionItem { name = "Completed", value = 4 });
-            statuses.Add(new OptionItem { name = "On Hold", value = 5 });
-            statuses.Add(new OptionItem { name = "Cancelled", value = 6 });
-            statuses.Add(new OptionItem { name = "Closed", value = 7 });
-            statuses.Add(new OptionItem { name = "Problem", value = 8 });
+
+            if (val == 0)
+            {
+                statuses.Add(new OptionItem { name = "New", value = 0 });
+                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Investigation", value = 2 });
+            }
+
+            if (val == 1)
+            {
+                statuses.Add(new OptionItem { name = "New", value = 0 });
+                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Completed", value = 3 });
+                statuses.Add(new OptionItem { name = "On Hold", value = 4 });
+                statuses.Add(new OptionItem { name = "Problem", value = 5 });
+                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+            }
+
+
+            if (val == 2)
+            {
+                statuses.Add(new OptionItem { name = "New", value = 0 });
+                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Investigation", value = 2 });
+                statuses.Add(new OptionItem { name = "Completed", value = 3 });
+                statuses.Add(new OptionItem { name = "On Hold", value = 4 });
+                statuses.Add(new OptionItem { name = "Problem", value = 5 });
+                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+            }
+
+
+            if (val == 3)            
+            {
+                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Completed", value = 3 });
+                statuses.Add(new OptionItem { name = "Passed", value = 7 });
+                statuses.Add(new OptionItem { name = "Failed", value = 8 });
+            }
+
+            if (val == 4)
+            {
+                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "On Hold", value = 4 });
+            }
+
+            if (val == 5)
+            {
+                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Problem", value = 5 });
+            }
+
+            if (val == 6)
+            {
+                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                statuses.Add(new OptionItem { name = "Closed", value = 9 });
+            }
+
+            if (val == 7)
+            {
+                statuses.Add(new OptionItem { name = "Passed", value = 7 });
+                statuses.Add(new OptionItem { name = "Closed", value = 9 });
+            }
+
+            if (val == 8)
+            {
+                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Failed", value = 8 });
+            }
+
+            if (val == 9)
+            {
+                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Closed", value = 9 });
+            }
+            
+            
+
+            //statuses.Add(new OptionItem { name = "New", value = 0 });
+            //statuses.Add(new OptionItem { name = "Active", value = 1 });
+            //statuses.Add(new OptionItem { name = "Investigation", value = 2 });
+            //statuses.Add(new OptionItem { name = "Completed", value = 3 });
+            //statuses.Add(new OptionItem { name = "On Hold", value = 4 });
+            //statuses.Add(new OptionItem { name = "Problem", value = 5 });
+            //statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+            //statuses.Add(new OptionItem { name = "Passed", value = 7 });
+            //statuses.Add(new OptionItem { name = "Failed", value = 8 });
+            //statuses.Add(new OptionItem { name = "Closed", value = 9 });
+
             return statuses;
         }
 
@@ -223,7 +307,7 @@ namespace CatchMe.Controllers
         public ActionResult CreateTask()
         {
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
-            ViewBag.status = new SelectList(getStatuses(), "value", "name");
+            //ViewBag.status = new SelectList(getStatuses(), "value", "name");
             ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name");
             ViewBag.complexity = new SelectList(getComplexities(), "value", "name");
             ViewBag.type= new SelectList(getTypes(), "value", "name");
@@ -346,7 +430,14 @@ namespace CatchMe.Controllers
 
 
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
-            ViewBag.status = new SelectList(getStatuses(), "value", "name", task.status );
+            
+            
+
+
+            ViewBag.status = new SelectList(getStatuses(task.status.Value), "value", "name", task.status );
+            
+            
+            
             ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name", task.test_status);
             ViewBag.complexity = new SelectList(getComplexities(), "value", "name", task.complexity);
             ViewBag.type = new SelectList(getTypes(), "value", "name", task.type);
@@ -410,7 +501,7 @@ namespace CatchMe.Controllers
                 return RedirectToAction("EditTask", new { id = task.task_id });
             }
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
-            ViewBag.status = new SelectList(getStatuses(), "value", "name", task.status);
+            ViewBag.status = new SelectList(getStatuses(task.status.Value), "value", "name", task.status);
             ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name", task.test_status);
             ViewBag.complexity = new SelectList(getComplexities(), "value", "name", task.complexity);
             ViewBag.type = new SelectList(getTypes(), "value", "name", task.type);
