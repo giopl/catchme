@@ -46,7 +46,7 @@ namespace CatchMe
                       "~/Content/bootstrap.css",
                       "~/Content/font-awesome.css",
                       "~/Content/select2.css",
-                      //"~/Content/DataTables.css",
+                      "~/Content/DataTables.css",
 
                       "~/Content/site.css"));
 
