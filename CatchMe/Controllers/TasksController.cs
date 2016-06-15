@@ -307,6 +307,20 @@ namespace CatchMe.Controllers
         public ActionResult CreateTask()
         {
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+
+
+            var currentprojectid = UserSession.Current.CurrentProjectId;
+
+            var currentproject = db.projects.Find(currentprojectid);
+            
+            
+            //http://stackoverflow.com/questions/13405568/linq-unable-to-create-a-constant-value-of-type-xxx-only-primitive-types-or-enu
+            var users = db.users.Where(x=>x.projects.Select(p=>p.project_id).Contains(currentprojectid)).ToList();
+            //Where(l => l.Courses.Select(c => c.CourseId).Contains(courseId)
+
+            ViewBag.assigned_to = new SelectList(users, "user_id", "firstname");
+            
+
             //ViewBag.status = new SelectList(getStatuses(), "value", "name");
             ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name");
             ViewBag.complexity = new SelectList(getComplexities(), "value", "name");
@@ -316,7 +330,7 @@ namespace CatchMe.Controllers
 
 
 
-            return View();
+            return View(new task());
         }
 
         [HttpPost]
@@ -351,7 +365,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateTask([Bind(Include = "task_id,project_id,status,test_status,title,description,initiator,type,complexity,severity,priority,due_date")] task task)
+        public ActionResult CreateTask([Bind(Include = "task_id,project_id,status,test_status,title,description,initiator,type,complexity,severity,priority,due_date,assigned_to")] task task)
         {
             try
             {
@@ -430,9 +444,17 @@ namespace CatchMe.Controllers
 
 
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
-            
-            
+            var currentprojectid = UserSession.Current.CurrentProjectId;
 
+            var currentproject = db.projects.Find(currentprojectid);
+
+
+            //http://stackoverflow.com/questions/13405568/linq-unable-to-create-a-constant-value-of-type-xxx-only-primitive-types-or-enu
+            var users = db.users.Where(x => x.projects.Select(p => p.project_id).Contains(currentprojectid)).ToList();
+            //Where(l => l.Courses.Select(c => c.CourseId).Contains(courseId)
+
+
+            ViewBag.assigned_to = new SelectList(users, "user_id", "firstname");
 
             ViewBag.status = new SelectList(getStatuses(task.status.Value), "value", "name", task.status );
             
@@ -459,7 +481,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,type,title,description,initiator,complexity,priority,due_date,created_on,created_by")] task task)
+        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,type,title,description,initiator,complexity,priority,due_date,created_on,created_by,assigned_to")] task task)
         {
                 
 

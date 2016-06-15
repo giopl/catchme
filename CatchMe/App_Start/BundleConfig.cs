@@ -25,7 +25,8 @@ namespace CatchMe
                 //https://select2.github.io/
                       "~/Scripts/plugins/select2.js",
                       "~/Scripts/plugins/readmore.js",
-                      "~/Scripts/plugins/nicEdit.js",                      
+                      "~/Scripts/plugins/nicEdit.js",
+                      "~/Scripts/plugins/DataTables.js",
                       "~/Scripts/respond.js"));
 
 
@@ -39,6 +40,8 @@ namespace CatchMe
                       "~/Content/bootstrap.css",
                       "~/Content/font-awesome.css",
                       "~/Content/select2.css",
+                      //"~/Content/DataTables.css",
+
                       "~/Content/site.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,

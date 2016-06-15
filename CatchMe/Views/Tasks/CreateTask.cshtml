@@ -1,10 +1,19 @@
 ﻿@model CatchMe.Models.task
 @using session = CatchMe.Helpers.UserSession
 @using selectlists = CatchMe.Helpers.SelectItems
+
+
 @{
     ViewBag.Title = "Create";
 
-        }
+    if (!string.IsNullOrWhiteSpace(session.Current.Username))
+    { 
+    Model.initiator = session.Current.Firstname;
+    
+    }
+        
+        
+                }
 
         <h2><span class="fa fa-plus-circle"></span>&nbsp;New Task for @session.Current.CurrentProject</h2>
 
@@ -27,6 +36,14 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    @Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+
+                        @Html.DropDownList("assigned_to", null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
 
                 <div class="form-group">

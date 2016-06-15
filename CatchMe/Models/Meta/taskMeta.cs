@@ -91,6 +91,29 @@ namespace CatchMe.Models
         
         }
 
+        public string typeIcon
+        {
+
+
+            get
+            {
+                switch (type)
+                {
+                    case 1: return "wrench";
+                        case 2: return "cogs";
+                        case 3: return "bug";
+                        case 4: return "exclamation";
+                        case 5: return "thumbs-up";
+                        case 6: return "search";
+                        
+                    default:
+                        break;
+                }
+                return string.Empty;
+
+            }
+        }
+
         public string StateColor
         {
             get

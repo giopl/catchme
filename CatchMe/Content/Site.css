@@ -102,6 +102,15 @@ width:100px;
     margin-right:5px;
 }
 	
+
+.rectangle-big {
+	width: 16px;
+	height: 40px;	
+    float:left;
+    margin-right:5px;
+}
+	
+
 .active,.onhold,.investigation{
     background: #428BCA;
 }

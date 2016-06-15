@@ -2,10 +2,14 @@
 @using session = CatchMe.Helpers.UserSession
 @{
     ViewBag.Title = "Edit Task";
+
+    var assignee = (Model.user == null) ? "Unassigned" : Model.user.fullname;
+
+    bool notassigned = Model.user == null;
 }
 
-<h2>Edit Task #@Model.task_id - @Model.title </h2>
-<h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user.fullname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") </h5>
+<h2><span class="rectangle-big @Model.StateColor"></span> Edit Task #@Model.task_id - @Model.title <span class="label label-@(notassigned?"default":"info")">(@assignee)</span> </h2>
+<h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.fullname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") </h5>
 
         <div class="row">
             <div class="col-md-8">
@@ -113,6 +117,15 @@
                         @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+    <div class="form-group pad20">
+        @Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+
+            @Html.DropDownList("assigned_to", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
 
 

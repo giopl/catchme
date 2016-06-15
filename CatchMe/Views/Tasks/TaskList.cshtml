@@ -19,53 +19,56 @@
 </div>
 
 <style>
-    .red {
-        background:red;
-    }
+    .red { background:red; }
 </style>
 @*<p>
     @Html.ActionLink("Create New", "Create")
 </p>*@
-<table class="table">
-    <tr>
-        <th>
-            Id
-        </th>
-        
-        <th>
-            @Html.DisplayNameFor(model => model.title)
-        </th>
-        <td>
-            type
-        </td>
+<table class="table" id="tasklisttable">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
 
-        <th>
-            Raised By
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.priority)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.due_date)
-        </th>
-        
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>                        
-            <span class="text-muted">#@item.task_id</span>    
-        </td>
-        <td>@item.TypeDesc</td>
-        <td>
-            <div class="readmore">
-                <div class="rectangle @item.StateColor"></div><a href="@Url.Action("EditTask", new {  id = item.task_id})">@Html.DisplayFor(modelItem => item.title)</a>
-            </div>
-
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <td>
+                type
             </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.initiator)
+
+            <th>
+                Assigned To
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.priority)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.due_date)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <span class="text-muted">#@item.task_id</span>
+                </td>
+                <td title="@item.TypeDesc"><span class="fa  fa-@(item.typeIcon)"></span></td>
+                <td>
+                    <div class="readmore">
+                        <div class="rectangle @item.StateColor"></div><a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a>
+                    </div>
+
+                </td>
+                <td>
+                    @{ var assignee = item.user == null ? "Unassigned" : item.user.fullname; }
+                    @assignee
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.PriorityDesc)
@@ -73,15 +76,15 @@
         <td>
             @Html.DisplayFor(modelItem => item.due_date)
         </td>
-        
+
         <td>
             <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
             <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
-            
+
         </td>
     </tr>
-}
-
+        }
+    </tbody>
 </table>
 
 
@@ -93,6 +96,8 @@
                 minimumResultsForSearch: Infinity
             });
 
+
+            $('#tasklisttable').DataTable();
 
             $('body').on('change', '.changeproject', function () {
                 var project_id = $(this).val();
