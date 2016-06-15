@@ -136,14 +136,14 @@ namespace CatchMe.Controllers
             if (val == 0)
             {
                 statuses.Add(new OptionItem { name = "New", value = 0 });
-                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Actioned", value = 1 });
                 statuses.Add(new OptionItem { name = "Investigation", value = 2 });
             }
 
             if (val == 1)
             {
                 statuses.Add(new OptionItem { name = "New", value = 0 });
-                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Actioned", value = 1 });
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
@@ -154,7 +154,7 @@ namespace CatchMe.Controllers
             if (val == 2)
             {
                 statuses.Add(new OptionItem { name = "New", value = 0 });
-                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Actioned", value = 1 });
                 statuses.Add(new OptionItem { name = "Investigation", value = 2 });
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
@@ -165,7 +165,7 @@ namespace CatchMe.Controllers
 
             if (val == 3)            
             {
-                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Actioned", value = 1 });
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "Passed", value = 7 });
                 statuses.Add(new OptionItem { name = "Failed", value = 8 });
@@ -173,19 +173,19 @@ namespace CatchMe.Controllers
 
             if (val == 4)
             {
-                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Actioned", value = 1 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
             }
 
             if (val == 5)
             {
-                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Actioned", value = 1 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
             }
 
             if (val == 6)
             {
-                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Actioned", value = 1 });
                 statuses.Add(new OptionItem { name = "No Issue", value = 6 });
                 statuses.Add(new OptionItem { name = "Closed", value = 9 });
             }
@@ -198,20 +198,20 @@ namespace CatchMe.Controllers
 
             if (val == 8)
             {
-                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Actioned", value = 1 });
                 statuses.Add(new OptionItem { name = "Failed", value = 8 });
             }
 
             if (val == 9)
             {
-                statuses.Add(new OptionItem { name = "Active", value = 1 });
+                statuses.Add(new OptionItem { name = "Actioned", value = 1 });
                 statuses.Add(new OptionItem { name = "Closed", value = 9 });
             }
             
             
 
             //statuses.Add(new OptionItem { name = "New", value = 0 });
-            //statuses.Add(new OptionItem { name = "Active", value = 1 });
+            //statuses.Add(new OptionItem { name = "Actioned", value = 1 });
             //statuses.Add(new OptionItem { name = "Investigation", value = 2 });
             //statuses.Add(new OptionItem { name = "Completed", value = 3 });
             //statuses.Add(new OptionItem { name = "On Hold", value = 4 });

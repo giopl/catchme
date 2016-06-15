@@ -87,6 +87,7 @@ namespace CatchMe.Controllers
         private string getUserCommonName(string user)
         {
             
+                var email = string.Empty;
 
             try
             {
@@ -98,7 +99,7 @@ namespace CatchMe.Controllers
 
                     var firstName = principal.GivenName;
                     var lastName = principal.Surname;
-                    var email = principal.EmailAddress;
+                     email = principal.EmailAddress;
 
                     return email;
                 }
@@ -106,8 +107,10 @@ namespace CatchMe.Controllers
             catch (Exception e)
             {
                 log.Error("[getUserCommonName] - Exception Caught" + e.ToString());
-                throw;
+                //throw;
+                return email;
             }
+            
         }
 
 

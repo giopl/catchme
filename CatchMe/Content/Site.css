@@ -111,7 +111,7 @@ width:100px;
 }
 	
 
-.active,.onhold,.investigation{
+.actioned,.onhold,.investigation{
     background: #428BCA;
 }
 

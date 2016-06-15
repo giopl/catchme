@@ -17,7 +17,8 @@ namespace CatchMe.Models
         [DisplayName("Task Id")]
         public int task_id { get; set; }
 
-
+        [DisplayName("Assigned To")]
+        public int assigned_to { get; set; }
 
         [DisplayName("Projet")]
         public int project_id { get; set; }

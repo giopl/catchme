@@ -23,11 +23,17 @@ namespace CatchMe
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/bootstrap3-typeahead.js",
                 //https://select2.github.io/
-                      "~/Scripts/plugins/select2.js",
+                      //"~/Scripts/plugins/select2.js",
                       "~/Scripts/plugins/readmore.js",
-                      "~/Scripts/plugins/nicEdit.js",
-                      "~/Scripts/plugins/DataTables.js",
                       "~/Scripts/respond.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/nicedit").Include(
+                      "~/Scripts/plugins/nicEdit.js"
+            ));
+
+            bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
+                      "~/Scripts/plugins/DataTables.js"
+            ));
 
 
             bundles.Add(new ScriptBundle("~/bundles/custom").Include(

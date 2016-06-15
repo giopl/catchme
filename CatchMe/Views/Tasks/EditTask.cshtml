@@ -37,7 +37,7 @@
         <div class="form-group">            
            <label class="col-md-2">Description</label>
                <div class="col-md-10">
-                   <textarea name="description" id="niceditor" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment"></textarea>
+                   <textarea name="description" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment"></textarea>
                 </div>
         </div>
 
@@ -64,34 +64,37 @@
 
             }
 
-            <h4>Task History</h4>
-            <table class="table">
-                <tr>
-                    <td>date</td>
-                    <td>status</td>
-                    <td>test</td>
-                    <td>type</td>
-                    <td>priority</td>
-                       <td>severity</td> 
-                </tr>
-                @foreach (var hist in Model.task_hist.OrderByDescending(x=>x.created_on))
-                {
-                    <tr>
-                        <td>
-                            @hist.created_on
-                        </td>
-                        <td> @(hist.hist_status==0?"Task Created > ":"") @hist.StatusDesc</td>
-                        
-                        <td>@hist.TestStatusDesc</td>
-                        <td>@hist.TypeDesc</td>
-                        <td>@hist.PriorityDesc</td>
-                        <td>@hist.SeverityDesc</td>
-                    </tr>
-                }
+            <h4>Task History (@Model.task_hist.Count)</h4>
+   
+                <a href="#" class="showsection"><span class="fa fa-plus-circle"></span>&nbsp;Show/Hide history</a>
+                <section style="display:none">
+                    <table class="table">
+                        <tr>
+                            <td>date</td>
+                            <td>status</td>
+                            <td>test</td>
+                            <td>type</td>
+                            <td>priority</td>
+                            <td>severity</td>
+                        </tr>
+                        @foreach (var hist in Model.task_hist.OrderByDescending(x => x.created_on))
+                        {
+                            <tr>
+                                <td>
+                                    @hist.created_on
+                                </td>
+                                <td> @(hist.hist_status == 0 ? "Task Created > " : "") @hist.StatusDesc</td>
 
-            </table>
-            
+                                <td>@hist.TestStatusDesc</td>
+                                <td>@hist.TypeDesc</td>
+                                <td>@hist.PriorityDesc</td>
+                                <td>@hist.SeverityDesc</td>
+                            </tr>
+                        }
 
+                    </table>
+
+                </section>
                 
                 </div> <!-- fisrt col -->
 
@@ -146,23 +149,6 @@
         </div>
     </div>
 
-
-    <div class="form-group  pad20">
-        @Html.LabelFor(model => model.test_status, htmlAttributes: new { @class = "control-label col-md-4" })
-        <div class="col-md-8">
-            @Html.DropDownList("test_status", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.test_status, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-
-                @*<div class="form-group">
-                    @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-4" })
-                    <div class="col-md-8">
-                        @Html.TextAreaFor(model => model.description, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
-                    </div>
-                </div>*@
 
     <div class="form-group  pad20">
         @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-4" })
@@ -228,9 +214,21 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/nicedit")
 
     <script>
+
+        bkLib.onDomLoaded(function () {
+
+            //nicEditors.allTextAreas();
+            new nicEditor({
+                //  fullPanel: true,
+                buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'forecolor', 'bgcolor']
+            }).panelInstance('area2');
+            //nicEditors.findEditor('myArea2');
+        });
+
         $(document).ready(function () {
 
             $('body').on('click', '.showsection', function () {
