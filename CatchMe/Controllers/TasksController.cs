@@ -716,7 +716,7 @@ namespace CatchMe.Controllers
 
                     //ViewBag.Email = email;
 
-                    return null;
+                    return RedirectToAction("EditTask", new { id = task });
 
 
                 
