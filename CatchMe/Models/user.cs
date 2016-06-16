@@ -16,12 +16,12 @@ namespace CatchMe.Models
     {
         public user()
         {
-            this.comments = new HashSet<comment>();
             this.task_user = new HashSet<taskUser>();
             this.logs = new HashSet<log>();
             this.projects = new HashSet<project>();
             this.tasks = new HashSet<task>();
             this.tasks1 = new HashSet<task>();
+            this.comments = new HashSet<comment>();
         }
     
         public int user_id { get; set; }
@@ -36,11 +36,11 @@ namespace CatchMe.Models
         public string email { get; set; }
         public Nullable<int> active_project { get; set; }
     
-        public virtual ICollection<comment> comments { get; set; }
         public virtual ICollection<taskUser> task_user { get; set; }
         public virtual ICollection<log> logs { get; set; }
         public virtual ICollection<project> projects { get; set; }
         public virtual ICollection<task> tasks { get; set; }
         public virtual ICollection<task> tasks1 { get; set; }
+        public virtual ICollection<comment> comments { get; set; }
     }
 }

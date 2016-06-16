@@ -8,6 +8,8 @@
     bool notassigned = Model.user == null;
 
     var users = ViewBag.EmailTo as List<CatchMe.Models.user>;
+
+    var is_readonly = Model.IsReadonly;
 }
 
 <h2><span class="rectangle-big @Model.StateColor"></span> Edit Task #@Model.task_id - @Model.title <span class="label label-@(notassigned?"default":"info")">(@assignee)</span> </h2>
@@ -17,9 +19,19 @@
             <div class="col-md-8">
             
 
-                <a href="#" class="showsection" data-sectionnum=".section1"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>&nbsp;|&nbsp;
-                <a href="#" class="showsection" data-sectionnum=".section2"><span class="fa fa-envelope"></span>&nbsp;Notify </a>&nbsp;|&nbsp;
-                <a href="#" class="showsection" data-sectionnum=".section3"><span class="fa fa-history"></span>&nbsp;History (@Model.task_hist.Count)</a>
+            @if(is_readonly)
+            {
+                <span class="text-muted"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</span>@:&nbsp;|&nbsp;
+
+            }
+            else
+            {
+                <a href="#" class="showsection" data-sectionnum=".section1"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>@:&nbsp;|&nbsp;
+                
+            }
+        
+                    <a href="#" class="showsection" data-sectionnum=".section2"><span class="fa fa-envelope"></span>&nbsp;Notify </a>&nbsp;|&nbsp;
+                <a href="#" class="showsection" data-sectionnum=".section3"><span class="fa fa-history"></span>&nbsp;History</a>
 
             <br />
                 <section style="display:none" class="section1">
@@ -88,25 +100,39 @@
 
                 <section style="display:none" class="section3">
                     <h4><span class="fa fa-history"></span> &nbsp;Task History (@Model.task_hist.Count)</h4>
+                    <div class="row">
+                        @{var prevstatus = "none" ;}
+                        @foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))
+                        {
+                            if(prevstatus!=hist.HistDesc )
+                            { 
+                            <div class="col-md-2 text-center">
+                                <span class="label label-info">@hist.HistDesc</span>
+                                <br /><small>@hist.created_on.Value.ToString("dd/MM/yy HH:mm") (@hist.firstname)</small> 
+                            </div>
+                            
+                            if(hist.HistDesc!="Closed")
+                            {
+                                
+                            <div class="col-md-1"><span class="fa fa-2x fa-long-arrow-right"></span></div>
+                            }
+                        }
 
-                    @foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))
-                    {
+                            prevstatus = hist.HistDesc;
                         
-                        <div style="float:left; height:40px; padding:5px;">
-                            <small>@hist.created_on @hist.created_by</small> <span class="label label-info">@hist.StatusDesc</span> 
-                        </div><div style="float:left" > <span class="fa fa-long-arrow-right"></span></div>
+                        }
 
-                        @*<small>@hist.created_on @hist.created_by</small><span class="label label-info">@hist.StatusDesc</span>  <span class="fa fa-long-arrow-right"></span>*@
-                    }
-
-                    <table class="table">
+                    </div>
+                    
+                    <br />
+                    <table class="table table-striped">
                         <tr>
-                            <td>date</td>
-                            <td>status</td>
-                            <td>test</td>
-                            <td>type</td>
-                            <td>priority</td>
-                            <td>severity</td>
+                            <th>date</th>
+                            <th>status</th>
+                            <th>test</th>
+                            <th>type</th>
+                            <th>priority</th>
+                            <th>severity</th>
                         </tr>
                         @foreach (var hist in Model.task_hist.OrderByDescending(x => x.created_on))
                         {
@@ -180,7 +206,17 @@
     <div class="form-group  pad20">
         @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-4" })
         <div class="col-md-8">
+
+            @if(is_readonly)
+            {
+            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" , @readonly=""} })
+
+            }
+            else
+            {
             @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+                
+            }
             @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -189,7 +225,15 @@
         @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label col-md-4" })
         <div class="col-md-8">
 
+            @if(is_readonly)
+            {
+            @Html.DropDownList("type", null, new { @class = "form-control", @readonly="" })
+                
+            } else
+            {
             @Html.DropDownList("type", null, new { @class = "form-control" })
+                
+            }
             @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -198,7 +242,16 @@
     <div class="form-group  pad20">
         @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-4" })
         <div class="col-md-8">
+            @if(is_readonly)
+            {
+            @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control", @readonly="" } })
+
+            }
+            else
+            {
             @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
+                
+            }
             @Html.ValidationMessageFor(model => model.initiator, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -206,7 +259,17 @@
     <div class="form-group pad20">
         @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label col-md-4" })
         <div class="col-md-8">
+@if(is_readonly)
+{
+
+            @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control" , @readonly=""})
+}
+else
+{
             @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control" })
+    
+    
+}
 
 
             @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
@@ -217,7 +280,17 @@
     <div class="form-group pad20">
         @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-4" })
         <div class="col-md-8">
+
+            @if (is_readonly)
+            {
+            @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control" , @readonly=""})
+
+            }
+            else
+            {
             @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control" })
+                
+            }
 
 
             @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
@@ -227,8 +300,33 @@
     <div class="form-group  pad20">
         @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-4" })
         <div class="col-md-8">
-            @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker" } })
-            @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
+@*            @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker" } })*@
+          
+            @if(is_readonly)
+            {
+                var duedt = "";
+                if(Model.due_date.HasValue)
+                {
+                   duedt = Model.due_date.Value.ToString("yyyy-MM-dd");
+                    
+                }
+                <input type="text" value="@duedt" class="form-control" name="due_date" readonly />
+                
+            }
+            else
+            {
+                
+                @Html.EditorFor(model => model.due_date, new
+       {
+           htmlAttributes = new
+           {
+               @class = "form-control combodate",
+               @data_format = "YYYY-MM-DD",
+               @data_template = "D MMM YYYY"
+           }
+       })
+            }
+              @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -276,16 +374,23 @@
 
         $(document).ready(function () {
 
+            var _minyear = new Date().getFullYear();
+            var _max_year = _minyear + 1;
+
+
             $('body').on('click', '.showsection', function () {
                 var section = $(this).data("sectionnum");
-                
                 $(section).toggle();
-
-
                 //$(this).next('section'+'.'+x).toggle();
             });
 
 
+            $('.combodate').combodate({
+    
+                minYear: _minyear,
+                maxYear: _max_year,
+            });
+       
 
             $('body').on('click', '#closeAddComment', function () {
                 $(this).closest('section').hide();

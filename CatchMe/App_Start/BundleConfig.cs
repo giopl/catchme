@@ -39,6 +39,12 @@ namespace CatchMe
             bundles.Add(new ScriptBundle("~/bundles/custom").Include(
                       "~/Scripts/custom/shared.js"
                       ));
+            //http://vitalets.github.io/combodate/
+            bundles.Add(new ScriptBundle("~/bundles/combodate").Include(
+                      "~/Scripts/plugins/moment.js",
+                      "~/Scripts/plugins/combodate.js"
+                      ));
+
 
 
 

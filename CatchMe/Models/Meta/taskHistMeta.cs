@@ -78,7 +78,25 @@ namespace CatchMe.Models
                 }
      
     }
+    public string HistDesc
+    {
+        get
+        {
+            if (!String.IsNullOrWhiteSpace(StatusDesc))
+            {
+                if (StatusDesc.Contains(">"))
+                {
 
+                    return StatusDesc.Substring(StatusDesc.LastIndexOf('>') + 1);
+
+                }
+                else
+                {
+                    return StatusDesc;
+                }
+            } return String.Empty;
+        }
+    }
 
 
         public string StatusDesc

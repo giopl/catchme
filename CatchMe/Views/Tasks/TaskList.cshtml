@@ -57,10 +57,10 @@
                         <td>
                             <span class="text-muted">#@item.task_id</span>
                         </td>
-                        <td title="@item.TypeDesc"><span style="padding:7px 2px;" class="label label-default"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span> </td>
+                        <td title="@item.TypeDesc"><span style="padding:7px 2px;" class="label label-default" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span> </td>
                         <td>
                             <div class="readmore">
-                                <div class="rectangle @item.StateColor"></div><a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a>
+                                <div class="rectangle @item.StateColor" data-toggle="tooltip" data-placement="left" title="@item.StatusDesc"></div><a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a>
                             </div>
 
                         </td>
@@ -125,6 +125,7 @@
 
                 });
 
+                $('[data-toggle="tooltip"]').tooltip();
 
                 //$('.readmore').readmore({
                 //    speed: 75,

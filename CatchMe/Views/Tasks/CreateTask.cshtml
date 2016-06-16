@@ -132,7 +132,9 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
-                        @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control" } })
+                        @*data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="date" value="09-01-2013"*@
+                        @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control combodate",
+                                @data_format ="YYYY-MM-DD" ,@data_template="D MMM YYYY" } })
                         @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -154,6 +156,15 @@
 @Scripts.Render("~/bundles/nicedit")
 <script>
 
+    $(document).ready(function () {
+        var _minyear = new Date().getFullYear();
+        var _max_year = _minyear + 1;
+    $('.combodate').combodate({
+    
+        minYear: _minyear,
+        maxYear: _max_year,
+    });
+    })
 
         bkLib.onDomLoaded(function () {
 

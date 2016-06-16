@@ -25,7 +25,7 @@ namespace CatchMe.Helpers
         {
             
             New = 0,
-            Actioned,
+            Action,
             Investigation,
             Completed,
             On_Hold,

@@ -30,6 +30,8 @@ namespace CatchMe.Models
         public Nullable<int> created_by { get; set; }
         public Nullable<System.DateTime> created_on { get; set; }
         public Nullable<int> hist_status { get; set; }
+        public string firstname { get; set; }
+        public string fullname { get; set; }
     
         public virtual task task { get; set; }
     }

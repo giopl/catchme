@@ -15,9 +15,15 @@
     [created_by]   INT            NULL,
     [created_on]   DATETIME       NULL,
     [hist_status]  INT            NULL,
+    [firstname]    NVARCHAR (50)  NULL,
+    [fullname]     NVARCHAR (100) NULL,
     PRIMARY KEY CLUSTERED ([task_hist_id] ASC),
     CONSTRAINT [FK_task_hist_task_id] FOREIGN KEY ([task_id]) REFERENCES [dbo].[task] ([task_id])
 );
+
+
+
+
 
 
 

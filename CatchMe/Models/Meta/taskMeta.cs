@@ -133,7 +133,32 @@ namespace CatchMe.Models
 
         }
 
+        public bool IsReadonly
+        {
 
+            get
+            {
+                var result = false;
+                if(status.HasValue)
+                {
+                    result = status.Value == 0 || status.Value == 4 || status.Value == 9;
+                }
+                    /*
+                     * 
+            New = 0,
+            Action,
+            Investigation,
+            Completed,
+            On_Hold,
+            Problem,
+            No_Issue,
+            Passed,
+            Failed,
+            Closed
+                     */
+                return result;
+            }
+        }
         public string StatusDescLabel
         {
             get
