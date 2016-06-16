@@ -1,4 +1,11 @@
-﻿1. add assigned to me
+﻿add tooltip
+check email works
+
+
+
+
+
+1. add assigned to me
 2. add multiple assignees (select2)
 3. add list.js function to filter list
 4. allow system to remember filters

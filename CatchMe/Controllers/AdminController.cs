@@ -11,6 +11,9 @@ using System.Text;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using log4net;
+using System.Data.Entity.Core;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 
 namespace CatchMe.Controllers
 {
@@ -31,7 +34,7 @@ namespace CatchMe.Controllers
         public ActionResult ListProjects()
         {
 
-            var users = db.users.ToList();
+            var users = db.users.AsNoTracking().ToList();
 
             ViewBag.Users = users;
 
@@ -140,18 +143,41 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditUser([Bind(Include = "username,firstname,lastname,job_title,team,role,num_logins,is_active,email,active_project")] user user)
+        public ActionResult EditUser([Bind(Include = "user_id,username,firstname,lastname,job_title,team,role,num_logins,is_active,email,active_project")] user user)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+                ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+
+                return View(user);
+
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw;
+                //saveFailed = true;
 
-            ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+                // Update the values of the entity that failed to save from the store 
+                //ex.Entries.Single().Reload();
+                //db.SaveChanges();
+                
+            } 
 
-            return View(user);
+            catch (Exception)
+            {
+                
+                throw;
+            }
+            
+
+
         }
 
 

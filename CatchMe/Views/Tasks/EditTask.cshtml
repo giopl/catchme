@@ -6,6 +6,8 @@
     var assignee = (Model.user == null) ? "Unassigned" : Model.user.fullname;
 
     bool notassigned = Model.user == null;
+
+    var users = ViewBag.EmailTo as List<CatchMe.Models.user>;
 }
 
 <h2><span class="rectangle-big @Model.StateColor"></span> Edit Task #@Model.task_id - @Model.title <span class="label label-@(notassigned?"default":"info")">(@assignee)</span> </h2>
@@ -13,16 +15,21 @@
 
         <div class="row">
             <div class="col-md-8">
+            
 
-                <a href="#" class="showsection"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>
-                <section style="display:none">
+                <a href="#" class="showsection" data-sectionnum=".section1"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>&nbsp;|&nbsp;
+                <a href="#" class="showsection" data-sectionnum=".section2"><span class="fa fa-envelope"></span>&nbsp;Notify </a>&nbsp;|&nbsp;
+                <a href="#" class="showsection" data-sectionnum=".section3"><span class="fa fa-history"></span>&nbsp;History (@Model.task_hist.Count)</a>
+
+            <br />
+                <section style="display:none" class="section1">
 
                     @using (Html.BeginForm("CreateComment", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
                     {
                         @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Comments</h4>
+        <h4><span class="fa fa-comment"></span> &nbsp;Comments</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -35,39 +42,63 @@
             </div>
         </div>
         <div class="form-group">            
-           <label class="col-md-2">Description</label>
+           <label class="col-md-2">Description
+            <br /><br />
+               <input type="submit" class="btn btn-info" value="save" />
+            <br />
+               <input type="reset" class="btn btn-link" id="closeAddComment" value="close" />
+            </label>
                <div class="col-md-10">
                    <textarea name="description" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment"></textarea>
                 </div>
         </div>
 
 
-        <div class="form-group">
+        @*<div class="form-group">
             <div class="col-md-offset-2 col-md-10 text-center">
                 <input type="submit" class="btn btn-danger" value="save" />
                 <input type="reset" class="btn btn-default" id="closeAddComment" value="close" />
             </div>
-        </div>
+        </div>*@
     </div>
                     }
 
 </section>
+                
 
-            @foreach (var comment in Model.comments.OrderByDescending(x=>x.created_on))
-            {
-                <div class="task-title">@comment.title - </div>
-                <small>@comment.user.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
-                <h4>
-                    @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))                    
-                </h4>
-          <hr />
+                <section style="display:none" class="section2">
+                    <h4><span class="fa fa-envelope"></span> &nbsp;Notifications</h4>
+                    <hr />
+                    @using (Html.BeginForm("NotifyUsers", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                    @Html.AntiForgeryToken()
+                        <input type="hidden" name="task" value="@Model.task_id" />
+                        <input type="hidden" name="project" value="@Model.project_id" />
+                        <input type="checkbox" name="notify" value="999" /> @:All
+                            foreach (var u in users.Where(u=>u.user_id !=0).ToList())
+                            {
+                                <input type="checkbox" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
+                            }
+                    
+                    <input type="submit" class="btn btn-info" value="Notify" />
+                    
+                    }
+                    <hr />
+                </section>
 
-            }
+                <section style="display:none" class="section3">
+                    <h4><span class="fa fa-history"></span> &nbsp;Task History (@Model.task_hist.Count)</h4>
 
-            <h4>Task History (@Model.task_hist.Count)</h4>
-   
-                <a href="#" class="showsection"><span class="fa fa-plus-circle"></span>&nbsp;Show/Hide history</a>
-                <section style="display:none">
+                    @foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))
+                    {
+                        
+                        <div style="float:left; height:40px; padding:5px;">
+                            <small>@hist.created_on @hist.created_by</small> <span class="label label-info">@hist.StatusDesc</span> 
+                        </div><div style="float:left" > <span class="fa fa-long-arrow-right"></span></div>
+
+                        @*<small>@hist.created_on @hist.created_by</small><span class="label label-info">@hist.StatusDesc</span>  <span class="fa fa-long-arrow-right"></span>*@
+                    }
+
                     <table class="table">
                         <tr>
                             <td>date</td>
@@ -95,7 +126,21 @@
                     </table>
 
                 </section>
-                
+
+
+            @foreach (var comment in Model.comments.OrderByDescending(x=>x.created_on))
+            {
+                <div class="task-title">@comment.title - </div>
+                <small>@comment.user.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
+                <h4>
+                    @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))                    
+                </h4>
+          <hr />
+
+            }
+
+            
+   
                 </div> <!-- fisrt col -->
 
 
@@ -232,7 +277,12 @@
         $(document).ready(function () {
 
             $('body').on('click', '.showsection', function () {
-                $(this).next('section').toggle();
+                var section = $(this).data("sectionnum");
+                
+                $(section).toggle();
+
+
+                //$(this).next('section'+'.'+x).toggle();
             });
 
 

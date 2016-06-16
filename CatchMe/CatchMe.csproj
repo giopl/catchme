@@ -139,7 +139,9 @@
     <Compile Include="Helpers\AppEnums.cs" />
     <Compile Include="Helpers\CacheHelper.cs" />
     <Compile Include="Helpers\ConfigurationHelper.cs" />
+    <Compile Include="Helpers\Emailer.cs" />
     <Compile Include="Helpers\EmailHelper.cs" />
+    <Compile Include="Helpers\EmailRecipient.cs" />
     <Compile Include="Helpers\SelectItems.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\UserSession.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Models\log.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Meta\commentMeta.cs" />
     <Compile Include="Models\Meta\projectMeta.cs" />
     <Compile Include="Models\Meta\taskHistMeta.cs" />
     <Compile Include="Models\Meta\taskMeta.cs" />

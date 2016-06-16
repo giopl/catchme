@@ -9,7 +9,7 @@ namespace CatchMe.Helpers
 
     public class ConfigurationHelper
     {
-
+        
 
 
         public static string GetEnvironment()

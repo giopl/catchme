@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CatchMe.Models;
 using CatchMe.Helpers;
+using System.Net.Mail;
 
 namespace CatchMe.Controllers
 {
@@ -316,9 +317,13 @@ namespace CatchMe.Controllers
             
             //http://stackoverflow.com/questions/13405568/linq-unable-to-create-a-constant-value-of-type-xxx-only-primitive-types-or-enu
             var users = db.users.Where(x=>x.projects.Select(p=>p.project_id).Contains(currentprojectid)).ToList();
+
+            var unassigned = new user { user_id = 0, firstname = "Unassigned" };
+            users.Add(unassigned) ;
+
             //Where(l => l.Courses.Select(c => c.CourseId).Contains(courseId)
 
-            ViewBag.assigned_to = new SelectList(users, "user_id", "firstname");
+            ViewBag.assigned_to = new SelectList(users, "user_id", "firstname", unassigned);
             
 
             //ViewBag.status = new SelectList(getStatuses(), "value", "name");
@@ -342,13 +347,16 @@ namespace CatchMe.Controllers
                 comment.user_id = UserSession.Current.UserId;
                 comment.created_on = DateTime.Now;
 
-                if (ModelState.IsValid)
-                {
-                    db.comments.Add(comment);
-                    db.SaveChanges();
+                if (!string.IsNullOrWhiteSpace(comment.description) || !string.IsNullOrWhiteSpace(comment.title))
+                { 
+                
+                    if (ModelState.IsValid)
+                    {
+                        db.comments.Add(comment);
+                        db.SaveChanges();
 
+                    }
                 }
-
                 return RedirectToAction("EditTask", new { id = comment.task_id });
                     
             }
@@ -453,8 +461,13 @@ namespace CatchMe.Controllers
             var users = db.users.Where(x => x.projects.Select(p => p.project_id).Contains(currentprojectid)).ToList();
             //Where(l => l.Courses.Select(c => c.CourseId).Contains(courseId)
 
+            ViewBag.EmailTo = users;
 
-            ViewBag.assigned_to = new SelectList(users, "user_id", "firstname");
+
+            var unassigned = new user { user_id = 0, firstname = "Unassigned" };
+            users.Add(unassigned);
+
+            ViewBag.assigned_to = new SelectList(users, "user_id", "firstname", task.assigned_to);
 
             ViewBag.status = new SelectList(getStatuses(task.status.Value), "value", "name", task.status );
             
@@ -559,6 +572,165 @@ namespace CatchMe.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult NotifyUsers(int task, int project, int[] notify)
+        {
+
+            try
+            {
+                bool sendtoall = false;
+
+                List<EmailRecipient> recipients = new List<EmailRecipient>();
+
+                for (int i = 0; i < notify.Count(); i++)
+                {
+                    if (i == 999)
+                    {
+                        sendtoall = true;
+                        break;
+                    }
+
+                    var user = db.users.Find(notify[i]);
+                    if (user != null && !string.IsNullOrWhiteSpace(user.email))
+                    {
+
+                        recipients.Add(new EmailRecipient { RecipientEmail = user.email, RecipientUserId = user.username, RecipientName = user.fullname });
+
+                    }
+                }
+                    Emailer mail = new Emailer();
+
+
+                    foreach (var item in recipients)
+                    {
+                        //mail.AddRecipient(String.Concat(item.RecipientName, " <", item.RecipientEmail, ">"));
+                        mail.AddRecipient(item.RecipientEmail);
+                    };
+
+                    mail.Body = "catchme test mail";
+
+                    var senderid = UserSession.Current.UserId;
+                    var sender = db.users.Find(senderid);
+
+
+                    MailAddress senderAddress = new MailAddress(sender.email);
+                    mail.SenderMail = senderAddress;
+
+                    mail.SendMail("test catchme", mail.Body, true);
+
+
+
+
+
+                    //List<EmailRecipient> recipients = adminService.ListAllRecipients().ToList();
+
+                    //var operations = userService.SearchOperationsByDate(email.Operations.BatchDate);
+                    //email.Operations = operations;
+
+
+
+                    //Generates the email body
+                    //     var mbb = RenderRazorViewToString(this.ControllerContext, "_emailBody2", email);
+
+
+                    ////Set name of FHC report
+                    //var now = DateTime.Now.ToString("yyyyMMddHHmm");
+                    //var to_list = recipients.FindAll(x => x.SendType == "TO" && x.IsActive).ToList();
+                    //var cc_list = recipients.FindAll(x => x.SendType == "CC" && x.IsActive).ToList();
+                    //var bcc_list = recipients.FindAll(x => x.SendType == "BCC" && x.IsActive).ToList();
+
+                    //var from = recipients.Find(x => x.SendType == "FROM");
+
+
+                    ////create new email object
+                    //Emailer mm = new Emailer();
+
+                    //if (from != null)
+                    //    mm.SenderMail = new MailAddress(String.Concat(from.RecipientName, " <", from.RecipientEmail, ">"));
+
+                    ////Email Attachments
+
+
+                    //foreach (var file in email.File)
+                    //{
+                    //    if (file != null)
+                    //    {
+
+                    //        byte[] uploadFile = new byte[file.InputStream.Length];
+                    //        file.InputStream.Read(uploadFile, 0, uploadFile.Length);
+
+                    //        var filename = file.FileName;
+
+                    //        ContentType mime = new ContentType();
+                    //        mime.MediaType = "application/xls";
+
+                    //        //add Attachment
+                    //        Stream AttachmentFileStream = new MemoryStream(uploadFile);
+                    //        Attachment FileAttachment = new Attachment(AttachmentFileStream, filename, mime.MediaType);
+                    //        mm.AddAttachment(FileAttachment);
+                    //    }
+                    //}
+
+
+
+
+
+
+
+                    //foreach (var item in to_list.OrderBy(x => x.DisplayOrder))
+                    //{
+                    //    mm.AddRecipient(String.Concat(item.RecipientName, " <", item.RecipientEmail, ">"));
+                    //}
+
+
+                    //foreach (var item in cc_list.OrderBy(x => x.DisplayOrder))
+                    //{
+                    //    mm.AddCcRecipient(String.Concat(item.RecipientName, " <", item.RecipientEmail, ">"));
+                    //}
+
+                    //foreach (var item in bcc_list.OrderBy(x => x.DisplayOrder))
+                    //{
+                    //    mm.AddBccRecipient(String.Concat(item.RecipientName, " <", item.RecipientEmail, ">"));
+                    //}
+
+
+
+
+                    ////Send Email
+                    //if (ConfigurationHelper.SendEmail())
+                    //{
+                    //    mm.SendMail(email.Subject, mbb, true);
+
+
+                    //    userService.ModifyEmailStatus(email.Operations.BatchDate);
+                    //}
+                    //else
+                    //{
+                    //    return View("_emailBody2");
+
+                    //}
+
+
+                    //ViewBag.Email = email;
+
+                    return null;
+
+
+                
+            }
+            catch (Exception e)
+            {
+                //log.Error("[SendEmail] - Exception Caught" + e.ToString());
+                //TempData["errorLog"] = new ErrorLog(e);
+                return RedirectToAction("ShowError", "Error");
+            }
+
+
+        }
+
 
         protected override void Dispose(bool disposing)
         {
