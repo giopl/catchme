@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using CatchMe.Models;
 using CatchMe.Helpers;
 using System.Net.Mail;
+using System.Text;
 
 namespace CatchMe.Controllers
 {
@@ -631,8 +632,23 @@ namespace CatchMe.Controllers
 
                     mail.SendMail(subj, mail.Body, true);
 
-                    
+                StringBuilder _recipients = new StringBuilder();
 
+                foreach(var r in recipients)
+                {
+                    _recipients.AppendFormat("{0};", r.RecipientName);
+
+                }
+
+                if(_recipients.Length > 1)
+                {
+                    _recipients.Length--;
+                }
+
+                notification notif = new notification { sender_id = UserSession.Current.UserId, sender_name = UserSession.Current.Fullname, task_id = taskId, sent_on = DateTime.Now, recicipents = _recipients.ToString() };
+
+                db.notifications.Add(notif);
+                db.SaveChanges();
 
                     return RedirectToAction("EditTask", new { id = taskId });
 
