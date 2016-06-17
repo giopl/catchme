@@ -34,5 +34,6 @@ namespace CatchMe.Models
         public virtual DbSet<task> tasks { get; set; }
         public virtual DbSet<comment> comments { get; set; }
         public virtual DbSet<taskHist> taskHists { get; set; }
+        public virtual DbSet<notification> notifications { get; set; }
     }
 }

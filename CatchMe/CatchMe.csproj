@@ -177,6 +177,9 @@
     <Compile Include="Models\Meta\taskHistMeta.cs" />
     <Compile Include="Models\Meta\taskMeta.cs" />
     <Compile Include="Models\Meta\userMeta.cs" />
+    <Compile Include="Models\notification.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OptionItem.cs" />
     <Compile Include="Models\project.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
@@ -312,6 +315,7 @@
     <Content Include="Views\Admin\EditUser.cshtml" />
     <Content Include="Views\Home\NoAccess.cshtml" />
     <Content Include="Views\Tasks\NoProject.cshtml" />
+    <Content Include="Views\Tasks\_notificationBody.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

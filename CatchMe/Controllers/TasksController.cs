@@ -580,23 +580,18 @@ namespace CatchMe.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult NotifyUsers(int task, int project, int[] notify)
+        public ActionResult NotifyUsers(int taskId, int projectId, int[] notify)
         {
 
             try
             {
-                bool sendtoall = false;
+                
 
                 List<EmailRecipient> recipients = new List<EmailRecipient>();
 
                 for (int i = 0; i < notify.Count(); i++)
                 {
-                    if (i == 999)
-                    {
-                        sendtoall = true;
-                        break;
-                    }
-
+                
                     var user = db.users.Find(notify[i]);
                     if (user != null && !string.IsNullOrWhiteSpace(user.email))
                     {
@@ -614,113 +609,32 @@ namespace CatchMe.Controllers
                         mail.AddRecipient(item.RecipientEmail);
                     };
 
-                    mail.Body = "catchme test mail";
+                    
 
                     var senderid = UserSession.Current.UserId;
                     var sender = db.users.Find(senderid);
 
+                    var task = db.tasks.Find(taskId);
+
+                    //Generates the email body
+                         mail.Body = RenderRazorViewToString(this.ControllerContext, "_notificationBody", task);
+
+                         var subj = string.Format("CatchMe! #{0} - {1}", task.task_id, task.title);
+
+
+                
 
                     MailAddress senderAddress = new MailAddress(sender.email);
                     mail.SenderMail = senderAddress;
 
-                    mail.SendMail("test catchme", mail.Body, true);
 
 
+                    mail.SendMail(subj, mail.Body, true);
+
+                    
 
 
-
-                    //List<EmailRecipient> recipients = adminService.ListAllRecipients().ToList();
-
-                    //var operations = userService.SearchOperationsByDate(email.Operations.BatchDate);
-                    //email.Operations = operations;
-
-
-
-                    //Generates the email body
-                    //     var mbb = RenderRazorViewToString(this.ControllerContext, "_emailBody2", email);
-
-
-                    ////Set name of FHC report
-                    //var now = DateTime.Now.ToString("yyyyMMddHHmm");
-                    //var to_list = recipients.FindAll(x => x.SendType == "TO" && x.IsActive).ToList();
-                    //var cc_list = recipients.FindAll(x => x.SendType == "CC" && x.IsActive).ToList();
-                    //var bcc_list = recipients.FindAll(x => x.SendType == "BCC" && x.IsActive).ToList();
-
-                    //var from = recipients.Find(x => x.SendType == "FROM");
-
-
-                    ////create new email object
-                    //Emailer mm = new Emailer();
-
-                    //if (from != null)
-                    //    mm.SenderMail = new MailAddress(String.Concat(from.RecipientName, " <", from.RecipientEmail, ">"));
-
-                    ////Email Attachments
-
-
-                    //foreach (var file in email.File)
-                    //{
-                    //    if (file != null)
-                    //    {
-
-                    //        byte[] uploadFile = new byte[file.InputStream.Length];
-                    //        file.InputStream.Read(uploadFile, 0, uploadFile.Length);
-
-                    //        var filename = file.FileName;
-
-                    //        ContentType mime = new ContentType();
-                    //        mime.MediaType = "application/xls";
-
-                    //        //add Attachment
-                    //        Stream AttachmentFileStream = new MemoryStream(uploadFile);
-                    //        Attachment FileAttachment = new Attachment(AttachmentFileStream, filename, mime.MediaType);
-                    //        mm.AddAttachment(FileAttachment);
-                    //    }
-                    //}
-
-
-
-
-
-
-
-                    //foreach (var item in to_list.OrderBy(x => x.DisplayOrder))
-                    //{
-                    //    mm.AddRecipient(String.Concat(item.RecipientName, " <", item.RecipientEmail, ">"));
-                    //}
-
-
-                    //foreach (var item in cc_list.OrderBy(x => x.DisplayOrder))
-                    //{
-                    //    mm.AddCcRecipient(String.Concat(item.RecipientName, " <", item.RecipientEmail, ">"));
-                    //}
-
-                    //foreach (var item in bcc_list.OrderBy(x => x.DisplayOrder))
-                    //{
-                    //    mm.AddBccRecipient(String.Concat(item.RecipientName, " <", item.RecipientEmail, ">"));
-                    //}
-
-
-
-
-                    ////Send Email
-                    //if (ConfigurationHelper.SendEmail())
-                    //{
-                    //    mm.SendMail(email.Subject, mbb, true);
-
-
-                    //    userService.ModifyEmailStatus(email.Operations.BatchDate);
-                    //}
-                    //else
-                    //{
-                    //    return View("_emailBody2");
-
-                    //}
-
-
-                    //ViewBag.Email = email;
-
-                    return RedirectToAction("EditTask", new { id = task });
+                    return RedirectToAction("EditTask", new { id = taskId });
 
 
                 

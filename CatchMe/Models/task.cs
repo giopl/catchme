@@ -21,6 +21,7 @@ namespace CatchMe.Models
             this.categories = new HashSet<category>();
             this.comments = new HashSet<comment>();
             this.task_hist = new HashSet<taskHist>();
+            this.notifications = new HashSet<notification>();
         }
     
         public int task_id { get; set; }
@@ -47,5 +48,6 @@ namespace CatchMe.Models
         public virtual ICollection<category> categories { get; set; }
         public virtual ICollection<comment> comments { get; set; }
         public virtual ICollection<taskHist> task_hist { get; set; }
+        public virtual ICollection<notification> notifications { get; set; }
     }
 }

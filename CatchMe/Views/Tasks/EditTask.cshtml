@@ -84,12 +84,15 @@
                     @using (Html.BeginForm("NotifyUsers", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
                     {
                     @Html.AntiForgeryToken()
-                        <input type="hidden" name="task" value="@Model.task_id" />
-                        <input type="hidden" name="project" value="@Model.project_id" />
-                        <input type="checkbox" name="notify" value="999" /> @:All
-                            foreach (var u in users.Where(u=>u.user_id !=0).ToList())
+                        <input type="hidden" name="taskId" value="@Model.task_id" />
+                        <input type="hidden" name="projectId" value="@Model.project_id" />
+                        
+                        
+                        <input type="checkbox" value="" id="checkall"  /> @:All
+                        
+                        foreach (var u in users.Where(u=>u.user_id !=0).ToList())
                             {
-                                <input type="checkbox" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
+                                <input type="checkbox" class="notification" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
                             }
                     
                     <input type="submit" class="btn btn-info" value="Notify" />
@@ -383,6 +386,16 @@ else
                 $(section).toggle();
                 //$(this).next('section'+'.'+x).toggle();
             });
+
+            $('body').on('change', '#checkall', function () {
+                if ($(this).prop('checked')) {
+                    $('.notification').prop('checked', true);
+                } else {
+                    $('.notification').prop('checked', false);
+                }
+
+            });
+
 
 
             $('.combodate').combodate({
