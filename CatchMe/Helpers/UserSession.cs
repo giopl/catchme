@@ -68,6 +68,15 @@ namespace CatchMe.Helpers
 
 
         public int Role { get; set; }
+
+        public bool IsAdmin {
+
+            get
+            {
+                return Role == 2;
+            }
+            
+            }
         public int CurrentProjectId { get; set; }
 
         /// <summary>

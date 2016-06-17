@@ -29,11 +29,9 @@
                         Id
                     </th>
 
-                    <th>
-                        Type
-                    </th>
+                    
                     <td>
-                        type
+                        Desc
                     </td>
 
                     <th>
@@ -55,17 +53,18 @@
                 {
                     <tr>
                         <td>
-                            <span class="text-muted">#@item.task_id</span>
-                        </td>
-                        <td title="@item.TypeDesc"><span style="padding:7px 2px;" class="label label-default" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span> </td>
+                            <span class="text-muted fa-15x">@item.task_id</span>
+                        </td>                        
                         <td>
                             <div class="readmore">
-                                <div class="rectangle @item.StateColor" data-toggle="tooltip" data-placement="left" title="@item.StatusDesc"></div><a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a>
+                                @*<div class="rectangle @item.StateColor" data-toggle="tooltip" data-placement="left" title="@item.StatusDesc"></div>*@
+                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
                             </div>
 
                         </td>
                         <td>
-                            @{ var assignee = item.user == null ? "Unassigned" : item.user.fullname; }
+                            @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.fullname; }
                             @assignee
                         </td>
                         <td>

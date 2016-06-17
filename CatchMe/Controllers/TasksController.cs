@@ -231,7 +231,7 @@ namespace CatchMe.Controllers
         {
 
             List<OptionItem> teststatuses = new List<OptionItem>();
-            teststatuses.Add(new OptionItem { name = "None", value = 0 });
+            //teststatuses.Add(new OptionItem { name = "None", value = 0 });
             teststatuses.Add(new OptionItem { name = "Not Tested", value = 1 });
             teststatuses.Add(new OptionItem { name = "Ready to Test", value = 2 });
             teststatuses.Add(new OptionItem { name = "Re-Test", value = 3 });
@@ -247,7 +247,7 @@ namespace CatchMe.Controllers
         {
 
             List<OptionItem> complexities = new List<OptionItem>();
-            complexities.Add(new OptionItem { name = "None", value = 0 });
+            //complexities.Add(new OptionItem { name = "None", value = 0 });
             complexities.Add(new OptionItem { name = "Low", value = 1 });
             complexities.Add(new OptionItem { name = "Medium", value = 2 });
             complexities.Add(new OptionItem { name = "High", value = 3 });
@@ -262,7 +262,7 @@ namespace CatchMe.Controllers
         {
 
             List<OptionItem> types = new List<OptionItem>();
-            types.Add(new OptionItem { name = "None", value = 0 });
+            //types.Add(new OptionItem { name = "None", value = 0 });
             types.Add(new OptionItem { name = "Development", value = 1 });
             types.Add(new OptionItem { name = "Change", value = 2 });
             types.Add(new OptionItem { name = "Bug", value = 3 });
@@ -279,7 +279,7 @@ namespace CatchMe.Controllers
 
 
             List<OptionItem> severities = new List<OptionItem>();
-            severities.Add(new OptionItem { name = "None", value = 0 });
+            //severities.Add(new OptionItem { name = "None", value = 0 });
             severities.Add(new OptionItem { name = "Low", value = 1 });
             severities.Add(new OptionItem { name = "Medium", value = 2 });
             severities.Add(new OptionItem { name = "High", value = 3 });
@@ -292,7 +292,7 @@ namespace CatchMe.Controllers
         {
 
             List<OptionItem> priorities = new List<OptionItem>();
-            priorities.Add(new OptionItem { name = "None", value = 0 });
+            //priorities.Add(new OptionItem { name = "None", value = 0 });
             priorities.Add(new OptionItem { name = "Low", value = 1 });
             priorities.Add(new OptionItem { name = "Medium", value = 2 });
             priorities.Add(new OptionItem { name = "High", value = 3 });
@@ -320,10 +320,11 @@ namespace CatchMe.Controllers
             var users = db.users.Where(x=>x.projects.Select(p=>p.project_id).Contains(currentprojectid)).ToList();
 
             var unassigned = new user { user_id = 0, firstname = "Unassigned" };
-            users.Add(unassigned) ;
+            //users.Add(unassigned) ;
 
             //Where(l => l.Courses.Select(c => c.CourseId).Contains(courseId)
 
+            
             ViewBag.assigned_to = new SelectList(users, "user_id", "firstname", unassigned);
             
 

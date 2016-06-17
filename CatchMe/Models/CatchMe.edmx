@@ -63,13 +63,9 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
           <Property Name="logtime" Type="datetime" />
           <Property Name="description" Type="nvarchar" MaxLength="1000" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.notification' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="notification">
           <Key>
             <PropertyRef Name="notification_id" />
-            <PropertyRef Name="task_id" />
-            <PropertyRef Name="sender_id" />
           </Key>
           <Property Name="notification_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="task_id" Type="int" Nullable="false" />
@@ -354,6 +350,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.notification' does not have a primar
         <EntityContainer Name="CatchMeDBModelStoreContainer">
           <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="comment" EntityType="Self.comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notification" EntityType="Self.notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project_user" EntityType="Self.project_user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="task" EntityType="Self.task" Schema="dbo" store:Type="Tables" />
@@ -389,16 +386,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.notification' does not have a primar
     [log].[logtime] AS [logtime], 
     [log].[description] AS [description]
     FROM [dbo].[log] AS [log]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="notification" EntityType="Self.notification" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [notification].[notification_id] AS [notification_id], 
-    [notification].[task_id] AS [task_id], 
-    [notification].[sender_id] AS [sender_id], 
-    [notification].[sender_name] AS [sender_name], 
-    [notification].[recicipents] AS [recicipents], 
-    [notification].[sent_on] AS [sent_on]
-    FROM [dbo].[notification] AS [notification]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_comment_task_id" Association="Self.FK_comment_task_id">
             <End Role="task" EntitySet="task" />
@@ -816,8 +803,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.notification' does not have a primar
         <EntityType Name="notification">
           <Key>
             <PropertyRef Name="notification_id" />
-            <PropertyRef Name="task_id" />
-            <PropertyRef Name="sender_id" />
           </Key>
           <Property Name="notification_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="task_id" Type="Int32" Nullable="false" />

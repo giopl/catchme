@@ -9,7 +9,13 @@ namespace CatchMe.Helpers
 
     public class ConfigurationHelper
     {
-        
+
+
+        public static string GetServerPath()
+        {
+            return ConfigurationManager.AppSettings["ServerPath"];
+        }
+
 
 
         public static string GetEnvironment()

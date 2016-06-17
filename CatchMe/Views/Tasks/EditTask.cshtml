@@ -12,11 +12,11 @@
     var is_readonly = Model.IsReadonly;
 }
 
-<h2><span class="rectangle-big @Model.StateColor"></span> Edit Task #@Model.task_id - @Model.title <span class="label label-@(notassigned?"default":"info")">(@assignee)</span> </h2>
-<h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.fullname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") </h5>
 
         <div class="row">
             <div class="col-md-8">
+                <h2><span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span> @Model.title </h2>
+                <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.fullname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") </h5>
             
 
             @if(is_readonly)
@@ -99,6 +99,35 @@
                     
                     }
                     <hr />
+
+                    @if (Model.notifications.Count > 0)
+                    { 
+                    
+                        <table class="table table-striped">
+                            <tr>
+                                <td>Date</td>
+                                <td>Sender</td>
+                                <td>Recipients</td>
+                            </tr>
+
+                            @foreach (var notif in Model.notifications)
+                            { 
+                            <tr>
+                                <td>
+                                    @notif.sent_on.Value.ToString("dd/MM/yy HH:mm")
+                                </td>
+                                <td>
+                                    @notif.sender_name
+                                </td>
+                                <td>
+                                    @notif.recicipents
+                                </td>
+                            </tr>
+                            }
+                        </table>
+                        
+                    }
+
                 </section>
 
                 <section style="display:none" class="section3">
@@ -107,19 +136,17 @@
                         @{var prevstatus = "none" ;}
                         @foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))
                         {
-                            if(prevstatus!=hist.HistDesc )
+                                                       
+                            if(!prevstatus.Trim().ToUpper().Equals(hist.HistDesc.Trim().ToUpper()) )
                             { 
                             <div class="col-md-2 text-center">
                                 <span class="label label-info">@hist.HistDesc</span>
                                 <br /><small>@hist.created_on.Value.ToString("dd/MM/yy HH:mm") (@hist.firstname)</small> 
                             </div>
                             
-                            if(hist.HistDesc!="Closed")
-                            {
-                                
                             <div class="col-md-1"><span class="fa fa-2x fa-long-arrow-right"></span></div>
+                            
                             }
-                        }
 
                             prevstatus = hist.HistDesc;
                         
@@ -156,7 +183,7 @@
 
                 </section>
 
-
+            <br /><br />
             @foreach (var comment in Model.comments.OrderByDescending(x=>x.created_on))
             {
                 <div class="task-title">@comment.title - </div>
@@ -175,6 +202,8 @@
 
 
             <div class="col-md-4">
+                <h4 class="text-right"><span class="text-muted">Assigned to: </span><span class="label label-@(notassigned?"default":"info")"><span class="fa fa-user"></span>&nbsp; @assignee</span></h4>
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()

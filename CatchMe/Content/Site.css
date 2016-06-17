@@ -45,7 +45,7 @@ textarea {
 /* http://www.softicons.com/free-icons/system-icons/crystal-project-icons-by-everaldo-coelho/apps-bug-icon */
 .navbar-brand
 {
-    background: url( '/Images/bug.png' ) no-repeat 15px 5px;
+    background: url( '../Images/bug.png' ) no-repeat 15px 5px;
     padding-left: 50px;
 }
 
@@ -101,6 +101,10 @@ width:100px;
     float:left;
     margin-right:5px;
 }
+
+.fa-15x {
+    font-size: 1.5em;
+}
 	
 
 .rectangle-big {
@@ -111,23 +115,28 @@ width:100px;
 }
 	
 
-.action,.onhold,.investigation{
-    background: #428BCA;
-}
-
-
-.problem, .failed  {
-    background: #D9534F;
-}
-
-.inprogress {
+.action,.investigation{
     background: #F0AD4E;
 }
 
-.completed,.passed,.closed {
+
+.problem, .failed {
+    background: #D9534F;
+}
+
+
+.new {
+    background:#337AB7;
+}
+
+.completed {
+    background: #5BC0DE;
+}
+
+.passed,.noissue{
     background: #5CB85C;
 }
-.new,  .noissue {
+.closed,.onhold {
     background: #777777;
 
 }

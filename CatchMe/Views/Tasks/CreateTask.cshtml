@@ -60,32 +60,12 @@
                     @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
 
-                        @Html.DropDownList("type", null, new { @class = "form-control" })
+                        @Html.DropDownList("type", null, new { @class = "form-control", @required="" })
                         @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
 
-                @*<div class="form-group">
-                    @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-6">                        
-                        @Html.DropDownList("status", null, new { @class = "form-control"  })                        
-                        @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
-                    </div>
-                </div>*@
-
-
-
-
-
-                @*<div class="form-group">
-                    @Html.LabelFor(model => model.test_status, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-6">
-                        
-                        @Html.DropDownList("test_status", null,  new { @class = "form-control" } )
-                        @Html.ValidationMessageFor(model => model.test_status, "", new { @class = "text-danger" })
-                    </div>
-                </div>*@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -125,7 +105,7 @@
                     @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
                         @Html.DropDownList("priority", null, new { @class = "form-control" } )
-                        @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
                     </div>
                 </div>
 

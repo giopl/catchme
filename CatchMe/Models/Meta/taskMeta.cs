@@ -167,18 +167,18 @@ namespace CatchMe.Models
                 {
                     switch (status.Value)
                     {
-                        case 0:
+                        case 0: return "primary";
                         case 5:
                         case 8: return "danger";
-                        case 1:
-                        case 2: return "primary";
+                        case 1: return "warning";
+                        case 2: return "warning";
                         
-                        case 6: return "default";
-                        case 4:
-                        case 3: return "warning";
+                        case 6: return "success";
+                        case 4: return "default";
+                        case 3: return "info";
                         
                         case 7: return "success";
-                        case 9: return "success";
+                        case 9: return "default";
                         
                         
 
