@@ -1,5 +1,24 @@
-﻿add tooltip
-check email works
+﻿
+
+1. when comment open do not display save for other items
+2. fix issue when not changing status
+3. add a filter for assigned to me (save somewhere) -- user preference
+4. add filter for items statuses
+5. add attachment of files
+6. allow to update a comment or delete a comment (only by user who created the comment or admin) - deleted comments can be reactivated
+7. create graphs
+  per status (pie)
+  open vs closed per day (area)
+  per type (pie)
+  per user bar chart (series per status)
+
+8. add advanced search to search in comments/ title
+9. ensure readonly for drop downs in status on edit Task
+
+
+
+add tooltip -- OK
+check email works -- OK
 
 
 
@@ -10,9 +29,9 @@ check email works
 3. add list.js function to filter list
 4. allow system to remember filters
 5. add attachment of files
-6. add emailing functionality
-7. add email address to users table
-8. add pagination
+6. add emailing functionality -- DONE
+7. add email address to users table -- DONE
+8. add pagination -- DONE
 
 
 
