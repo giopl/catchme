@@ -22,6 +22,8 @@ namespace CatchMe.Helpers
         //used in view for saving object (insert or update)
         public string Action { get; set; }
 
+        public bool isTo { get; set; }
+        public bool isCc { get; set; }
 
 
         public override bool Equals(object obj)

@@ -1,34 +1,60 @@
 ﻿@model CatchMe.Models.task
+
 @using session = CatchMe.Helpers.UserSession
 
 @{
     
     var sp = CatchMe.Helpers.ConfigurationHelper.GetServerPath();
+
+    var assignee = Model.assigned_to.HasValue ? Model.user1.firstname : "Unassigned";
+    var due_date = Model.due_date.HasValue ? Model.due_date.Value.ToString("dd MMM yyyy") : "Not defined";
 }
 
 
 <div style="font-family: Calibri">
-    Dear User,<br /><br />
+    @if(Model.assigned_to.HasValue)
+    {
+        <p>Hi @Model.user1.firstname,</p> <br /><br />
+    }
+    else
+    {
+     <p>Hi Team,<br /><br /></p>
+        
+    }
     
-    You received a notification from Catch ME! from <b>@session.Current.Fullname</b>
+    You received a notification on Catch ME! from <b>@session.Current.Fullname</b>
+    
 
     <h2 style="color:#777">#@Model.task_id @Model.title</h2>
 
-    <br />
-    Task Status: <b>@Model.StatusDesc</b>
+
+
+    Details:
+    <ul>
+        <li>Assigned to: <b>@assignee</b></li>
+        <li>Task Status: <b>@Model.StatusDesc</b></li>
+        <li>Due Date: <b>@due_date</b></li>
+
+    </ul>
+    
+
+    
+
 
     <br /><br />Most Recent Comment:
     <hr />
     <p>
         <b>@Model.comments.LastOrDefault().title</b>
+     </p>
 
+    <p>
         @Html.Raw(Model.comments.LastOrDefault().description)
 
     </p>
     <hr />
     <p>
         Read More:
-        <a href="@string.Concat("http://localhost:25894/Tasks/EditTask/",@Model.task_id)">@Model.title</a> or paste this (@string.Concat(sp,@Url.Content("~/Tasks/EditTask/"),@Model.task_id)) in your browser (preferably not IE)
+        <a href="@string.Concat(sp, @Url.Content("~/Tasks/EditTask/"), @Model.task_id)">@Model.title</a> or paste this (@string.Concat(sp,@Url.Content("~/Tasks/EditTask/"),@Model.task_id)) in your browser (preferably not IE)
         </p>
     
     <br /><br />Regards,

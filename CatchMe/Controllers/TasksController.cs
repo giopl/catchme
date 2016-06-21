@@ -590,15 +590,25 @@ namespace CatchMe.Controllers
                 
 
                 List<EmailRecipient> recipients = new List<EmailRecipient>();
-
+                var task = db.tasks.Find(taskId);
                 for (int i = 0; i < notify.Count(); i++)
                 {
                 
                     var user = db.users.Find(notify[i]);
+                    
+
+                    var assigned_user = task.assigned_to.HasValue ? task.assigned_to.Value:  0;
                     if (user != null && !string.IsNullOrWhiteSpace(user.email))
                     {
+                        var isTo = false;
+                        
+                        if(user.user_id == assigned_user || notify.Count() == 1)
+                        {
+                            isTo = true;
+                        
+                        }
 
-                        recipients.Add(new EmailRecipient { RecipientEmail = user.email, RecipientUserId = user.username, RecipientName = user.fullname });
+                        recipients.Add(new EmailRecipient { RecipientEmail = user.email, RecipientUserId = user.username, RecipientName = user.fullname , isTo = isTo });
 
                     }
                 }
@@ -608,7 +618,19 @@ namespace CatchMe.Controllers
                     foreach (var item in recipients)
                     {
                         //mail.AddRecipient(String.Concat(item.RecipientName, " <", item.RecipientEmail, ">"));
+                        
+
+                        if(item.isTo)
+                        {
+
                         mail.AddRecipient(item.RecipientEmail);
+                        }
+                        else
+                        {
+                            mail.AddCcRecipient(item.RecipientEmail);
+                        }
+
+                        
                     };
 
                     
@@ -616,7 +638,7 @@ namespace CatchMe.Controllers
                     var senderid = UserSession.Current.UserId;
                     var sender = db.users.Find(senderid);
 
-                    var task = db.tasks.Find(taskId);
+                    
 
                     //Generates the email body
                          mail.Body = RenderRazorViewToString(this.ControllerContext, "_notificationBody", task);
