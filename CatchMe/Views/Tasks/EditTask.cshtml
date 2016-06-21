@@ -413,6 +413,15 @@ else
             $('body').on('click', '.showsection', function () {
                 var section = $(this).data("sectionnum");
                 $(section).toggle();
+
+                if (section == '.section1')
+                {
+                    if($(section).is("visible"))
+                    {
+                        alert('visible');
+                    }
+                }
+
                 //$(this).next('section'+'.'+x).toggle();
             });
 
