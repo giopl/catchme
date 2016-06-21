@@ -12,17 +12,10 @@
 
 
 <div style="font-family: Calibri">
-    @if(Model.assigned_to.HasValue)
-    {
-        <p>Hi @Model.user1.firstname,</p> <br /><br />
-    }
-    else
-    {
-     <p>Hi Team,<br /><br /></p>
-        
-    }
     
-    You received a notification on Catch ME! from <b>@session.Current.Fullname</b>
+        <p>Hi @Model.HiUser,</p> 
+    
+    You received a notification from <b>@session.Current.Fullname</b>
     
 
     <h2 style="color:#777">#@Model.task_id @Model.title</h2>

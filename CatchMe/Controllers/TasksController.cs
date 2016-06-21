@@ -591,6 +591,9 @@ namespace CatchMe.Controllers
 
                 List<EmailRecipient> recipients = new List<EmailRecipient>();
                 var task = db.tasks.Find(taskId);
+
+                task.HiUser = "Team";
+
                 for (int i = 0; i < notify.Count(); i++)
                 {
                 
@@ -605,6 +608,8 @@ namespace CatchMe.Controllers
                         if(user.user_id == assigned_user || notify.Count() == 1)
                         {
                             isTo = true;
+
+                            task.HiUser = user.firstname;
                         
                         }
 

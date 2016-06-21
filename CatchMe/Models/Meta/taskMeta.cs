@@ -92,6 +92,9 @@ namespace CatchMe.Models
         
         }
 
+
+        public string HiUser { get;set; }
+
         public string typeIcon
         {
 
