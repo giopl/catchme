@@ -8,132 +8,289 @@
 
 <div>
     <div class="pull-left"><h2>@session.Current.CurrentProject</h2></div>
-    <div class="pull-right" style="margin-top:20px;"> <span class="text-muted">change project:</span>
-       @if(session.Current.MyProjects.Count() > 1)
-       {           
-        @Html.DropDownList("project_id", null, htmlAttributes: new { @class = "projectselect pull-right changeproject" })           
-       }
+    <div class="pull-right" style="margin-top:20px;">
+        <span class="text-muted">change project:</span>
+        @if (session.Current.MyProjects.Count() > 1)
+        {
+            @Html.DropDownList("project_id", null, htmlAttributes: new { @class = "projectselect pull-right changeproject" })
+        }
     </div>
 </div>
 <div style="clear:both"></div>
-<hr />
 
 
 
+<div class="gap"></div>
 
 
-        <table class="table" id="tasklisttable">
-            <thead>
-                <tr>
-                    <th>
-                        Id
-                    </th>
+<div>
 
-                    
-                    <td>
-                        Desc
-                    </td>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation"><a href="#open" aria-controls="settings" role="tab" data-toggle="tab">Open</a></li>
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me</a></li>
+        <li role="presentation"><a href="#closed" aria-controls="messages" role="tab" data-toggle="tab">Closed</a></li>
+        
+    </ul>
 
-                    <th>
-                        Assigned To
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.priority)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.due_date)
-                    </th>
+    <!-- Tab panes -->
+    <div class="tab-content">
 
-                    <th></th>
-                </tr>
-            </thead>
+        <div role="tabpanel" class="tab-pane" id="open">
 
-            <tbody>
-                @foreach (var item in Model)
-                {
+            <div class="gap"></div>
+
+
+            <table class="table" id="tableopen" style="width:100%">
+                <thead>
                     <tr>
-                        <td>
-                            <span class="text-muted fa-15x">@item.task_id</span>
-                        </td>                        
-                        <td>
-                            <div class="readmore">
-                                @*<div class="rectangle @item.StateColor" data-toggle="tooltip" data-placement="left" title="@item.StatusDesc"></div>*@
-                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
-                                <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                            </div>
+                        <th width="5%">
+                            Id
+                        </th>
 
-                        </td>
-                        <td>
-                            @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.fullname; }
-                            @assignee
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PriorityDesc)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.due_date)
-                        </td>
 
                         <td>
-                            <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
-                            <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
-
+                            Desc
                         </td>
+
+                        <th>
+                            Assigned To
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.priority)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.due_date)
+                        </th>
+
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.status != 9))
+                    {
+                        <tr>
+                            <td>
+                                <span class="text-muted fa-15x">@item.task_id</span>
+                            </td>
+                            <td>
+                                <div class="readmore">
+                                    
+                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                </div>
+
+                            </td>
+                            <td>
+                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.fullname; }
+                                @assignee
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PriorityDesc)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.due_date)
+                            </td>
+
+                            <td>
+                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane active" id="home">
+
+            <div class="gap"></div>
 
 
+            <table class="table" id="tableme" style="width:100%">
+                <thead>
+                    <tr>
+                        <th width="5%">
+                            Id
+                        </th>
 
 
-    @section scripts {
+                        <td>
+                            Desc
+                        </td>
 
-        @Scripts.Render("~/bundles/datatables")
+                        <th>
+                            Assigned To
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.priority)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.due_date)
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId))
+                    {
+                        <tr>
+                            <td>
+                                <span class="text-muted fa-15x">@item.task_id</span>
+                            </td>
+                            <td>
+                                <div class="readmore">
+                                    
+                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                </div>
+
+                            </td>
+                            <td>
+                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.fullname; }
+                                @assignee
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PriorityDesc)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.due_date)
+                            </td>
+
+                            <td>
+                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+      
+        <div role="tabpanel" class="tab-pane" id="closed">
+            <div class="gap"></div>
+            <table class="table" id="tableclose" style="width:100%">
+                <thead>
+                    <tr>
+                        <th width="5%">
+                            Id
+                        </th>
 
 
-        <script>
+                        <td>
+                            Desc
+                        </td>
+
+                        <th>
+                            Assigned To
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.priority)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.due_date)
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.status == 9))
+            {
+            <tr>
+                <td>
+                    <span class="text-muted fa-15x">@item.task_id</span>
+                </td>
+                <td>
+                    <div class="readmore">
+                        
+                        <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                    </div>
+
+                </td>
+                <td>
+                    @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.fullname; }
+                    @assignee
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriorityDesc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.due_date)
+                </td>
+
+                <td>
+                    <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                    <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
+                </td>
+            </tr>
+            }
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+
+</div>
+
+@section scripts {
+
+    @Scripts.Render("~/bundles/datatables")
 
 
-            $(document).ready(function () {
+    <script>
 
 
-                $('#tasklisttable').DataTable({
-                   
-                    "pageLength": 50
-
-                });
-
-                //$(".projectselect").select2({
-                //    minimumResultsForSearch: Infinity
-                //});
+        $(document).ready(function () {
 
 
+            $('#tableopen').DataTable({
+                "pageLength": 50
+            });
+
+            $('#tableclose').DataTable({
+                "pageLength": 50
+            });
 
 
-                $('body').on('change', '.changeproject', function () {
-                    var project_id = $(this).val();
-                    alert("Changing Project");
+            $('#tableme').DataTable({
+                "pageLength": 50
+            });
 
 
-                    // similar behavior as an HTTP redirect
-                    window.location.replace(getVirtualDir() + "Tasks/Tasklist/" + project_id);
+            $('body').on('change', '.changeproject', function () {
+                var project_id = $(this).val();
+                //alert("Changing Project");
 
-                    // similar behavior as clicking on a link
-                    //window.location.href = "http://stackoverflow.com";
 
-                });
+                // similar behavior as an HTTP redirect
+                window.location.replace(getVirtualDir() + "Tasks/Tasklist/" + project_id);
 
-                $('[data-toggle="tooltip"]').tooltip();
-
-                //$('.readmore').readmore({
-                //    speed: 75,
-                //    collapsedHeight: 40,
-                //    lessLink: '<a href="#">Read less</a>'
-                //});
-
+                // similar behavior as clicking on a link
+                //window.location.href = "http://stackoverflow.com";
 
             });
 
-        </script>
-    }
+            $('[data-toggle="tooltip"]').tooltip();
+
+            //$('.readmore').readmore({
+            //    speed: 75,
+            //    collapsedHeight: 40,
+            //    lessLink: '<a href="#">Read less</a>'
+            //});
+
+
+        });
+
+    </script>
+}

@@ -32,8 +32,8 @@ namespace CatchMe.Models
         public virtual DbSet<log> logs { get; set; }
         public virtual DbSet<user> users { get; set; }
         public virtual DbSet<task> tasks { get; set; }
-        public virtual DbSet<comment> comments { get; set; }
         public virtual DbSet<taskHist> taskHists { get; set; }
         public virtual DbSet<notification> notifications { get; set; }
+        public virtual DbSet<comment> comments { get; set; }
     }
 }

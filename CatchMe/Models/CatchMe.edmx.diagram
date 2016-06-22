@@ -21,13 +21,13 @@
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_task_id" />
         <AssociationConnector Association="CatchMeDBModel.task_category" />
-        <EntityTypeShape EntityType="CatchMeDBModel.comment" Width="1.5" PointX="10.5" PointY="8.5" />
-        <AssociationConnector Association="CatchMeDBModel.FK_comment_task_id" />
-        <AssociationConnector Association="CatchMeDBModel.FK_comment_user_id" />
         <EntityTypeShape EntityType="CatchMeDBModel.taskHist" Width="1.5" PointX="10.5" PointY="3" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_hist_task_id" />
         <EntityTypeShape EntityType="CatchMeDBModel.notification" Width="1.5" PointX="5.25" PointY="1" />
         <AssociationConnector Association="CatchMeDBModel.FK_notification_task_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.comment" Width="1.5" PointX="10.5" PointY="8.5" />
+        <AssociationConnector Association="CatchMeDBModel.FK_comment_task_id" />
+        <AssociationConnector Association="CatchMeDBModel.FK_comment_user_id" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

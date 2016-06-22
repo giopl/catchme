@@ -89,6 +89,11 @@ width:200px;
 .task-title {
     font-size:24px;
     font-weight:500;
+     word-wrap: break-word;
+}
+
+.task-title {
+
 }
 
 .status {
@@ -143,6 +148,16 @@ width:100px;
 
 
 /* miscellanesous*/
+
+.tasklisttable {
+
+    width:100%;
+}
+
+    .gap {
+        margin-top:20px;
+    }
+
 
     .border-red { border: 1px solid red;}    
     .border-green { border: 1px solid green;}    
