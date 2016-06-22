@@ -87,13 +87,19 @@ width:200px;
 }
 
 .task-title {
-    font-size:24px;
+    font-size:2em;
     font-weight:500;
      word-wrap: break-word;
 }
 
-.task-title {
-
+.tasknum {
+    font-size:2em;
+    float:left;
+}
+.tasktitle {
+    word-wrap: break-word;
+    font-size:2em;
+    float:left;
 }
 
 .status {
