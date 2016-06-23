@@ -13,9 +13,25 @@
 }
 
 
+<style>
+
+</style>
         <div class="row">
             <div class="col-md-8">
-                <h2 class="tasktitle"><<span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span> @Model.title </h2>
+
+            <div class="task-title2">
+                <div class="taskid">
+                    <span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span>
+                </div>
+                <div class="taskname truncate" title="@Model.title">
+                    @Model.title
+                </div>
+
+              </div>
+            <div class="clearfix"></div>
+
+                @*<h2 class="tasktitle"><span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span> @Model.title </h2>*@
+
                 <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.fullname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") </h5>
             
 
@@ -188,8 +204,11 @@
             {
                 <div class="task-title">@comment.title - </div>
                 <small>@comment.user.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
-                <h4>
-                    @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))                    
+                <h4 style="word-break:break-all">
+
+                    <span style="word-wrap:break-word">
+                        @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
+                    </span>
                 </h4>
           <hr />
 

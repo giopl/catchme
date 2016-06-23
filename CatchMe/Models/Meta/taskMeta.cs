@@ -181,7 +181,7 @@ namespace CatchMe.Models
                         case 3: return "info";
                         
                         case 7: return "success";
-                        case 9: return "default";
+                        case 9: return "success";
                         
                         
 

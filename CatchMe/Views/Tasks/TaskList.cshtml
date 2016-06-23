@@ -4,6 +4,12 @@
 @using appenums = CatchMe.Helpers.AppEnums
 @{
     ViewBag.Title = "Catch Me";
+    
+    var countopen = Model.Where(x => x.status != 9).Count();
+    var countme = Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9).Count();
+    var countclosed = Model.Where(x => x.status == 9).Count();
+    var countopenbyme = Model.Where(x => x.created_by == session.Current.UserId).Count();
+    
 }
 
 <div>
@@ -18,6 +24,11 @@
 </div>
 <div style="clear:both"></div>
 
+<style>
+    
+        table.fixed { table-layout:fixed; }    
+        table.fixed td { overflow: hidden; }
+</style>
 
 
 <div class="gap"></div>
@@ -27,9 +38,10 @@
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation"><a href="#open" aria-controls="settings" role="tab" data-toggle="tab">Open</a></li>
-        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me</a></li>
-        <li role="presentation"><a href="#closed" aria-controls="messages" role="tab" data-toggle="tab">Closed</a></li>
+        <li role="presentation"><a href="#open" aria-controls="settings" role="tab" data-toggle="tab">Open (@countopen)</a></li>
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me (@countme)</a></li>
+        <li role="presentation"><a href="#closed" aria-controls="messages" role="tab" data-toggle="tab">Closed (@countclosed)</a></li>
+        <li role="presentation"><a href="#openbyme" aria-controls="messages" role="tab" data-toggle="tab">Opened By Me (@countopenbyme)</a></li>
         
     </ul>
 
@@ -42,28 +54,29 @@
 
 
             <table class="table" id="tableopen" style="width:100%">
+                
                 <thead>
                     <tr>
                         <th width="5%">
                             Id
                         </th>
+                        <td></td>
 
-
-                        <td>
+                        <td width="45%">
                             Desc
-                        </td>
+                            </td>
 
-                        <th>
+                        <th width="20%">
                             Assigned To
-                        </th>
-                        <th>
+                            </th>
+                        <th width="10%">
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
-                        <th>
+                        <th width="14%">
                             @Html.DisplayNameFor(model => model.due_date)
                         </th>
 
-                        <th></th>
+                        <th width="1%">
                     </tr>
                 </thead>
 
@@ -75,9 +88,11 @@
                                 <span class="text-muted fa-15x">@item.task_id</span>
                             </td>
                             <td>
-                                <div class="readmore">
-                                    
-                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                            </td>
+
+                            <td >
+                                <div class="readmore">                                 
                                     <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
                                 </div>
 
@@ -116,37 +131,38 @@
                         <th width="5%">
                             Id
                         </th>
+                        <td></td>
 
-
-                        <td>
+                        <td width="45%">
                             Desc
                         </td>
 
-                        <th>
+                        <th width="20%">
                             Assigned To
                         </th>
-                        <th>
+                        <th width="10%">
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
-                        <th>
+                        <th width="14%">
                             @Html.DisplayNameFor(model => model.due_date)
                         </th>
 
-                        <th></th>
+                        <th width="1%">
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId))
+                    @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9))
                     {
                         <tr>
                             <td>
                                 <span class="text-muted fa-15x">@item.task_id</span>
                             </td>
                             <td>
-                                <div class="readmore">
-                                    
-                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                            </td>
+                            <td class="">
+                                <div class="readmore">                                    
                                     <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
                                 </div>
 
@@ -183,60 +199,138 @@
                             Id
                         </th>
 
-
-                        <td>
+                        <td></td>
+                        <td width="45%">
                             Desc
                         </td>
 
-                        <th>
+                        <th width="20%">
                             Assigned To
                         </th>
-                        <th>
+                        <th width="10%">
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
-                        <th>
+                        <th width="14%">
                             @Html.DisplayNameFor(model => model.due_date)
                         </th>
 
-                        <th></th>
+                        <th width="1%">
                     </tr>
                 </thead>
 
                 <tbody>
                     @foreach (var item in Model.Where(x => x.status == 9))
-            {
-            <tr>
-                <td>
-                    <span class="text-muted fa-15x">@item.task_id</span>
-                </td>
-                <td>
-                    <div class="readmore">
-                        
-                        <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
-                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                    </div>
+                    {
 
-                </td>
-                <td>
-                    @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.fullname; }
-                    @assignee
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PriorityDesc)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.due_date)
-                </td>
+                        <tr>
+                            <td>
+                                <span class="text-muted fa-15x">@item.task_id</span>
+                            </td>
+                            <td>
+                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                            </td>
 
-                <td>
-                    <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
-                    <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+                            <td class="">
+                                <div class="readmore">                                    
+                                    <span class="truncate-tasklist">
+                                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                    </span>
+                                </div>
 
-                </td>
-            </tr>
-            }
+                            </td>
+                            <td>
+                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.fullname; }
+                                @assignee
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PriorityDesc)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.due_date)
+                            </td>
+
+                            <td>
+                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
+        </div>
+
+
+        <div role="tabpanel" class="tab-pane" id="openbyme">
+
+            <div class="gap"></div>
+
+
+            <table class="table" id="tableopenbyme" style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th width="5%">
+                            Id
+                        </th>
+                        <td></td>
+
+                        <td width="45%">
+                            Desc
+                        </td>
+
+                        <th width="20%">
+                            Assigned To
+                        </th>
+                        <th width="10%">
+                            @Html.DisplayNameFor(model => model.priority)
+                        </th>
+                        <th width="14%">
+                            @Html.DisplayNameFor(model => model.due_date)
+                        </th>
+
+                        <th width="1%">
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.created_by == session.Current.UserId))
+                    {
+                        <tr>
+                            <td>
+                                <span class="text-muted fa-15x">@item.task_id</span>
+                            </td>
+                            <td>
+                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                            </td>
+
+                            <td>
+                                <div class="readmore">
+                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                </div>
+
+                            </td>
+                            <td>
+                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.fullname; }
+                                @assignee
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PriorityDesc)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.due_date)
+                            </td>
+
+                            <td>
+                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
         </div>
         
     </div>
@@ -268,6 +362,12 @@
             });
 
 
+            $('#tableopenbyme').DataTable({
+                "pageLength": 50
+            });
+
+
+
             $('body').on('change', '.changeproject', function () {
                 var project_id = $(this).val();
                 //alert("Changing Project");
@@ -283,11 +383,11 @@
 
             $('[data-toggle="tooltip"]').tooltip();
 
-            //$('.readmore').readmore({
-            //    speed: 75,
-            //    collapsedHeight: 40,
-            //    lessLink: '<a href="#">Read less</a>'
-            //});
+            $('.readmore').readmore({
+                speed: 75,
+                collapsedHeight: 40,
+                lessLink: '<a href="#">Read less</a>'
+            });
 
 
         });
