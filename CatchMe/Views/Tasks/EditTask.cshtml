@@ -385,8 +385,16 @@ else
     <div class="form-group pad20">
         <div class="col-md-offset-4 col-md-8 text-center">
 
-            <input type="submit" value="Save" class="btn btn-info" />
+            <input type="submit" id="savestatusbutton" value="Save" class="btn btn-info" />
             <input type="reset" value="Reset" class="btn btn-default" />
+        </div>
+    </div>
+
+
+    <div class="form-group pad20" id="infosave" style="display:none">
+        <div class="col-md-offset-4 col-md-8 text-center">
+
+            <small class="text-muted"><span class="fa fa-warning"></span> &nbsp;close or save the comment to enable save button</small>
         </div>
     </div>
 
@@ -433,11 +441,17 @@ else
                 var section = $(this).data("sectionnum");
                 $(section).toggle();
 
+                $('#savestatusbutton').prop('disabled', false);
+                $('#infosave').hide();
+
                 if (section == '.section1')
                 {
-                    if($(section).is("visible"))
+
+                    if ($(section).is(":visible"))
                     {
-                        alert('visible');
+                        $('#savestatusbutton').prop('disabled', true);
+                        $('#infosave').show();
+                        //alert('visible');
                     }
                 }
 
@@ -463,6 +477,8 @@ else
        
 
             $('body').on('click', '#closeAddComment', function () {
+                $('#savestatusbutton').prop('disabled', false);
+                $('#infosave').hide();
                 $(this).closest('section').hide();
             });
 
