@@ -39,6 +39,7 @@ namespace CatchMe.Models
         public Nullable<int> created_by { get; set; }
         public Nullable<System.DateTime> created_on { get; set; }
         public Nullable<int> assigned_to { get; set; }
+        public Nullable<System.DateTime> updated_on { get; set; }
     
         public virtual project project { get; set; }
         public virtual ICollection<log> logs { get; set; }
