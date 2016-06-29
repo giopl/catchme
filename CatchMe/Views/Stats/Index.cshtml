@@ -3,11 +3,7 @@
 @{
     ViewBag.Title = "Index";
 
-    var factorSortList =
-        Model.OrderBy(o => o.status_code)
-               .ToList()
-               .GroupBy(i => i.status_code)
-               .Select(g => new { tax = g.Count(i => i.status_code >0) , g.status});
+  
 
 
 }
