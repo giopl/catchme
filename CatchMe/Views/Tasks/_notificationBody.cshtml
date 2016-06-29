@@ -6,7 +6,7 @@
     
     var sp = CatchMe.Helpers.ConfigurationHelper.GetServerPath();
 
-    var assignee = Model.assigned_to.HasValue ? Model.user1.firstname : "Unassigned";
+    var assignee = Model.assigned_to.HasValue ? Model.user.firstname : "Unassigned";
     var due_date = Model.due_date.HasValue ? Model.due_date.Value.ToString("dd MMM yyyy") : "Not defined";
 }
 
