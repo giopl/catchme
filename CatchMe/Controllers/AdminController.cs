@@ -109,6 +109,7 @@ namespace CatchMe.Controllers
                 return RedirectToAction("Index");
             }
 
+
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
 
             return View(user);
