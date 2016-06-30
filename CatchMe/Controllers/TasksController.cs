@@ -508,6 +508,9 @@ namespace CatchMe.Controllers
 
             if (ModelState.IsValid)
             {
+
+                task.updated_on = DateTime.Now;
+
                 db.Entry(task).State = EntityState.Modified;
                 db.SaveChanges();
 
