@@ -16,7 +16,7 @@ namespace CatchMe
 
 
             bundles.Add(new ScriptBundle("~/bundles/chart").Include(
-                        "~/Scripts/plugins/moment.js",
+                        
                         "~/Scripts/plugins/chart.js"
 
                         ));
@@ -33,6 +33,7 @@ namespace CatchMe
                 //https://select2.github.io/
                       //"~/Scripts/plugins/select2.js",
                       "~/Scripts/plugins/readmore.js",
+                      "~/Scripts/plugins/moment.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/nicedit").Include(
@@ -49,7 +50,7 @@ namespace CatchMe
                       ));
             //http://vitalets.github.io/combodate/
             bundles.Add(new ScriptBundle("~/bundles/combodate").Include(
-                      "~/Scripts/plugins/moment.js",
+                      
                       "~/Scripts/plugins/combodate.js"
                       ));
 

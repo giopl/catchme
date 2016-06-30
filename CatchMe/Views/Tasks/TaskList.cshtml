@@ -193,13 +193,14 @@
         <div role="tabpanel" class="tab-pane" id="closed">
             <div class="gap"></div>
             <table class="table" id="tableclose" style="width:100%">
+
                 <thead>
                     <tr>
                         <th width="5%">
                             Id
                         </th>
-
                         <td></td>
+
                         <td width="45%">
                             Desc
                         </td>
@@ -221,7 +222,6 @@
                 <tbody>
                     @foreach (var item in Model.Where(x => x.status == 9))
                     {
-
                         <tr>
                             <td>
                                 <span class="text-muted fa-15x">@item.task_id</span>
@@ -230,11 +230,9 @@
                                 <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
                             </td>
 
-                            <td class="">
-                                <div class="readmore">                                    
-                                    <span class="truncate-tasklist">
-                                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                                    </span>
+                            <td>
+                                <div class="readmore">
+                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
                                 </div>
 
                             </td>
