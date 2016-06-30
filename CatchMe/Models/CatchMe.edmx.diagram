@@ -28,6 +28,7 @@
         <EntityTypeShape EntityType="CatchMeDBModel.comment" Width="1.5" PointX="10.5" PointY="8.5" />
         <AssociationConnector Association="CatchMeDBModel.FK_comment_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_comment_user_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.viewTasks" Width="1.5" PointX="7.375" PointY="9.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

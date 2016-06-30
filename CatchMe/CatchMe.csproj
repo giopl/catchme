@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -131,6 +132,7 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -196,6 +198,9 @@
     <Compile Include="Models\user.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\viewTasks.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -254,7 +259,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap3-typeahead.js" />
     <Content Include="Scripts\bootstrap3-typeahead.min.js" />
-    <Content Include="Scripts\custom\chart.js" />
+    <Content Include="Scripts\plugins\chart.js" />
     <Content Include="Scripts\custom\shared.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -319,6 +324,11 @@
     <Content Include="Views\Home\NoAccess.cshtml" />
     <Content Include="Views\Tasks\NoProject.cshtml" />
     <Content Include="Views\Tasks\_notificationBody.cshtml" />
+    <Content Include="Views\Stats\Create.cshtml" />
+    <Content Include="Views\Stats\Delete.cshtml" />
+    <Content Include="Views\Stats\Details.cshtml" />
+    <Content Include="Views\Stats\Edit.cshtml" />
+    <Content Include="Views\Stats\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
