@@ -32,6 +32,8 @@
                     <li><a href="@Url.Action("Index","Admin")" title="Admin"><span class="fa fa-15x fa-wrench"></span> </a></li>                    
                         
                     }
+                    <li><a href="@Url.Action("Index","Stats")" title="Admin"><span class="fa fa-15x fa-line-chart"></span> </a></li>
+
                 </ul>                
                 <p class="nav navbar-text navbar-right">Hello, @session.Current.Firstname!</p>
             </div>
@@ -51,10 +53,6 @@
     @Scripts.Render("~/bundles/combodate")
     @RenderSection("scripts", required: false)
 
-    <script type="text/javascript">    
-
-        
-    </script>
 
 </body>
 </html>

@@ -92,6 +92,18 @@ namespace CatchMe.Models
         
         }
 
+        public bool IsOverdue
+        {
+            get
+            {
+                if (due_date.HasValue)
+                {
+                    return status < 9 && DateTime.Now.AddDays(-1) > due_date.Value;
+
+                }
+                else return false;
+            }
+        }
 
         public string HiUser { get;set; }
 

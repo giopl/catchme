@@ -61,6 +61,7 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Views\" />
     <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\user.sql" />
@@ -78,6 +79,9 @@
     <Build Include="dbo\Tables\optionset.sql" />
     <Build Include="dbo\Views\v_tasks.sql" />
     <Build Include="dbo\Functions\RemoveNonASCII.sql" />
+    <Build Include="dbo\Tables\date.sql" />
+    <Build Include="dbo\Views\backlog.sql" />
+    <Build Include="dbo\Stored Procedures\PopulateDates.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Initialisation.sql" />

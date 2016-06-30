@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CatchMe.Models;
+using CatchMe.Helpers;
 
 namespace CatchMe.Controllers
 {
@@ -17,7 +18,8 @@ namespace CatchMe.Controllers
         // GET: Stats
         public ActionResult Index()
         {
-            return View(db.viewTasks.ToList());
+            var proj = UserSession.Current.CurrentProjectId ;
+            return View(db.viewTasks.Where(x=>x.project_id == proj).ToList());
         }
 
         // GET: Stats/Details/5
