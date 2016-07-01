@@ -1,0 +1,208 @@
+﻿@model IEnumerable<CatchMe.Models.viewTasks>
+
+@{
+    ViewBag.Title = "Index";
+    @Scripts.Render("~/bundles/chart")
+    var t1 = Model.Where(x => x.type_code == 1).Count();
+    var t2 = Model.Where(x => x.type_code == 2).Count();
+    var t3 = Model.Where(x => x.type_code == 3).Count();
+    var t4 = Model.Where(x => x.type_code == 4).Count();
+    var t5 = Model.Where(x => x.type_code == 5).Count();
+    var t6 = Model.Where(x => x.type_code == 6).Count();
+
+    var s0 = Model.Where(x => x.status_code == 0).Count();
+    var s1 = Model.Where(x => x.status_code == 1).Count();
+    var s2 = Model.Where(x => x.status_code == 2).Count();
+    var s3 = Model.Where(x => x.status_code == 3).Count();
+    var s4 = Model.Where(x => x.status_code == 4).Count();
+    var s5 = Model.Where(x => x.status_code == 5).Count();
+    var s6 = Model.Where(x => x.status_code == 6).Count();
+    var s7 = Model.Where(x => x.status_code == 7).Count();
+    var s8 = Model.Where(x => x.status_code == 8).Count();
+    var s9 = Model.Where(x => x.status_code == 9).Count();
+
+
+
+}
+
+
+<h2>Project Stats</h2>
+<div class="row">
+    <div class="col-md-3">
+
+<canvas id="pertype" width="400" height="400"></canvas>
+    </div>
+
+    <div class="col-md-3">
+
+        <canvas id="perstatus" width="400" height="400"></canvas>
+    </div>
+
+</div>
+
+
+<script>
+    var ctx1 = document.getElementById("perstatus");
+
+    //var myDoughnutChart = new Chart(ctx1, {
+    //    type: 'bar',
+    //    data: data,
+    //    options: {
+    //        animation: {
+    //            animateScale: true
+    //        }
+    //    }
+    //});
+
+    var data = {
+        labels: [
+            "Red",
+            "Blue",
+            "Yellow"
+        ],
+        datasets: [
+            {
+                data: [300, 50, 100],
+                backgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56"
+                ],
+                hoverBackgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56"
+                ]
+            }]
+    };
+    @*var datastatus = {
+        labels: [
+            "New",
+            "Act",
+            "Inv",
+            "Cpl",
+            "Hol",
+            "Prb",
+            "NoI",
+            "Pas",
+            "Fail",
+            "Clo"
+        ],
+        datasets: [
+            {
+                data: [@s0,@s1,@s2,@s3,@s4,@s5,@s6,@s7,@s8,@s9],
+                backgroundColor:[
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#FFCE56"
+                ],
+                hoverBackgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#FF6384",
+                    "#36A2EB",
+                    "#36A2EB",
+                    "#FFCE56"
+                ]
+            }]
+    };*@
+
+
+    var ctx = document.getElementById("pertype");
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["dev", "chg", "bug", "fail", "test", "inve"],
+        datasets: [{
+            label: '# task type',
+            data: [@t1, @t2, @t3, @t4, @t5, @t6],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+
+    var ctx = document.getElementById("perstatus");
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: [
+              "New",
+              "Action",
+              "Investigate",
+              "Complete",
+              "Hold",
+              "Problem",
+              "No Issue",
+              "Passed",
+              "Failed",
+              "Closed"
+            ], datasets: [{
+                label: '# task type',
+                data: [@s0,@s1,@s2,@s3,@s4,@s5,@s6,@s7,@s8,@s9],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            animation: {
+                            animateScale: true
+                        }
+
+        }
+    });
+
+</script>

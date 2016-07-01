@@ -8,12 +8,19 @@ using System.Web;
 using System.Web.Mvc;
 using CatchMe.Models;
 using System.Text;
+using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
+using log4net;
+using System.Data.Entity.Core;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 
 namespace CatchMe.Controllers
 {
     public class AdminController : BaseController
     {
         private CatchMeDBEntities db = new CatchMeDBEntities();
+        log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         // GET: Projects
         public ActionResult Index()
@@ -27,7 +34,7 @@ namespace CatchMe.Controllers
         public ActionResult ListProjects()
         {
 
-            var users = db.users.ToList();
+            var users = db.users.AsNoTracking().ToList();
 
             ViewBag.Users = users;
 
@@ -55,13 +62,16 @@ namespace CatchMe.Controllers
 
             employee emp = db.employees.Where(x=>x.user_id == user).FirstOrDefault();
 
+            //if ldap is on
+
 
             var founduser = new user
             {
                 firstname = emp.common_name,
                 lastname = emp.fam_name,
                 username = emp.user_id,
-                email = string.Format("{0}@local.mcb", emp.user_id),
+                //email = string.Format("{0}@local.mcb", emp.user_id),
+                email = getUserCommonName(emp.user_id),
                 job_title = emp.position_title,
                 team = emp.team
             };
@@ -74,6 +84,38 @@ namespace CatchMe.Controllers
 
             return View(founduser);
         }
+
+
+
+        private string getUserCommonName(string user)
+        {
+            
+                var email = string.Empty;
+
+            try
+            {
+                using (var context = new PrincipalContext(ContextType.Domain))
+                {
+                    //log.Info(string.Concat("connected to server: ", context.ConnectedServer));
+                    var principal = UserPrincipal.FindByIdentity(context, user);
+
+
+                    var firstName = principal.GivenName;
+                    var lastName = principal.Surname;
+                     email = principal.EmailAddress;
+
+                    return email;
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error("[getUserCommonName] - Exception Caught" + e.ToString());
+                //throw;
+                return email;
+            }
+            
+        }
+
 
 
 
@@ -90,6 +132,7 @@ namespace CatchMe.Controllers
                 return HttpNotFound();
             }
 
+
             ViewBag.active_project = new SelectList(db.projects, "project_id", "name", user.active_project);
 
             return View(user);
@@ -100,19 +143,41 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditUser([Bind(Include = "username,firstname,lastname,job_title,team,role,num_logins,is_active,email,active_project")] user user)
+        public ActionResult EditUser([Bind(Include = "user_id,username,firstname,lastname,job_title,team,role,num_logins,is_active,email,active_project")] user user)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+                ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+
+                return View(user);
+
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw;
+                //saveFailed = true;
+
+                // Update the values of the entity that failed to save from the store 
+                //ex.Entries.Single().Reload();
+                //db.SaveChanges();
+                
+            } 
+
+            catch (Exception)
+            {
+                
+                throw;
+            }
+            
 
 
-            ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
-
-            return View(user);
         }
 
 
@@ -139,6 +204,8 @@ namespace CatchMe.Controllers
 
 
             var employee = db.employees.Where(x => x.user_id == addeduser.username).ToList() ;
+
+
             if (employee != null && employee.Count == 1 )
             {
 

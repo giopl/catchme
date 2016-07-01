@@ -22,7 +22,8 @@ namespace CatchMe.Controllers
 
             if(!string.IsNullOrWhiteSpace(_user))
             {                
-                _user = _user.Replace("MCB\\","");
+                //_user = _user.Replace("MCB\\","");
+                _user = _user.Substring(_user.IndexOf('\\') + 1);
             }
             
             var user = db.users.Where(x=>x.username == _user).ToList();
@@ -38,7 +39,7 @@ namespace CatchMe.Controllers
 
                 UserSession.Current.Fullname = founduser.fullname;
                 UserSession.Current.Firstname = founduser.firstname;
-                UserSession.Current.CurrentProjectId = founduser.active_project.Value;
+                UserSession.Current.CurrentProjectId = founduser.active_project.HasValue?founduser.active_project.Value:0;
 
                 var myProjects = founduser.projects.ToList();
 

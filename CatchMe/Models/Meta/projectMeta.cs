@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CatchMe.Models
 {
@@ -13,12 +14,14 @@ namespace CatchMe.Models
 
         public int project_id { get; set; }
 
-        [DisplayName("Project Name")]
+        [DisplayName("Project")]
         [Required]
         [StringLength(100)]
         public string name { get; set; }
 
-        [DisplayName("Project Desc")]
+
+        
+        [DisplayName("Description")]
         [StringLength(300)]
         [DataType(DataType.MultilineText)]
         public string description { get; set; }

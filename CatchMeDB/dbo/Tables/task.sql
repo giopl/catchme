@@ -13,10 +13,17 @@
     [priority]    INT            NULL,
     [created_by]  INT            NULL,
     [created_on]  DATETIME       DEFAULT (getdate()) NULL,
+    [assigned_to] INT            NULL,
+    [updated_on]  DATETIME       DEFAULT (getdate()) NULL,
     PRIMARY KEY CLUSTERED ([task_id] ASC),
+    CONSTRAINT [FK_task_assigned_user_id] FOREIGN KEY ([assigned_to]) REFERENCES [dbo].[user] ([user_id]),
     CONSTRAINT [FK_task_project_id] FOREIGN KEY ([project_id]) REFERENCES [dbo].[project] ([project_id]),
     CONSTRAINT [FK_task_user_id] FOREIGN KEY ([created_by]) REFERENCES [dbo].[user] ([user_id])
 );
+
+
+
+
 
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -38,6 +39,28 @@ namespace CatchMe.Controllers
                 }
             }
         }
+
+        /// <summary>
+        /// allows to send content of a view to a string
+        /// </summary>
+        /// <param name="controllerContext"></param>
+        /// <param name="viewName"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        protected static String RenderRazorViewToString(ControllerContext controllerContext, String viewName, Object model)
+        {
+            controllerContext.Controller.ViewData.Model = model;
+
+            using (var sw = new StringWriter())
+            {
+                var ViewResult = ViewEngines.Engines.FindPartialView(controllerContext, viewName);
+                var ViewContext = new ViewContext(controllerContext, ViewResult.View, controllerContext.Controller.ViewData, controllerContext.Controller.TempData, sw);
+                ViewResult.View.Render(ViewContext, sw);
+                ViewResult.ViewEngine.ReleaseView(controllerContext, ViewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
+        }
+
 
         /// <summary>
     }

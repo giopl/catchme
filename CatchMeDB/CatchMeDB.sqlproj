@@ -59,6 +59,9 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\user.sql" />
@@ -72,5 +75,17 @@
     <Build Include="dbo\Tables\task_user.sql" />
     <Build Include="dbo\Tables\project_user.sql" />
     <Build Include="dbo\Tables\task_hist.sql" />
+    <Build Include="dbo\Tables\notification.sql" />
+    <Build Include="dbo\Tables\optionset.sql" />
+    <Build Include="dbo\Views\v_tasks.sql" />
+    <Build Include="dbo\Functions\RemoveNonASCII.sql" />
+    <Build Include="dbo\Tables\date.sql" />
+    <Build Include="dbo\Views\backlog.sql" />
+    <Build Include="dbo\Stored Procedures\PopulateDates.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dbo\Initialisation.sql" />
+    <None Include="adding_updated_on_data.sql" />
+    <None Include="adding_option_sets.sql" />
   </ItemGroup>
 </Project>

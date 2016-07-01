@@ -1,0 +1,69 @@
+﻿
+
+1. when comment open do not display save for other items
+2. fix issue when not changing status
+3. add a filter for assigned to me (save somewhere) -- user preference
+4. add filter for items statuses
+5. add attachment of files
+6. allow to update a comment or delete a comment (only by user who created the comment or admin) - deleted comments can be reactivated
+7. create graphs
+  per status (pie)
+  open vs closed per day (area)
+  per type (pie)
+  per user bar chart (series per status)
+
+8. add advanced search to search in comments/ title
+9. ensure readonly for drop downs in status on edit Task
+
+
+
+add tooltip -- OK
+check email works -- OK
+
+
+
+
+
+1. add assigned to me
+2. add multiple assignees (select2)
+3. add list.js function to filter list
+4. allow system to remember filters
+5. add attachment of files
+6. add emailing functionality -- DONE
+7. add email address to users table -- DONE
+8. add pagination -- DONE
+
+
+
+state    assigned
+New -->  developer  (Read only) 
+Active -> development (becomes editable)
+Completed --> developer 
+ON Hold --> developer (Read only)
+Test Passed -> (Tester) --> 
+Test Failed - > active (tester) -->
+Closed
+
+new		> active		> completed		> test passed	> closed
+										> test failed	> active
+						> problem
+						> on hold		
+						> problem		> active	
+						> no issue		> closed	
+
+		> investigation	> active		
+						> no issue		
+						> problem		
+
+permission precedence
+---------------------
+	         New = 0,	active,investigation
+1	            Active,	Completed|On Hold|Problem|No Issue|New
+2	            Investigation,	Active|On Hold|No Issue|Problem
+3	            Completed,	Pass | Failed
+4	            On_Hold,	Active
+5	            Problem,	Active
+6	            No_Issue,	Active|Closed
+7	            Passed,	Closed
+8	            Failed,	Active
+9	            Closed	Active

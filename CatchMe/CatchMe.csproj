@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,6 +54,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
@@ -129,6 +132,7 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -137,7 +141,9 @@
     <Compile Include="Helpers\AppEnums.cs" />
     <Compile Include="Helpers\CacheHelper.cs" />
     <Compile Include="Helpers\ConfigurationHelper.cs" />
+    <Compile Include="Helpers\Emailer.cs" />
     <Compile Include="Helpers\EmailHelper.cs" />
+    <Compile Include="Helpers\EmailRecipient.cs" />
     <Compile Include="Helpers\SelectItems.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\UserSession.cs" />
@@ -168,9 +174,14 @@
     <Compile Include="Models\log.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Meta\commentMeta.cs" />
     <Compile Include="Models\Meta\projectMeta.cs" />
+    <Compile Include="Models\Meta\taskHistMeta.cs" />
     <Compile Include="Models\Meta\taskMeta.cs" />
     <Compile Include="Models\Meta\userMeta.cs" />
+    <Compile Include="Models\notification.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OptionItem.cs" />
     <Compile Include="Models\project.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
@@ -187,6 +198,9 @@
     <Compile Include="Models\user.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\viewTasks.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +208,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\DataTables.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\select2.css" />
@@ -206,6 +221,7 @@
     <Content Include="Images\butterfly-catching.jpg" />
     <Content Include="Images\dropdown.png" />
     <Content Include="Images\dropdown32.png" />
+    <Content Include="Images\tfs-defect-screen.PNG" />
     <Content Include="notes\catchme_create.sql" />
     <EntityDeploy Include="Models\CatchMe.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -235,11 +251,15 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="notes\catchme_data.7z" />
+    <Content Include="notes\New folder.zip" />
+    <None Include="Properties\PublishProfiles\dwh-appsdev %28Debug%29.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="notes\todo.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap3-typeahead.js" />
     <Content Include="Scripts\bootstrap3-typeahead.min.js" />
+    <Content Include="Scripts\plugins\chart.js" />
     <Content Include="Scripts\custom\shared.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -250,6 +270,12 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\plugins\combodate.js" />
+    <Content Include="Scripts\plugins\DataTables.js" />
+    <Content Include="Scripts\plugins\list.js" />
+    <Content Include="Scripts\plugins\moment.js" />
+    <Content Include="Scripts\plugins\nicEdit.js" />
+    <Content Include="Scripts\plugins\nicEditorIcons.gif" />
     <Content Include="Scripts\plugins\readmore.js" />
     <Content Include="Scripts\plugins\select2.js" />
     <Content Include="Scripts\respond.js" />
@@ -297,6 +323,12 @@
     <Content Include="Views\Admin\EditUser.cshtml" />
     <Content Include="Views\Home\NoAccess.cshtml" />
     <Content Include="Views\Tasks\NoProject.cshtml" />
+    <Content Include="Views\Tasks\_notificationBody.cshtml" />
+    <Content Include="Views\Stats\Create.cshtml" />
+    <Content Include="Views\Stats\Delete.cshtml" />
+    <Content Include="Views\Stats\Details.cshtml" />
+    <Content Include="Views\Stats\Edit.cshtml" />
+    <Content Include="Views\Stats\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Catch ME!</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -24,9 +24,16 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     
-                    <li><a href="@Url.Action("Index","Tasks")" title="Home"><span class="fa fa-home"></span> </a></li>
-                    <li><a href="@Url.Action("CreateTask","Tasks")" title="create task"><span class="fa fa-plus"></span> </a></li>
-                    <li><a href="@Url.Action("Index","Admin")" title="Admin"><span class="fa fa-wrench"></span> </a></li>                    
+                    <li><a href="@Url.Action("Index","Tasks")" title="Home"><span class="fa fa-15x fa-home"></span> </a></li>
+                    <li><a href="@Url.Action("CreateTask","Tasks")" title="create task"><span class="fa fa-15x fa-plus"></span> </a></li>
+                    @if(session.Current.IsAdmin)
+                    {
+                        
+                    <li><a href="@Url.Action("Index","Admin")" title="Admin"><span class="fa fa-15x fa-wrench"></span> </a></li>                    
+                        
+                    }
+                    <li><a href="@Url.Action("Index","Stats")" title="Admin"><span class="fa fa-15x fa-line-chart"></span> </a></li>
+
                 </ul>                
                 <p class="nav navbar-text navbar-right">Hello, @session.Current.Firstname!</p>
             </div>
@@ -36,13 +43,16 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Catch ME!</p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/combodate")
     @RenderSection("scripts", required: false)
+
+
 </body>
 </html>

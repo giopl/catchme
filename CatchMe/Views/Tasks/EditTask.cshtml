@@ -2,110 +2,488 @@
 @using session = CatchMe.Helpers.UserSession
 @{
     ViewBag.Title = "Edit Task";
+
+    var assignee = (Model.user == null) ? "Unassigned" : Model.user.fullname;
+
+    bool notassigned = Model.user == null;
+
+    var users = ViewBag.EmailTo as List<CatchMe.Models.user>;
+
+    var is_readonly = Model.IsReadonly;
 }
 
-<h2>Edit Task #@Model.task_id - @Model.title </h2>
-<h4 class="text-muted">@session.Current.CurrentProject - created by @Model.user.fullname on @Model.</h4>
 
+<style>
+
+</style>
+        <div class="row">
+            <div class="col-md-8">
+
+            <div class="task-title2">
+                <div class="taskid">
+                    <span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span>
+                </div>
+                <div class="taskname truncate" title="@Model.title">
+                    @Model.title
+                </div>
+
+              </div>
+            <div class="clearfix"></div>
+
+                @*<h2 class="tasktitle"><span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span> @Model.title </h2>*@
+
+                <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.fullname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") </h5>
+            
+
+            @if(is_readonly)
+            {
+                <span class="text-muted"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</span>@:&nbsp;|&nbsp;
+
+            }
+            else
+            {
+                <a href="#" class="showsection" data-sectionnum=".section1"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>@:&nbsp;|&nbsp;
+                
+            }
+        
+                    <a href="#" class="showsection" data-sectionnum=".section2"><span class="fa fa-envelope"></span>&nbsp;Notify </a>&nbsp;|&nbsp;
+                <a href="#" class="showsection" data-sectionnum=".section3"><span class="fa fa-history"></span>&nbsp;History</a>
+
+            <br />
+                <section style="display:none" class="section1">
+
+                    @using (Html.BeginForm("CreateComment", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4><span class="fa fa-comment"></span> &nbsp;Comments</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <input type="hidden" name="task_id" value="@Model.task_id" />
+
+        <div class="form-group">
+            <label class="col-md-2">Title</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="title" placeholder="Title (optional)" />
+            </div>
+        </div>
+        <div class="form-group">            
+           <label class="col-md-2">Description
+            <br /><br />
+               <input type="submit" class="btn btn-info" value="save" />
+            <br />
+               <input type="reset" class="btn btn-link" id="closeAddComment" value="close" />
+            </label>
+               <div class="col-md-10">
+                   <textarea name="description" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment"></textarea>
+                </div>
+        </div>
+
+
+        @*<div class="form-group">
+            <div class="col-md-offset-2 col-md-10 text-center">
+                <input type="submit" class="btn btn-danger" value="save" />
+                <input type="reset" class="btn btn-default" id="closeAddComment" value="close" />
+            </div>
+        </div>*@
+    </div>
+                    }
+
+</section>
+                
+
+                <section style="display:none" class="section2">
+                    <h4><span class="fa fa-envelope"></span> &nbsp;Notifications</h4>
+                    <hr />
+                    @using (Html.BeginForm("NotifyUsers", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                    @Html.AntiForgeryToken()
+                        <input type="hidden" name="taskId" value="@Model.task_id" />
+                        <input type="hidden" name="projectId" value="@Model.project_id" />
+                        
+                        
+                        <input type="checkbox" value="" id="checkall"  /> @:All
+                        
+                        foreach (var u in users.Where(u=>u.user_id !=0).ToList())
+                            {
+                                <input type="checkbox" class="notification" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
+                            }
+                    
+                    <input type="submit" class="btn btn-info" value="Notify" />
+                    
+                    }
+                    <hr />
+
+                    @if (Model.notifications.Count > 0)
+                    { 
+                    
+                        <table class="table table-striped">
+                            <tr>
+                                <td>Date</td>
+                                <td>Sender</td>
+                                <td>Recipients</td>
+                            </tr>
+
+                            @foreach (var notif in Model.notifications)
+                            { 
+                            <tr>
+                                <td>
+                                    @notif.sent_on.Value.ToString("dd/MM/yy HH:mm")
+                                </td>
+                                <td>
+                                    @notif.sender_name
+                                </td>
+                                <td>
+                                    @notif.recicipents
+                                </td>
+                            </tr>
+                            }
+                        </table>
+                        
+                    }
+
+                </section>
+
+                <section style="display:none" class="section3">
+                    <h4><span class="fa fa-history"></span> &nbsp;Task History (@Model.task_hist.Count)</h4>
+                    <div class="row">
+                        @{var prevstatus = "none" ;}
+                        @foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))
+                        {
+                                                       
+                            if(!prevstatus.Trim().ToUpper().Equals(hist.HistDesc.Trim().ToUpper()) )
+                            { 
+                            <div class="col-md-2 text-center">
+                                <span class="label label-info">@hist.HistDesc</span>
+                                <br /><small>@hist.created_on.Value.ToString("dd/MM/yy HH:mm") (@hist.firstname)</small> 
+                            </div>
+                            
+                            <div class="col-md-1"><span class="fa fa-2x fa-long-arrow-right"></span></div>
+                            
+                            }
+
+                            prevstatus = hist.HistDesc;
+                        
+                        }
+
+                    </div>
+                    
+                    <br />
+                    <table class="table table-striped">
+                        <tr>
+                            <th>date</th>
+                            <th>status</th>
+                            <th>test</th>
+                            <th>type</th>
+                            <th>priority</th>
+                            <th>severity</th>
+                        </tr>
+                        @foreach (var hist in Model.task_hist.OrderByDescending(x => x.created_on))
+                        {
+                            <tr>
+                                <td>
+                                    @hist.created_on
+                                </td>
+                                <td> @(hist.hist_status == 0 ? "Task Created > " : "") @hist.StatusDesc</td>
+
+                                <td>@hist.TestStatusDesc</td>
+                                <td>@hist.TypeDesc</td>
+                                <td>@hist.PriorityDesc</td>
+                                <td>@hist.SeverityDesc</td>
+                            </tr>
+                        }
+
+                    </table>
+
+                </section>
+
+            <br /><br />
+            @foreach (var comment in Model.comments.OrderByDescending(x=>x.created_on))
+            {
+                <div class="task-title">@comment.title - </div>
+                <small>@comment.user.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
+                <h4 style="word-break:break-all">
+
+                    <span style="word-wrap:break-word">
+                        @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
+                    </span>
+                </h4>
+          <hr />
+
+            }
+
+            
+   
+                </div> <!-- fisrt col -->
+
+
+
+            <div class="col-md-4">
+                <h4 class="text-right"><span class="text-muted">Assigned to: </span><span class="label label-@(notassigned?"default":"info")"><span class="fa fa-user"></span>&nbsp; @assignee</span></h4>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>
-        
-            @Html.Raw(Model.description.Replace(Environment.NewLine, "<br/>"))        
-        
-        </h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.task_id)
+                @Html.HiddenFor(model => model.project_id)
+                @Html.HiddenFor(model => model.created_on)
+                @Html.HiddenFor(model => model.created_by)
+                @Html.HiddenFor(model => model.description)
 
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.task_id)
-        @Html.HiddenFor(model => model.project_id)
+                <div class="form-group pad20">
+                    @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                
-                @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                        @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
+    <div class="form-group pad20">
+        @Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
 
-
-        <div class="form-group" style="display:none">
-            @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.test_status, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("test_status", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.test_status, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.description,  new { @class = "form-control" } )
-                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.initiator, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control" })
-
-
-                @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker" } })
-                @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+            @Html.DropDownList("assigned_to", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
         </div>
     </div>
+
+
+
+    <div class="form-group  pad20">
+        @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+
+            @if(is_readonly)
+            {
+            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" , @readonly=""} })
+
+            }
+            else
+            {
+            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+                
+            }
+            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group pad20">
+        @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+
+            @if(is_readonly)
+            {
+            @Html.DropDownList("type", null, new { @class = "form-control", @readonly="" })
+                
+            } else
+            {
+            @Html.DropDownList("type", null, new { @class = "form-control" })
+                
+            }
+            @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group  pad20">
+        @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @if(is_readonly)
+            {
+            @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control", @readonly="" } })
+
+            }
+            else
+            {
+            @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
+                
+            }
+            @Html.ValidationMessageFor(model => model.initiator, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group pad20">
+        @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+@if(is_readonly)
+{
+
+            @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control" , @readonly=""})
 }
+else
+{
+            @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control" })
+    
+    
+}
+
+
+            @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group pad20">
+        @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+
+            @if (is_readonly)
+            {
+            @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control" , @readonly=""})
+
+            }
+            else
+            {
+            @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control" })
+                
+            }
+
+
+            @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group  pad20">
+        @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+@*            @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker" } })*@
+          
+            @if(is_readonly)
+            {
+                var duedt = "";
+                if(Model.due_date.HasValue)
+                {
+                   duedt = Model.due_date.Value.ToString("yyyy-MM-dd");
+                    
+                }
+                <input type="text" value="@duedt" class="form-control" name="due_date" readonly />
+                
+            }
+            else
+            {
+                
+                @Html.EditorFor(model => model.due_date, new
+       {
+           htmlAttributes = new
+           {
+               @class = "form-control combodate",
+               @data_format = "YYYY-MM-DD",
+               @data_template = "D MMM YYYY"
+           }
+       })
+            }
+              @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group pad20">
+        <div class="col-md-offset-4 col-md-8 text-center">
+
+            <input type="submit" id="savestatusbutton" value="Save" class="btn btn-info" />
+            <input type="reset" value="Reset" class="btn btn-default" />
+        </div>
+    </div>
+
+
+    <div class="form-group pad20" id="infosave" style="display:none">
+        <div class="col-md-offset-4 col-md-8 text-center">
+
+            <small class="text-muted"><span class="fa fa-warning"></span> &nbsp;close or save the comment to enable save button</small>
+        </div>
+    </div>
+
+}
+        </div><!-- second col-->
+
+    </div> <!--end row-->
+
+        
+
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
 
+
+
+
+
+
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/nicedit")
 
     <script>
+
+        bkLib.onDomLoaded(function () {
+
+            //nicEditors.allTextAreas();
+            new nicEditor({
+                //  fullPanel: true,
+                buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'forecolor', 'bgcolor']
+            }).panelInstance('area2');
+            //nicEditors.findEditor('myArea2');
+        });
+
         $(document).ready(function () {
 
-            $('.datepicker').datepicker();
+            var _minyear = new Date().getFullYear();
+            var _max_year = _minyear + 1;
+
+
+            $('body').on('click', '.showsection', function () {
+                var section = $(this).data("sectionnum");
+                $(section).toggle();
+
+                $('#savestatusbutton').prop('disabled', false);
+                $('#infosave').hide();
+
+                if (section == '.section1')
+                {
+
+                    if ($(section).is(":visible"))
+                    {
+                        $('#savestatusbutton').prop('disabled', true);
+                        $('#infosave').show();
+                        //alert('visible');
+                    }
+                }
+
+                //$(this).next('section'+'.'+x).toggle();
+            });
+
+            $('body').on('change', '#checkall', function () {
+                if ($(this).prop('checked')) {
+                    $('.notification').prop('checked', true);
+                } else {
+                    $('.notification').prop('checked', false);
+                }
+
+            });
+
+
+
+            $('.combodate').combodate({
+    
+                minYear: _minyear,
+                maxYear: _max_year,
+            });
+       
+
+            $('body').on('click', '#closeAddComment', function () {
+                $('#savestatusbutton').prop('disabled', false);
+                $('#infosave').hide();
+                $(this).closest('section').hide();
+            });
+
+            
+
         });
     </script>
 }
