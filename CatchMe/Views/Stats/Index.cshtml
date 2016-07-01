@@ -21,6 +21,15 @@
     var s8 = Model.Where(x => x.status_code == 8).Count();
     var s9 = Model.Where(x => x.status_code == 9).Count();
 
+    var backlogs = ViewBag.Backlog as List<CatchMe.Models.backlog>;
+
+    var bcklglbl = ViewBag.BackLogLabel as string;
+
+    var bcklgopen = ViewBag.BackLogOpen as string;
+    var bcklgclose = ViewBag.BackLogClosed as string;
+    
+
+    var lastbacklogdate = backlogs.Last().fulldate;
 
 
 }
@@ -29,13 +38,18 @@
 <h2>Project Stats</h2>
 <div class="row">
     <div class="col-md-3">
-
+        <h3>By Type</h3>
 <canvas id="pertype" width="400" height="400"></canvas>
     </div>
 
     <div class="col-md-3">
-
+        <h3>By Status</h3>
         <canvas id="perstatus" width="400" height="400"></canvas>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Backlog</h3>
+        <canvas id="backlog" width="800" height="400"></canvas>
     </div>
 
 </div>
@@ -44,147 +58,26 @@
 <script>
     var ctx1 = document.getElementById("perstatus");
 
-    //var myDoughnutChart = new Chart(ctx1, {
-    //    type: 'bar',
-    //    data: data,
-    //    options: {
-    //        animation: {
-    //            animateScale: true
-    //        }
-    //    }
-    //});
+    
+    Chart.defaults.global.legend.display = false;
 
-    var data = {
-        labels: [
-            "Red",
-            "Blue",
-            "Yellow"
-        ],
-        datasets: [
-            {
-                data: [300, 50, 100],
-                backgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56"
-                ],
-                hoverBackgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56"
-                ]
-            }]
-    };
-    @*var datastatus = {
-        labels: [
-            "New",
-            "Act",
-            "Inv",
-            "Cpl",
-            "Hol",
-            "Prb",
-            "NoI",
-            "Pas",
-            "Fail",
-            "Clo"
-        ],
-        datasets: [
-            {
-                data: [@s0,@s1,@s2,@s3,@s4,@s5,@s6,@s7,@s8,@s9],
-                backgroundColor:[
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#FFCE56"
-                ],
-                hoverBackgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#FF6384",
-                    "#36A2EB",
-                    "#36A2EB",
-                    "#FFCE56"
-                ]
-            }]
-    };*@
 
 
     var ctx = document.getElementById("pertype");
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ["dev", "chg", "bug", "fail", "test", "inve"],
-        datasets: [{
-            label: '# task type',
-            data: [@t1, @t2, @t3, @t4, @t5, @t6],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-});
-
-
-    var ctx = document.getElementById("perstatus");
     var myChart = new Chart(ctx, {
-        type: 'pie',
+        type: 'bar',
         data: {
-            labels: [
-              "New",
-              "Action",
-              "Investigate",
-              "Complete",
-              "Hold",
-              "Problem",
-              "No Issue",
-              "Passed",
-              "Failed",
-              "Closed"
-            ], datasets: [{
+            labels: ["dev", "chg", "bug", "fail", "test", "inve"],
+            datasets: [{
                 label: '# task type',
-                data: [@s0,@s1,@s2,@s3,@s4,@s5,@s6,@s7,@s8,@s9],
+                data: [@t1, @t2, @t3, @t4, @t5, @t6],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153,102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)'
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
@@ -198,11 +91,149 @@ var myChart = new Chart(ctx, {
             }]
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+
+
+
+
+
+    var ctx = document.getElementById("perstatus");
+    var myDoughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels:
+                [
+                       "New",
+              "Action",
+              "Investigate",
+              "Complete",
+              "Hold",
+              "Problem",
+              "No Issue",
+              "Passed",
+              "Failed",
+              "Closed"
+
+                ], datasets: [{
+                    label: '# status',
+                    legend: false,
+                    data: [@s0,@s1,@s2,@s3,@s4,@s5,@s6,@s7,@s8,@s9],
+                    backgroundColor: [
+                        'rgba(51,122,183, 0.6)',
+                        'rgba(240,173,78, 0.6)',
+                        'rgba(240,173,78, 0.6)',
+                        'rgba(91,192,222, 0.6)',
+                        'rgba(119,119,119,0.6)',
+                        'rgba(217,83,79,  0.6)',
+                        'rgba(119,119,119,0.6)',
+                        'rgba(92,184,92,  0.6)',
+                        'rgba(217,83,79,  0.6)',
+                        'rgba(119,119,119,0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(51,122,183, 1)',
+                        'rgba(240,173,78, 1)',
+                        'rgba(240,173,78, 1)',
+                        'rgba(91,192,222, 1)',
+                        'rgba(119,119,119,1)',
+                        'rgba(217,83,79,  1)',
+                        'rgba(119,119,119,1)',
+                        'rgba(92,184,92,  1)',
+                        'rgba(217,83,79,  1)',
+                        'rgba(119,119,119,1)'
+                    ],
+                    borderWidth: 1
+                }]
+        },
+        options: {
             animation: {
-                            animateScale: true
-                        }
+                animateScale: true
+            }
 
         }
     });
+
+    myDoughnutChart.legend.display = false;
+
+    var ctx = document.getElementById("backlog");
+    var myChart = new Chart(ctx, {
+        //type: 'doughnut',
+        type: 'line',
+        data: {
+            labels: [@Html.Raw(bcklglbl)]
+            , datasets: [{
+                label: '# open',
+                legend: false,
+                data: [@Html.Raw(bcklgopen)],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255,99,132,1)',
+                borderWidth: 1
+            },
+            {
+                label: '# closed',
+                legend: false,
+                data: [@Html.Raw(bcklgclose)],
+                backgroundColor: 'rgba(92,184,92, 0.6)',
+                borderColor: 'rgba(92,184,92,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            animation: {
+                animateScale: true
+            }
+
+        }
+    });
+
+
+    //var ctx = document.getElementById("backlog");
+    //var myLineChart = new Chart(ctx, {
+    //    type: 'line',
+    //    data: data,
+    //    options: options
+    //});
+
+    //var data = {
+    //    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    //    datasets: [
+    //        {
+    //            label: "My First dataset",
+    //            fill: false,
+    //            lineTension: 0.1,
+    //            backgroundColor: "rgba(75,192,192,0.4)",
+    //            borderColor: "rgba(75,192,192,1)",
+    //            borderCapStyle: 'butt',
+    //            borderDash: [],
+    //            borderDashOffset: 0.0,
+    //            borderJoinStyle: 'miter',
+    //            pointBorderColor: "rgba(75,192,192,1)",
+    //            pointBackgroundColor: "#fff",
+    //            pointBorderWidth: 1,
+    //            pointHoverRadius: 5,
+    //            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+    //            pointHoverBorderColor: "rgba(220,220,220,1)",
+    //            pointHoverBorderWidth: 2,
+    //            pointRadius: 1,
+    //            pointHitRadius: 10,
+    //            data: [65, 59, 80, 81, 56, 55, 40],
+    //        }
+    //    ]
+    //};
+
+    //var options = {
+    //    fill: true
+    //};
+
+
+
 
 </script>

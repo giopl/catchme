@@ -377,6 +377,9 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="get_backlog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="project_id" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="CatchMeDBModelStoreContainer">
           <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="comment" EntityType="Self.comment" Schema="dbo" store:Type="Tables" />
@@ -570,6 +573,9 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
             <End Role="comment" EntitySet="comments" />
           </AssociationSet>
           <EntitySet Name="viewTasks" EntityType="CatchMeDBModel.viewTasks" />
+          <FunctionImport Name="GetBacklog" ReturnType="Collection(CatchMeDBModel.backlog)">
+            <Parameter Name="project_id" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -907,6 +913,11 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Property Name="updated_on" Type="DateTime" Precision="0" />
           <Property Name="due_date" Type="DateTime" Precision="0" />
         </EntityType>
+        <ComplexType Name="backlog">
+          <Property Type="DateTime" Name="fulldate" Nullable="false" />
+          <Property Type="Int32" Name="sum_opened" Nullable="true" />
+          <Property Type="Int32" Name="sum_closed" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1104,6 +1115,15 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetBacklog" FunctionName="CatchMeDBModel.Store.get_backlog">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CatchMeDBModel.backlog">
+                <ScalarProperty Name="fulldate" ColumnName="fulldate" />
+                <ScalarProperty Name="sum_opened" ColumnName="sum_opened" />
+                <ScalarProperty Name="sum_closed" ColumnName="sum_closed" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

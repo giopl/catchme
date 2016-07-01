@@ -147,6 +147,9 @@
     <Compile Include="Helpers\SelectItems.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\UserSession.cs" />
+    <Compile Include="Models\backlog.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CatchMe.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -324,10 +327,6 @@
     <Content Include="Views\Home\NoAccess.cshtml" />
     <Content Include="Views\Tasks\NoProject.cshtml" />
     <Content Include="Views\Tasks\_notificationBody.cshtml" />
-    <Content Include="Views\Stats\Create.cshtml" />
-    <Content Include="Views\Stats\Delete.cshtml" />
-    <Content Include="Views\Stats\Details.cshtml" />
-    <Content Include="Views\Stats\Edit.cshtml" />
     <Content Include="Views\Stats\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

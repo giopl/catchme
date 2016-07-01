@@ -12,6 +12,8 @@ namespace CatchMe.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class CatchMeDBEntities : DbContext
     {
@@ -36,5 +38,14 @@ namespace CatchMe.Models
         public virtual DbSet<notification> notifications { get; set; }
         public virtual DbSet<comment> comments { get; set; }
         public virtual DbSet<viewTasks> viewTasks { get; set; }
+    
+        public virtual ObjectResult<backlog> GetBacklog(Nullable<int> project_id)
+        {
+            var project_idParameter = project_id.HasValue ?
+                new ObjectParameter("project_id", project_id) :
+                new ObjectParameter("project_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<backlog>("GetBacklog", project_idParameter);
+        }
     }
 }

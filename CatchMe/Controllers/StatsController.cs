@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using CatchMe.Models;
 using CatchMe.Helpers;
+using System.Data.SqlClient;
+using System.Text;
 
 namespace CatchMe.Controllers
 {
@@ -19,103 +21,68 @@ namespace CatchMe.Controllers
         public ActionResult Index()
         {
             var proj = UserSession.Current.CurrentProjectId ;
+
+            if (proj == 0)
+                return RedirectToAction("Index", "Tasks");
+
+
+            var backlogs = GetBacklog(proj);
+
+            var lastbacklogdate = backlogs.LastOrDefault().fulldate;
+            StringBuilder sb = new StringBuilder();
+
+            StringBuilder open  = new StringBuilder();
+
+            StringBuilder closed = new StringBuilder();
+              foreach(var l in backlogs)
+                    {
+                        sb.AppendFormat("'{0}'{1}", l.fulldate.ToString("dd-MM-yy"), (lastbacklogdate == l.fulldate ? "" : ","));
+                        open.AppendFormat("{0}{1}", l.sum_opened, (lastbacklogdate == l.fulldate ? "" : ","));
+                        closed.AppendFormat("{0}{1}", l.sum_closed, (lastbacklogdate == l.fulldate ? "" : ","));
+
+                    }
+
+              //var backloglabel = sb.ToString();
+              ViewBag.BackLogLabel = sb.ToString();
+              ViewBag.BackLogOpen = open.ToString();
+              ViewBag.BackLogClosed = closed.ToString();
+
+
+            ViewBag.Backlog = backlogs;
             return View(db.viewTasks.Where(x=>x.project_id == proj).ToList());
         }
 
-        // GET: Stats/Details/5
-        public ActionResult Details(int? id)
+        
+        private IList<backlog> GetBacklog(int projectId)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                IList<backlog> result = new List<backlog>();
+                using (var ctx = new CatchMeDBEntities())
+                {
+                
+                    var backlogs = db.Database.SqlQuery<backlog>(@"exec get_backlog @project_id"
+                            , new object[]
+                            {
+                                 new SqlParameter("@project_id", projectId)
+                            }
+                            ).ToList<backlog>();
+
+                    result = backlogs;
+                }
+
+                return result;
+
             }
-            viewTasks viewTasks = db.viewTasks.Find(id);
-            if (viewTasks == null)
+            catch (Exception)
             {
-                return HttpNotFound();
+                
+                throw;
             }
-            return View(viewTasks);
         }
 
-        // GET: Stats/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Stats/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "project_id,task_id,initiator,complexity_code,complexity,type_code,type,status_code,status,priority_code,priority,created_by,creator_fn,creator_ln,created_on,assigned_to,assignee_fn,assignee_ln,updated_on,due_date")] viewTasks viewTasks)
-        {
-            if (ModelState.IsValid)
-            {
-                db.viewTasks.Add(viewTasks);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(viewTasks);
-        }
-
-        // GET: Stats/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            viewTasks viewTasks = db.viewTasks.Find(id);
-            if (viewTasks == null)
-            {
-                return HttpNotFound();
-            }
-            return View(viewTasks);
-        }
-
-        // POST: Stats/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "project_id,task_id,initiator,complexity_code,complexity,type_code,type,status_code,status,priority_code,priority,created_by,creator_fn,creator_ln,created_on,assigned_to,assignee_fn,assignee_ln,updated_on,due_date")] viewTasks viewTasks)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(viewTasks).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(viewTasks);
-        }
-
-        // GET: Stats/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            viewTasks viewTasks = db.viewTasks.Find(id);
-            if (viewTasks == null)
-            {
-                return HttpNotFound();
-            }
-            return View(viewTasks);
-        }
-
-        // POST: Stats/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            viewTasks viewTasks = db.viewTasks.Find(id);
-            db.viewTasks.Remove(viewTasks);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+      
 
         protected override void Dispose(bool disposing)
         {
@@ -127,3 +94,4 @@ namespace CatchMe.Controllers
         }
     }
 }
+
