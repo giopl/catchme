@@ -213,9 +213,13 @@
                 
                 if(session.Current.IsAdmin || session.Current.UserId == comment.user_id)
                 {
-                    <a href="@Url.Action("EditComment", new { commentId = comment.comment_id })">Edit Comment</a>
+                    <a href="#" class="showsection">Edit Comment</a>
                 }
-                
+    
+                <section style="display:none" >
+                    @Html.Partial("_EditComment",comment)
+                </section>
+                            
           <hr />
 
             }

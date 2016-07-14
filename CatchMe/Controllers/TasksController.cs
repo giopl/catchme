@@ -697,29 +697,21 @@ namespace CatchMe.Controllers
         }
 
 
-        public ActionResult EditComment(int commentId)
-        {
-            try
-            {
-                var comment = db.comments.Find(commentId);
-
-                return View(comment);
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
-        }
-
-
         [HttpPost]
         public ActionResult EditComment(comment comment)
         {
             try
             {
-                return null;
-            }
+
+                if (ModelState.IsValid)
+                {
+                    db.Entry(comment).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+
+                return RedirectToAction("EditTask", new { id = comment.task_id });
+                }
             catch (Exception)
             {
 
