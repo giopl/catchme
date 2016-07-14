@@ -25,6 +25,9 @@ namespace CatchMe.Controllers
             if (proj == 0)
                 return RedirectToAction("Index", "Tasks");
 
+            var figures = db.viewFigures.Where(p => p.project_id == proj);
+
+            ViewBag.Figures = figures;
 
             var backlogs = GetBacklog(proj);
 

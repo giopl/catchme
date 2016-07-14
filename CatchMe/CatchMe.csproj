@@ -201,6 +201,10 @@
     <Compile Include="Models\user.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\viewFigures.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModel\RoleVM.cs" />
     <Compile Include="Models\viewTasks.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
@@ -328,6 +332,7 @@
     <Content Include="Views\Tasks\NoProject.cshtml" />
     <Content Include="Views\Tasks\_notificationBody.cshtml" />
     <Content Include="Views\Stats\Index.cshtml" />
+    <Content Include="Views\Tasks\EditComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

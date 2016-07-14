@@ -38,6 +38,7 @@ namespace CatchMe.Models
         public virtual DbSet<notification> notifications { get; set; }
         public virtual DbSet<comment> comments { get; set; }
         public virtual DbSet<viewTasks> viewTasks { get; set; }
+        public virtual DbSet<viewFigures> viewFigures { get; set; }
     
         public virtual ObjectResult<backlog> GetBacklog(Nullable<int> project_id)
         {

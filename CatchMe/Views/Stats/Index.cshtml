@@ -27,8 +27,10 @@
 
     var bcklgopen = ViewBag.BackLogOpen as string;
     var bcklgclose = ViewBag.BackLogClosed as string;
-    
 
+
+    var figures = ViewBag.Figures as CatchMe.Models.viewFigures;
+    
     var lastbacklogdate = backlogs.Last().fulldate;
 
 
@@ -51,6 +53,11 @@
         <h3>Backlog</h3>
         <canvas id="backlog" width="800" height="400"></canvas>
     </div>
+
+</div>
+
+<div class="row">
+
 
 </div>
 

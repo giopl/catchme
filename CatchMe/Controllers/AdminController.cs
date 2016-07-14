@@ -14,6 +14,7 @@ using log4net;
 using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using CatchMe.Models.ViewModel;
 
 namespace CatchMe.Controllers
 {
@@ -79,10 +80,22 @@ namespace CatchMe.Controllers
 
             
 
+            ViewBag.role = new SelectList(getRoles(), "role_id", "name");
+
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
 
 
             return View(founduser);
+        }
+
+        private List<RoleVM> getRoles()
+        {
+            List<RoleVM> roles = new List<RoleVM>();
+            roles.Add(new RoleVM(0, "Business"));
+            roles.Add(new RoleVM(1, "User"));
+            roles.Add(new RoleVM(2, "Admin"));
+            return roles;
+
         }
 
 
@@ -132,7 +145,7 @@ namespace CatchMe.Controllers
                 return HttpNotFound();
             }
 
-
+            ViewBag.role = new SelectList(getRoles(), "role_id", "name", user.role);
             ViewBag.active_project = new SelectList(db.projects, "project_id", "name", user.active_project);
 
             return View(user);

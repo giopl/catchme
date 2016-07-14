@@ -210,6 +210,12 @@
                         @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
                     </span>
                 </h4>
+                
+                if(session.Current.IsAdmin || session.Current.UserId == comment.user_id)
+                {
+                    <a href="@Url.Action("EditComment", new { commentId = comment.comment_id })">Edit Comment</a>
+                }
+                
           <hr />
 
             }
@@ -426,7 +432,7 @@ else
             //nicEditors.allTextAreas();
             new nicEditor({
                 //  fullPanel: true,
-                buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'forecolor', 'bgcolor']
+                buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr','image', 'forecolor', 'bgcolor','xhtml']
             }).panelInstance('area2');
             //nicEditors.findEditor('myArea2');
         });

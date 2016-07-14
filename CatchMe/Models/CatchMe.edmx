@@ -169,6 +169,19 @@ warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key def
           <Property Name="active_project" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'CatchMeDB.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_figures">
+          <Key>
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="project_id" Type="int" Nullable="false" />
+          <Property Name="total" Type="int" />
+          <Property Name="open" Type="int" />
+          <Property Name="overdue" Type="int" />
+          <Property Name="closed_ontime" Type="int" />
+          <Property Name="closed_late" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_tasks">
           <Key>
@@ -420,6 +433,16 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
     [log].[description] AS [description]
     FROM [dbo].[log] AS [log]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="v_figures" EntityType="Self.v_figures" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_figures].[project_id] AS [project_id], 
+    [v_figures].[total] AS [total], 
+    [v_figures].[open] AS [open], 
+    [v_figures].[overdue] AS [overdue], 
+    [v_figures].[closed_ontime] AS [closed_ontime], 
+    [v_figures].[closed_late] AS [closed_late]
+    FROM [dbo].[v_figures] AS [v_figures]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="v_tasks" EntityType="Self.v_tasks" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [v_tasks].[project_id] AS [project_id], 
@@ -574,8 +597,9 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           </AssociationSet>
           <EntitySet Name="viewTasks" EntityType="CatchMeDBModel.viewTasks" />
           <FunctionImport Name="GetBacklog" ReturnType="Collection(CatchMeDBModel.backlog)">
-            <Parameter Name="project_id" Mode="In" Type="Int32" />
+          <Parameter Name="project_id" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="viewFigures" EntityType="CatchMeDBModel.viewFigures" />
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -918,6 +942,17 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Property Type="Int32" Name="sum_opened" Nullable="true" />
           <Property Type="Int32" Name="sum_closed" Nullable="true" />
         </ComplexType>
+        <EntityType Name="viewFigures">
+          <Key>
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="project_id" Type="Int32" Nullable="false" />
+          <Property Name="total" Type="Int32" />
+          <Property Name="open" Type="Int32" />
+          <Property Name="overdue" Type="Int32" />
+          <Property Name="closed_ontime" Type="Int32" />
+          <Property Name="closed_late" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1124,6 +1159,18 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="viewFigures">
+            <EntityTypeMapping TypeName="CatchMeDBModel.viewFigures">
+              <MappingFragment StoreEntitySet="v_figures">
+                <ScalarProperty Name="closed_late" ColumnName="closed_late" />
+                <ScalarProperty Name="closed_ontime" ColumnName="closed_ontime" />
+                <ScalarProperty Name="overdue" ColumnName="overdue" />
+                <ScalarProperty Name="open" ColumnName="open" />
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

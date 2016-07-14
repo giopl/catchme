@@ -179,7 +179,7 @@ width:100px;
     background: #5BC0DE;
 }
 
-.passed,.noissue,.closed{
+.passed,.noissue{
     background: #5CB85C;
 }
 
@@ -187,6 +187,10 @@ width:100px;
    background: #777777;
 }
 
+.closed {
+    background:#808080;
+
+}
 
 /* miscellanesous*/
 

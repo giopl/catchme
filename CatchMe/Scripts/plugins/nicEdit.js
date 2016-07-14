@@ -268,9 +268,9 @@ var nicEditorConfig = bkClass.extend({
 		'outdent' : {name : __('Remove Indent'), command : 'outdent', noActive : true},
 		'hr' : {name : __('Horizontal Rule'), command : 'insertHorizontalRule', noActive : true}
 	},
-	iconsPath: $('#svrpath').val() + 'Scripts/plugins/nicEditorIcons.gif',
+	iconsPath : '../nicEditorIcons.gif',
 	buttonList : ['save','bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','indent','outdent','image','upload','link','unlink','forecolor','bgcolor'],
-	iconList : {"bgcolor":1,"forecolor":2,"bold":3,"center":4,"hr":5,"indent":6,"italic":7,"justify":8,"left":9,"ol":10,"outdent":11,"removeformat":12,"right":13,"save":24,"strikethrough":15,"subscript":16,"superscript":17,"ul":18,"underline":19,"image":20,"link":21,"unlink":22,"close":23,"arrow":25}
+	iconList : {"xhtml":1,"bgcolor":2,"forecolor":3,"bold":4,"center":5,"hr":6,"indent":7,"italic":8,"justify":9,"left":10,"ol":11,"outdent":12,"removeformat":13,"right":14,"save":25,"strikethrough":16,"subscript":17,"superscript":18,"ul":19,"underline":20,"image":21,"link":22,"unlink":23,"close":24,"arrow":26,"upload":27}
 	
 });
 /* END CONFIG */
@@ -1353,4 +1353,314 @@ var nicEditorSaveButton = nicEditorButton.extend({
 });
 
 nicEditors.registerPlugin(nicPlugin,nicSaveOptions);
+
+
+
+/* START CONFIG */
+var nicUploadOptions = {
+	buttons : {
+		'upload' : {name : 'Upload Image', type : 'nicUploadButton'}
+	}
+	
+};
+/* END CONFIG */
+
+var nicUploadButton = nicEditorAdvancedButton.extend({	
+	nicURI : 'https://api.imgur.com/3/image',
+  errorText : 'Failed to upload image',
+
+	addPane : function() {
+    if(typeof window.FormData === "undefined") {
+      return this.onError("Image uploads are not supported in this browser, use Chrome, Firefox, or Safari instead.");
+    }
+    this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
+
+    var container = new bkElement('div')
+      .setStyle({ padding: '10px' })
+      .appendTo(this.pane.pane);
+
+		new bkElement('div')
+      .setStyle({ fontSize: '14px', fontWeight : 'bold', paddingBottom: '5px' })
+      .setContent('Insert an Image')
+      .appendTo(container);
+
+    this.fileInput = new bkElement('input')
+      .setAttributes({ 'type' : 'file' })
+      .appendTo(container);
+
+    this.progress = new bkElement('progress')
+      .setStyle({ width : '100%', display: 'none' })
+      .setAttributes('max', 100)
+      .appendTo(container);
+
+    this.fileInput.onchange = this.uploadFile.closure(this);
+	},
+
+  onError : function(msg) {
+    this.removePane();
+    alert(msg || "Failed to upload image");
+  },
+
+  uploadFile : function() {
+    var file = this.fileInput.files[0];
+    if (!file || !file.type.match(/image.*/)) {
+      this.onError("Only image files can be uploaded");
+      return;
+    }
+    this.fileInput.setStyle({ display: 'none' });
+    this.setProgress(0);
+
+    var fd = new FormData(); // https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
+    fd.append("image", file);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", this.ne.options.uploadURI || this.nicURI);
+
+    xhr.onload = function() {
+      try {
+        var data = JSON.parse(xhr.responseText).data;
+      } catch(e) {
+        return this.onError();
+      }
+      if(data.error) {
+        return this.onError(data.error);
+      }
+      this.onUploaded(data);
+    }.closure(this);
+    xhr.onerror = this.onError.closure(this);
+    xhr.upload.onprogress = function(e) {
+      this.setProgress(e.loaded / e.total);
+    }.closure(this);
+    xhr.setRequestHeader('Authorization', 'Client-ID c37fc05199a05b7');
+    xhr.send(fd);
+  },
+
+  setProgress : function(percent) {
+    this.progress.setStyle({ display: 'block' });
+    if(percent < .98) {
+      this.progress.value = percent;
+    } else {
+      this.progress.removeAttribute('value');
+    }
+  },
+
+  onUploaded : function(options) {
+    this.removePane();
+    var src = options.link;
+    if(!this.im) {
+      this.ne.selectedInstance.restoreRng();
+      var tmp = 'javascript:nicImTemp();';
+      this.ne.nicCommand("insertImage", src);
+      this.im = this.findElm('IMG','src', src);
+    }
+    var w = parseInt(this.ne.selectedInstance.elm.getStyle('width'));
+    if(this.im) {
+      this.im.setAttributes({
+        src : src,
+        width : (w && options.width) ? Math.min(w, options.width) : ''
+      });
+    }
+  }
+});
+
+nicEditors.registerPlugin(nicPlugin,nicUploadOptions);
+
+
+
+var nicXHTML = bkClass.extend({
+	stripAttributes : ['_moz_dirty','_moz_resizing','_extended'],
+	noShort : ['style','title','script','textarea','a'],
+	cssReplace : {'font-weight:bold;' : 'strong', 'font-style:italic;' : 'em'},
+	sizes : {1 : 'xx-small', 2 : 'x-small', 3 : 'small', 4 : 'medium', 5 : 'large', 6 : 'x-large'},
+	
+	construct : function(nicEditor) {
+		this.ne = nicEditor;
+		if(this.ne.options.xhtml) {
+			nicEditor.addEvent('get',this.cleanup.closure(this));
+		}
+	},
+	
+	cleanup : function(ni) {
+		var node = ni.getElm();
+		var xhtml = this.toXHTML(node);
+		ni.content = xhtml;
+	},
+	
+	toXHTML : function(n,r,d) {
+		var txt = '';
+		var attrTxt = '';
+		var cssTxt = '';
+		var nType = n.nodeType;
+		var nName = n.nodeName.toLowerCase();
+		var nChild = n.hasChildNodes && n.hasChildNodes();
+		var extraNodes = new Array();
+		
+		switch(nType) {
+			case 1:
+				var nAttributes = n.attributes;
+				
+				switch(nName) {
+					case 'b':
+						nName = 'strong';
+						break;
+					case 'i':
+						nName = 'em';
+						break;
+					case 'font':
+						nName = 'span';
+						break;
+				}
+				
+				if(r) {
+					for(var i=0;i<nAttributes.length;i++) {
+						var attr = nAttributes[i];
+						
+						var attributeName = attr.nodeName.toLowerCase();
+						var attributeValue = attr.nodeValue;
+						
+						if(!attr.specified || !attributeValue || bkLib.inArray(this.stripAttributes,attributeName) || typeof(attributeValue) == "function") {
+							continue;
+						}
+						
+						switch(attributeName) {
+							case 'style':
+								var css = attributeValue.replace(/ /g,"");
+								for(itm in this.cssReplace) {
+									if(css.indexOf(itm) != -1) {
+										extraNodes.push(this.cssReplace[itm]);
+										css = css.replace(itm,'');
+									}
+								}
+								cssTxt += css;
+								attributeValue = "";
+							break;
+							case 'class':
+								attributeValue = attributeValue.replace("Apple-style-span","");
+							break;
+							case 'size':
+								cssTxt += "font-size:"+this.sizes[attributeValue]+';';
+								attributeValue = "";
+							break;
+						}
+						
+						if(attributeValue) {
+							attrTxt += ' '+attributeName+'="'+attributeValue+'"';
+						}
+					}
+
+					if(cssTxt) {
+						attrTxt += ' style="'+cssTxt+'"';
+					}
+
+					for(var i=0;i<extraNodes.length;i++) {
+						txt += '<'+extraNodes[i]+'>';
+					}
+				
+					if(attrTxt == "" && nName == "span") {
+						r = false;
+					}
+					if(r) {
+						txt += '<'+nName;
+						if(nName != 'br') {
+							txt += attrTxt;
+						}
+					}
+				}
+				
+
+				
+				if(!nChild && !bkLib.inArray(this.noShort,attributeName)) {
+					if(r) {
+						txt += ' />';
+					}
+				} else {
+					if(r) {
+						txt += '>';
+					}
+					
+					for(var i=0;i<n.childNodes.length;i++) {
+						var results = this.toXHTML(n.childNodes[i],true,true);
+						if(results) {
+							txt += results;
+						}
+					}
+				}
+					
+				if(r && nChild) {
+					txt += '</'+nName+'>';
+				}
+				
+				for(var i=0;i<extraNodes.length;i++) {
+					txt += '</'+extraNodes[i]+'>';
+				}
+
+				break;
+			case 3:
+				//if(n.nodeValue != '\n') {
+					txt += n.nodeValue;
+				//}
+				break;
+		}
+		
+		return txt;
+	}
+});
+nicEditors.registerPlugin(nicXHTML);
+
+
+
+
+nicEditor = nicEditor.extend({
+        floatingPanel : function() {
+                this.floating = new bkElement('DIV').setStyle({position: 'absolute', top : '-1000px'}).appendTo(document.body);
+                this.addEvent('focus', this.reposition.closure(this)).addEvent('blur', this.hide.closure(this));
+                this.setPanel(this.floating);
+        },
+        
+        reposition : function() {
+                var e = this.selectedInstance.e;
+                this.floating.setStyle({ width : (parseInt(e.getStyle('width')) || e.clientWidth)+'px' });
+                var top = e.offsetTop-this.floating.offsetHeight;
+                if(top < 0) {
+                        top = e.offsetTop+e.offsetHeight;
+                }
+                
+                this.floating.setStyle({ top : top+'px', left : e.offsetLeft+'px', display : 'block' });
+        },
+        
+        hide : function() {
+                this.floating.setStyle({ top : '-1000px'});
+        }
+});
+
+
+
+/* START CONFIG */
+var nicCodeOptions = {
+	buttons : {
+		'xhtml' : {name : 'Edit HTML', type : 'nicCodeButton'}
+	}
+	
+};
+/* END CONFIG */
+
+var nicCodeButton = nicEditorAdvancedButton.extend({
+	width : '350px',
+		
+	addPane : function() {
+		this.addForm({
+			'' : {type : 'title', txt : 'Edit HTML'},
+			'code' : {type : 'content', 'value' : this.ne.selectedInstance.getContent(), style : {width: '340px', height : '200px'}}
+		});
+	},
+	
+	submit : function(e) {
+		var code = this.inputs['code'].value;
+		this.ne.selectedInstance.setContent(code);
+		this.removePane();
+	}
+});
+
+nicEditors.registerPlugin(nicPlugin,nicCodeOptions);
+
 
