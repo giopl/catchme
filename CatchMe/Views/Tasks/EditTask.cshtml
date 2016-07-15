@@ -81,13 +81,6 @@
                 </div>
         </div>
 
-
-        @*<div class="form-group">
-            <div class="col-md-offset-2 col-md-10 text-center">
-                <input type="submit" class="btn btn-danger" value="save" />
-                <input type="reset" class="btn btn-default" id="closeAddComment" value="close" />
-            </div>
-        </div>*@
     </div>
                     }
 
@@ -211,9 +204,9 @@
                     </span>
                 </h4>
                 
-                if(session.Current.IsAdmin || session.Current.UserId == comment.user_id)
+                if(session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
                 {
-                    <a href="#" class="showsection">Edit Comment</a>
+                    <a href="#" class="shownextsection"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>
                 }
     
                 <section style="display:none" >
@@ -433,11 +426,11 @@ else
 
         bkLib.onDomLoaded(function () {
 
-            //nicEditors.allTextAreas();
+            nicEditors.allTextAreas();
             new nicEditor({
                 //  fullPanel: true,
-                buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr','image', 'forecolor', 'bgcolor','xhtml']
-            }).panelInstance('area2');
+                buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'xhtml']
+            });//.panelInstance('area2');
             //nicEditors.findEditor('myArea2');
         });
 
@@ -445,6 +438,11 @@ else
 
             var _minyear = new Date().getFullYear();
             var _max_year = _minyear + 1;
+
+            $('body').on('click', '.shownextsection', function () {
+
+                $(this).next('section').toggle();
+            });
 
 
             $('body').on('click', '.showsection', function () {
