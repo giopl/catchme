@@ -1,10 +1,16 @@
 ﻿@model CatchMe.Models.project
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create Project";
 }
 
-<h2>Create</h2>
+
+<h2>Create Project</h2>
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index")">Home</a></li>
+    <li><a href="@Url.Action("ListProjects")">Projects</a></li>
+    <li class="active">Create Project</li>
+</ol>
 
 
 @using (Html.BeginForm()) 

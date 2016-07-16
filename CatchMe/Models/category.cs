@@ -14,15 +14,8 @@ namespace CatchMe.Models
     
     public partial class category
     {
-        public category()
-        {
-            this.tasks = new HashSet<task>();
-        }
-    
         public int category_id { get; set; }
         public string description { get; set; }
         public Nullable<int> display_order { get; set; }
-    
-        public virtual ICollection<task> tasks { get; set; }
     }
 }

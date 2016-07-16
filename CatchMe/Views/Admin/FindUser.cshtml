@@ -7,6 +7,11 @@
 }
 
 <h2>Find and Add User</h2>
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index")">Home</a></li>
+    <li><a href="@Url.Action("ListUsers")">Users</a></li>
+    <li class="active">Find and Add Users</li>
+</ol>
 
 @if (!string.IsNullOrWhiteSpace(error))
 {

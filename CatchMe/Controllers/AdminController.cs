@@ -26,12 +26,15 @@ namespace CatchMe.Controllers
         // GET: Projects
         public ActionResult Index()
         {
-
-
-            return RedirectToAction("ListProjects");
-
-
+            return RedirectToAction("Home");
         }
+
+
+        public ActionResult Home()
+        {
+            return View();
+        }
+
         public ActionResult ListProjects()
         {
 
@@ -43,6 +46,10 @@ namespace CatchMe.Controllers
 
 
         }
+
+
+
+
         public ActionResult ListUsers()
         {
             return View(db.users.ToList());
@@ -129,9 +136,7 @@ namespace CatchMe.Controllers
             
         }
 
-
-
-
+   
         // GET: Users/Edit/5
         public ActionResult EditUser(int? id)
         {
@@ -146,7 +151,15 @@ namespace CatchMe.Controllers
             }
 
             ViewBag.role = new SelectList(getRoles(), "role_id", "name", user.role);
-            ViewBag.active_project = new SelectList(db.projects, "project_id", "name", user.active_project);
+            ViewBag.active_project = new SelectList(user.projects, "project_id", "name", user.active_project);
+
+            var allprojects = db.projects.ToList();
+            var userprojects = user.projects;
+            var otherprojects = allprojects.Except(userprojects);
+
+            ViewBag.NewProjects = otherprojects;
+            
+            ViewBag.project_id = new SelectList(otherprojects, "project_id", "name");
 
             return View(user);
         }
@@ -382,7 +395,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddUserToProject(int project_id, int user_id)
+        public ActionResult AddUserToProject(int project_id, int user_id, bool fromuser = false)
         {
 
             var user = db.users.Find(user_id);
@@ -395,9 +408,17 @@ namespace CatchMe.Controllers
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
                 
+                if(fromuser)
+                {
+                    return RedirectToAction("EditUser", new { id = user_id });
 
-                
+                }
+                else
+                {
                 return RedirectToAction("EditProject", new { id = project_id, tab = 2 });
+
+                }
+                
             }
 
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name",project_id);
@@ -409,7 +430,7 @@ namespace CatchMe.Controllers
         // POST: projectUsers/Delete/5
         
 
-        public ActionResult RemoveUserFromProject(int project_id, int user_id)
+        public ActionResult RemoveUserFromProject(int project_id, int user_id, bool fromuser = false)
         {
 
 
@@ -422,9 +443,14 @@ namespace CatchMe.Controllers
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
 
+                if(fromuser)
+                {
+                    return RedirectToAction("EditUser", new { id = user_id });
 
-
+                } else
+                {
                 return RedirectToAction("EditProject", new { id = project_id, tab = 2 });
+                }
             }
 
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name", project_id);

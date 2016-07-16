@@ -6,7 +6,15 @@
     var tab = ViewBag.Tab ;
 }
 
-<h2>Edit @Model.name</h2>
+<h2>Edit <strong>@Model.name</strong> Project</h2>
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index")">Home</a></li>
+    <li><a href="@Url.Action("ListProjects")">Projects</a></li>
+    <li class="active">Editing <strong>@Model.name</strong></li>
+</ol>
+
+
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs bigger " role="tablist">

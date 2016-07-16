@@ -108,6 +108,49 @@ namespace CatchMe.Models
 
         }
 
+        /*
+            0-New
+            1-Action
+            2-Investigation
+            3-Completed
+            4-On Hold
+            5-Problem
+            6-No Issue
+            7-Passed
+            8-Failed
+            9-Closed
+         */
+
+        public string HistDescLabel
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(status))
+                {
+                    
+                    switch (status.Last().ToString())
+                    {
+                        case "0": return "info";
+                        case "4":
+                        case "9": return "default";
+                        case "1":
+                        case "2": return "warning";
+                        case "3": return "primary";
+                        case "6":
+                        case "7": return "success";
+                        case "5":
+                        case "8": return "danger";
+
+
+                        default:
+                            break;
+                    }
+
+                }
+                return "default";
+
+            }
+        }
 
         public string StatusDescLabel
         {
@@ -117,12 +160,13 @@ namespace CatchMe.Models
                 {
                     switch (status)
                     {
-                        case "0":
-                        case "6": return "default";
-                        case "1":
-                        case "2": return "primary";
-                        case "3": return "warning";
+                        case "0": return "info";
                         case "4":
+                        case "9": return "default";
+                        case "1":
+                        case "2": return "warning";
+                        case "3": return "primary";
+                        case "6":
                         case "7": return "success";
                         case "5":
                         case "8": return "danger";

@@ -45,4 +45,6 @@
             </div>
         </div>
     </div>
+
+    <a href="@Url.Action("DeleteComment","Tasks", new { id=Model.comment_id, taskid=Model.task_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash-o"></span>&nbsp; Delete </a>
 }

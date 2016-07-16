@@ -5,38 +5,29 @@
 }
 
 <h2>List Users</h2>
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index")">Home</a></li>
+    <li class="active">Users</li>
+</ol>
 
+<br />
 <p>
-    @Html.ActionLink("FindUser", "Admin")
+    <a href="@Url.Action("AddUser", "Admin")" class="btn btn-primary btn-sm"><span class="fa fa-user-plus"></span>&nbsp;Add User</a>
 </p>
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.username)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.firstname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.lastname)
+            User
         </th>
         <th>
             @Html.DisplayNameFor(model => model.job_title)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.team)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.role)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.num_logins)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.is_active)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.email)
         </th>
         
         <th></th>
@@ -44,34 +35,21 @@
 
 @foreach (var item in Model) {
     <tr>
+        
         <td>
-            @Html.DisplayFor(modelItem => item.username)
+            <a href="@Url.Action("EditUser",new { id = item.user_id })">@Html.DisplayFor(modelItem => item.firstname) @Html.DisplayFor(modelItem => item.lastname) (@Html.DisplayFor(modelItem => item.username))</a>
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.firstname)
+            @Html.DisplayFor(modelItem => item.job_title) - @Html.DisplayFor(modelItem => item.team)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.lastname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.job_title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.team)
-        </td>
+       
         <td>
             @Html.DisplayFor(modelItem => item.role)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.num_logins)
-        </td>
+
         <td>
             @Html.DisplayFor(modelItem => item.is_active)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.email)
-        </td>
-        
         <td>
             @Html.ActionLink("Edit", "EditUser", new { id=item.user_id }) |
             @Html.ActionLink("Details", "Details", new { id=item.user_id }) |

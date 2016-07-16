@@ -6,9 +6,15 @@
     var users = ViewBag.Users as List<CatchMe.Models.user>;
 }
 
+<h2>Projects</h2>
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index")">Home</a></li>
+    <li class="active">Projects</li>
+</ol>
+
 
 <style>
-    .bigger {
+   .bigger {
     font-size:1.2em;
     }
 
@@ -17,22 +23,8 @@
     background: #DDDDDD;
     }
 </style>
-<br /><br />
 <div class="container">
 
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs bigger " role="tablist">
-        <li role="presentation" class="active"><a href="#projects" aria-controls="projects" role="tab" data-toggle="tab">Projects</a></li>
-        <li role="presentation"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">Users</a></li>
-        </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="projects">
-
-
-
-            <br />
             <p>
                 <a href="@Url.Action("CreateProject", "Admin")" class="btn btn-primary btn-sm"><span class="fa fa-plus-circle"></span> Add Project</a>
             </p>
@@ -54,7 +46,7 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.name) <a href="@Url.Action("EditProject", new { id = item.project_id })"><sup>Edit</sup></a>
+                             <a href="@Url.Action("EditProject", new { id = item.project_id })">@Html.DisplayFor(modelItem => item.name)</a>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.description)
@@ -70,7 +62,8 @@
   
         
         </div>
-        <div role="tabpanel" class="tab-pane" id="users">
+
+        @*<div role="tabpanel" class="tab-pane" id="users">
 
             <br/>
             <p>
@@ -125,8 +118,6 @@
             </table>
 
 
-        </div>
+        </div>*@
         
-    </div>
-
-</div>
+    

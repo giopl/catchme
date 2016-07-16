@@ -70,7 +70,7 @@ namespace CatchMe.Controllers
 
         
             // find list of tasks for active project
-            var tasks = db.tasks.Include(t => t.project).Where(p => p.project_id == active_project).ToList();
+            var tasks = db.tasks.Include(t => t.project).Where(p => p.project_id == active_project && p.state == 0).ToList();
 
             return View(tasks);
         }
@@ -382,7 +382,7 @@ namespace CatchMe.Controllers
 
                 task.created_by = UserSession.Current.UserId;
                 task.created_on = DateTime.Now;
-
+                task.state = 0;
                 if (ModelState.IsValid)
                 {
                     db.tasks.Add(task);
@@ -454,6 +454,10 @@ namespace CatchMe.Controllers
             }
             task task = db.tasks.Find(id);
 
+            if(task.IsDeleted || task.IsArchived)
+            {
+                return HttpNotFound();
+            }
 
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
             var currentprojectid = UserSession.Current.CurrentProjectId;
@@ -510,7 +514,7 @@ namespace CatchMe.Controllers
             {
 
                 task.updated_on = DateTime.Now;
-
+                task.state = 0;
                 db.Entry(task).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -576,10 +580,17 @@ namespace CatchMe.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteTaskConfirmed(int id)
         {
+
+            
             task task = db.tasks.Find(id);
-            db.tasks.Remove(task);
+
+
+            //state 1 = deleted, 2 = archived, 0 = active
+            task.state = 1;
+            db.Entry(task).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            return RedirectToAction("TaskList");
         }
 
 
@@ -719,7 +730,23 @@ namespace CatchMe.Controllers
             }
         }
 
+        
+        public ActionResult DeleteComment(int id, int taskId)
+        {
+            try
+            {
+                comment comment = db.comments.Find(id);
+                db.comments.Remove(comment);
+                db.SaveChanges();
+                return RedirectToAction("EditTask", new { id=taskId });
 
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
 
 

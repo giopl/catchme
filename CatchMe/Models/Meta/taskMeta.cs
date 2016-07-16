@@ -92,6 +92,20 @@ namespace CatchMe.Models
         
         }
 
+        public bool IsDeleted { get
+            {
+                return state == 1;
+            }
+        }
+
+        public bool IsArchived
+        {
+            get
+            {
+                return state == 2;
+            }
+        }
+
         public bool IsOverdue
         {
             get
@@ -182,21 +196,16 @@ namespace CatchMe.Models
                 {
                     switch (status.Value)
                     {
-                        case 0: return "primary";
+                        case 0: return "info";
+                        case 4:
+                        case 9: return "default";
+                        case 1:
+                        case 2: return "warning";
+                        case 3: return "primary";
+                        case 6:
+                        case 7: return "success";
                         case 5:
                         case 8: return "danger";
-                        case 1: return "warning";
-                        case 2: return "warning";
-                        
-                        case 6: return "success";
-                        case 4: return "default";
-                        case 3: return "info";
-                        
-                        case 7: return "success";
-                        case 9: return "default";
-                        
-                        
-
 
                         default:
                             break;

@@ -2,12 +2,18 @@
 @using helpers = CatchMe.Helpers
 
 @{
-    ViewBag.Title = "AddUser";
+    ViewBag.Title = "Add User";
     
     var roles = CatchMe.Helpers.SelectItems.RoleItemList();
 }
 
 <h2>Add User</h2>
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index")">Home</a></li>
+    <li><a href="@Url.Action("ListUsers")">Users</a></li>
+    <li class="active">Find and Add Users</li>
+</ol>
+
 
 
 @using (Html.BeginForm("AddUser","Admin",FormMethod.Post))

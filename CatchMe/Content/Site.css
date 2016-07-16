@@ -162,7 +162,7 @@ width:100px;
 	
 
 .action,.investigation{
-    background: #F0AD4E;
+    background: #F0AD4E; /*warning*/
 }
 
 
@@ -172,25 +172,25 @@ width:100px;
 
 
 .new {
-    background:#337AB7;
+    background:#5BC0DE; /*info*/
 }
 
 .completed {
-    background: #5BC0DE;
+    background: #337AB7; /*primary*/
 }
 
 .passed,.noissue{
-    background: #5CB85C;
+    background: #5CB85C; /*success*/
 }
 
 .onhold {
-   background: #777777;
+   background: #BBBBBB;
 }
 
 .closed {
-    background:#808080;
-
+   background: #777777;
 }
+
 
 /* miscellanesous*/
 

@@ -1,4 +1,5 @@
-﻿create view v_tasks as
+﻿
+CREATE view [dbo].[v_tasks] as
 
 select T.project_id, T.task_id, T.initiator, 
 
@@ -38,3 +39,5 @@ on t.created_by = creator.user_id
 
 left join [user] assignee
 on t.assigned_to = assignee.user_id
+
+where t.state <> 1
