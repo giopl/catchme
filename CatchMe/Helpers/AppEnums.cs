@@ -89,8 +89,10 @@ namespace CatchMe.Helpers
         public enum RoleEnum
         {
             Business = 0,
-            Developer,
-            Admin
+            Developer = 1,
+            Project_Lead = 2,
+            Default_System_User = 8,
+            Admin = 9
 
 
         }

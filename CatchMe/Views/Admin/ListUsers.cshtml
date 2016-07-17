@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CatchMe.Models.user>
 
 @{
-    ViewBag.Title = "ListUsers";
+    ViewBag.Title = "List Users";
 }
 
 <h2>List Users</h2>
@@ -30,7 +30,6 @@
             @Html.DisplayNameFor(model => model.is_active)
         </th>
         
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -44,16 +43,11 @@
         </td>
        
         <td>
-            @Html.DisplayFor(modelItem => item.role)
+            @Html.DisplayFor(modelItem => item.RoleDesc)
         </td>
 
         <td>
             @Html.DisplayFor(modelItem => item.is_active)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "EditUser", new { id=item.user_id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.user_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.user_id })
         </td>
     </tr>
 }

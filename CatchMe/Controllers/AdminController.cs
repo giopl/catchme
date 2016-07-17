@@ -35,8 +35,33 @@ namespace CatchMe.Controllers
             return View();
         }
 
+        public ActionResult Restore(int id)
+        {
+            try
+            {
+                var task = db.tasks.Find(id);
+
+                task.state = 0;
+
+                db.Entry(task).State = EntityState.Modified;
+                db.SaveChanges();
+
+
+                return RedirectToAction("ListDeleted");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+
         public ActionResult ListProjects()
         {
+            try
+            {
 
             var users = db.users.AsNoTracking().ToList();
 
@@ -44,15 +69,57 @@ namespace CatchMe.Controllers
 
             return View(db.projects.ToList());
 
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
         }
 
 
+        public ActionResult ListDeleted()
+        {
+            try
+            {
+                var deleted = db.tasks.Where(x => x.state == 1).ToList();
+                return View(deleted);
 
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        public ActionResult ListArchived()
+        {
+            try
+            {
+                var archived = db.tasks.Where(x => x.state == 2).ToList();
+                return View(archived);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public ActionResult ListUsers()
         {
+            try
+            {
             return View(db.users.ToList());
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         
@@ -61,38 +128,47 @@ namespace CatchMe.Controllers
         public ActionResult AddUser(string user)
         {
 
-
-            if (string.IsNullOrWhiteSpace(user))
+            try
             {
 
-                return RedirectToAction("FindUser");
+                if (string.IsNullOrWhiteSpace(user))
+                {
+
+                    return RedirectToAction("FindUser");
+                }
+
+                employee emp = db.employees.Where(x => x.user_id == user).FirstOrDefault();
+
+                //if ldap is on
+
+
+                var founduser = new user
+                {
+                    firstname = emp.common_name,
+                    lastname = emp.fam_name,
+                    username = emp.user_id,
+                    //email = string.Format("{0}@local.mcb", emp.user_id),
+                    email = getUserCommonName(emp.user_id),
+                    job_title = emp.position_title,
+                    team = emp.team
+                };
+
+
+
+
+                ViewBag.role = new SelectList(getRoles(), "role_id", "name");
+
+                ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
+
+
+                return View(founduser);
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
-            employee emp = db.employees.Where(x=>x.user_id == user).FirstOrDefault();
-
-            //if ldap is on
-
-
-            var founduser = new user
-            {
-                firstname = emp.common_name,
-                lastname = emp.fam_name,
-                username = emp.user_id,
-                //email = string.Format("{0}@local.mcb", emp.user_id),
-                email = getUserCommonName(emp.user_id),
-                job_title = emp.position_title,
-                team = emp.team
-            };
-
-
-            
-
-            ViewBag.role = new SelectList(getRoles(), "role_id", "name");
-
-            ViewBag.project_id = new SelectList(db.projects, "project_id", "name");
-
-
-            return View(founduser);
         }
 
         private List<RoleVM> getRoles()

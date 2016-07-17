@@ -4,6 +4,30 @@
 }
 
 <h2>Administration</h2>
+<style>
+    a.nodeco:hover {
+        text-decoration:none;
+    }
+</style>
 
-<h3><span class="fa fa-tasks"></span>&nbsp; <a href="@Url.Action("ListProjects")">Projects</a></h3>
-<h3><span class="fa fa-user"></span>&nbsp; <a href="@Url.Action("ListUsers")">Users</a></h3>
+<hr />
+<a href="@Url.Action("ListProjects")" class="nodeco">
+    <h3>
+        <span class="fa fa-tasks text-muted"></span>&nbsp; Projects<small class="text-muted"> - Adding and Editing projects</small>
+    </h3>
+</a>
+<hr />
+<a href="@Url.Action("ListUsers")" class="nodeco">
+    <h3><span class="fa fa-user text-info"></span>&nbsp; Users
+<small class="text-muted"> - User management at application level</small></h3>
+</a>
+@*<hr />
+<a href="@Url.Action("ListArchived")" class="nodeco">
+    <h3>
+        <span class="fa fa-archive text-success"></span>&nbsp; Archived
+<small class="text-muted"> - Reviewing items archived</small></h3>
+</a>*@
+<hr />
+<a href="@Url.Action("ListDeleted")" class="nodeco">
+<h3><span class="fa fa-recycle text-danger"></span>&nbsp; Recovery<small class="text-muted"> - Reviewing deleted items and recovering items</small></h3>
+    </a>

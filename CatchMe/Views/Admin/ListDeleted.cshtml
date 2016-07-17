@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CatchMe.Models.task>
+
+@{
+    ViewBag.Title = "List Deleted";
+}
+
+<h2>List Deleted</h2>
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index")">Home</a></li>
+    <li class="active">Recycled</li>
+</ol>
+<table class="table">
+    <tr>
+        <th>
+            project
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.state)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.project.name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.project.name)
+
+        
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+       
+        <td>
+            deleted
+        </td>
+        <td>
+            @Html.ActionLink("Restore", "Restore", new { id=item.task_id }) 
+        </td>
+    </tr>
+}
+
+</table>

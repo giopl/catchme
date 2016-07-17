@@ -65,7 +65,12 @@ namespace CatchMe.Helpers
         public string CurrentProject { get; set; }
         
         public string UserImage { get; set; }
-
+        public bool IsProjectLead {
+            get
+            {
+                return Role == 2;
+            }
+                }
 
         public int Role { get; set; }
 
@@ -73,7 +78,7 @@ namespace CatchMe.Helpers
 
             get
             {
-                return Role == 2;
+                return Role == 9;
             }
             
             }
