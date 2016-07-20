@@ -202,7 +202,7 @@
             @foreach (var comment in Model.comments.OrderByDescending(x=>x.created_on))
             {
               
-                  <div class="task-title"><span class="fa fa-play"></span> @(string.IsNullOrWhiteSpace(comment.title)?"No Title..":comment.title) - </div>
+                  <div class="task-title">@(string.IsNullOrWhiteSpace(comment.title)?"No Title..":comment.title) - </div>
                 <small>@comment.user.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
                 <h4 style="word-break:break-all">
 
@@ -437,7 +437,11 @@ else
             nicEditors.allTextAreas();
             new nicEditor({
                 //  fullPanel: true,
-                buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'xhtml']
+                //buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'xhtml']
+                buttonList : ['fontSize','bold','italic','underline','strikeThrough','subscript','superscript']
+
+
+
             });//.panelInstance('area2');
             //nicEditors.findEditor('myArea2');
         });

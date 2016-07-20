@@ -145,7 +145,14 @@
 
                     </td>
                     <td>
-                    @(p.project_id == @Model.active_project.Value ?"Active":"Member")
+                    
+                    @if(Model.active_project!= null)
+                    {
+                        @(p.project_id == @Model.active_project.Value ?"Active":"Member")
+                        
+                    }
+                    
+                    
 
                     </td>
                     <td>

@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace CatchMe.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private CatchMeDBEntities db = new CatchMeDBEntities();
         log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -37,11 +37,18 @@ namespace CatchMe.Controllers
                 UserSession.Current.Username = founduser.username;
                 UserSession.Current.UserId = founduser.user_id;
 
+                log Alog = new log { user_id = founduser.user_id, logtime = DateTime.Now, description = "Login", operation = "LOGIN", type = "USER" };
+
+                CreateLog(Alog);
+
+
                 UserSession.Current.Fullname = founduser.fullname;
                 UserSession.Current.Firstname = founduser.firstname;
                 UserSession.Current.CurrentProjectId = founduser.active_project.HasValue?founduser.active_project.Value:0;
 
                 var myProjects = founduser.projects.ToList();
+
+                
 
                 UserSession.Current.MyProjects = myProjects;
                 if(UserSession.Current.CurrentProjectId  > 0)
@@ -63,6 +70,10 @@ namespace CatchMe.Controllers
             //return View();
             return RedirectToAction("Index","Tasks");
         }
+
+
+
+
 
 
         public ActionResult NoAccess()
