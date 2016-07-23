@@ -8,12 +8,26 @@ using System.Web.Mvc;
 
 namespace CatchMe.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
         private CatchMeDBEntities db = new CatchMeDBEntities();
         log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        
-        
+
+
+
+
+        private void CreateLog(log log)
+        {
+            if (ModelState.IsValid)
+            {
+                      db.logs.Add(log);
+                   // db.SaveChanges();
+                //return RedirectToAction("Index");
+            }
+
+        }
+
+
         public ActionResult Index()
         {
             log.Debug("Hello World");
@@ -37,10 +51,7 @@ namespace CatchMe.Controllers
                 UserSession.Current.Username = founduser.username;
                 UserSession.Current.UserId = founduser.user_id;
 
-                log Alog = new log { user_id = founduser.user_id, logtime = DateTime.Now, description = "Login", operation = "LOGIN", type = "USER" };
-
-                CreateLog(Alog);
-
+                
 
                 UserSession.Current.Fullname = founduser.fullname;
                 UserSession.Current.Firstname = founduser.firstname;

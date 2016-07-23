@@ -10,8 +10,11 @@
     [is_active]      BIT           DEFAULT ((1)) NOT NULL,
     [email]          NVARCHAR (60) NULL,
     [active_project] INT           NULL,
+    [nickname]       NVARCHAR (60) NULL,
     PRIMARY KEY CLUSTERED ([user_id] ASC)
 );
+
+
 
 
 
