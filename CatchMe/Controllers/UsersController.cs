@@ -35,6 +35,7 @@ namespace CatchMe.Controllers
             return View(user);
         }
 
+
         // GET: Users/Create
         public ActionResult Create()                
         {

@@ -148,6 +148,9 @@
     <Compile Include="Helpers\SelectItems.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\UserSession.cs" />
+    <Compile Include="Models\attachment.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\backlog.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
@@ -178,6 +181,7 @@
     <Compile Include="Models\log.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Meta\attachmentMeta.cs" />
     <Compile Include="Models\Meta\commentMeta.cs" />
     <Compile Include="Models\Meta\projectMeta.cs" />
     <Compile Include="Models\Meta\taskHistMeta.cs" />
@@ -339,6 +343,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="uploads\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\logs\" />
   </ItemGroup>

@@ -5,6 +5,20 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="CatchMeDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="attachment">
+          <Key>
+            <PropertyRef Name="attachment_id" />
+          </Key>
+          <Property Name="attachment_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="task_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="filename" Type="nvarchar" MaxLength="200" />
+          <Property Name="mimetype" Type="nvarchar" MaxLength="200" />
+          <Property Name="content_length" Type="int" />
+          <Property Name="created_on" Type="datetime" />
+          <Property Name="is_disabled" Type="bit" Nullable="false" />
+          <Property Name="filepath" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="category">
           <Key>
             <PropertyRef Name="category_id" />
@@ -47,9 +61,13 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="is_active" Type="char" MaxLength="1" />
           <Property Name="team" Type="varchar" MaxLength="100" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CatchMeDB.dbo.log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="log">
           <Key>
             <PropertyRef Name="log_id" />
+            
+            
           </Key>
           <Property Name="log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="user_id" Type="int" Nullable="false" />
@@ -156,6 +174,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="email" Type="nvarchar" MaxLength="60" />
           <Property Name="active_project" Type="int" />
+          <Property Name="nickname" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CatchMeDB.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -199,6 +218,30 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Property Name="updated_on" Type="date" />
           <Property Name="due_date" Type="date" />
         </EntityType>
+        <Association Name="FK_attachment_task_id">
+          <End Role="task" Type="Self.task" Multiplicity="1" />
+          <End Role="attachment" Type="Self.attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_attachment_user_id">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="attachment" Type="Self.attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_comment_task_id">
           <End Role="task" Type="Self.task" Multiplicity="1" />
           <End Role="comment" Type="Self.comment" Multiplicity="*" />
@@ -359,9 +402,9 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Parameter Name="project_id" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="CatchMeDBModelStoreContainer">
+          <EntitySet Name="attachment" EntityType="Self.attachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="comment" EntityType="Self.comment" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="log" EntityType="Self.log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="notification" EntityType="Self.notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project_user" EntityType="Self.project_user" Schema="dbo" store:Type="Tables" />
@@ -386,6 +429,17 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
     [employee].[is_active] AS [is_active], 
     [employee].[team] AS [team]
     FROM [dbo].[employee] AS [employee]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="log" EntityType="Self.log" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [log].[log_id] AS [log_id], 
+    [log].[user_id] AS [user_id], 
+    [log].[task_id] AS [task_id], 
+    [log].[operation] AS [operation], 
+    [log].[type] AS [type], 
+    [log].[logtime] AS [logtime], 
+    [log].[description] AS [description]
+    FROM [dbo].[log] AS [log]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="v_figures" EntityType="Self.v_figures" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -421,6 +475,14 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
     [v_tasks].[due_date] AS [due_date]
     FROM [dbo].[v_tasks] AS [v_tasks]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_attachment_task_id" Association="Self.FK_attachment_task_id">
+            <End Role="task" EntitySet="task" />
+            <End Role="attachment" EntitySet="attachment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_attachment_user_id" Association="Self.FK_attachment_user_id">
+            <End Role="user" EntitySet="user" />
+            <End Role="attachment" EntitySet="attachment" />
+          </AssociationSet>
           <AssociationSet Name="FK_comment_task_id" Association="Self.FK_comment_task_id">
             <End Role="task" EntitySet="task" />
             <End Role="comment" EntitySet="comment" />
@@ -542,6 +604,15 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
             <End Role="user" EntitySet="users" />
             <End Role="log" EntitySet="logs" />
           </AssociationSet>
+          <EntitySet Name="attachments" EntityType="CatchMeDBModel.attachment" />
+          <AssociationSet Name="FK_attachment_task_id" Association="CatchMeDBModel.FK_attachment_task_id">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="attachment" EntitySet="attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_attachment_user_id" Association="CatchMeDBModel.FK_attachment_user_id">
+            <End Role="user" EntitySet="users" />
+            <End Role="attachment" EntitySet="attachments" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -614,6 +685,8 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <NavigationProperty Name="tasks" Relationship="CatchMeDBModel.FK_task_assigned_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="tasks1" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_user_id" FromRole="user" ToRole="log" />
+          <Property Name="nickname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="user" ToRole="attachment" />
         </EntityType>
         <Association Name="FK_task_user_user_id">
           <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
@@ -765,6 +838,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <NavigationProperty Name="user1" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="task" ToRole="user" />
           <NavigationProperty Name="task_user" Relationship="CatchMeDBModel.FK_task_user_task_id" FromRole="task" ToRole="taskUser" />
           <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_task_id" FromRole="task" ToRole="log" />
+          <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="task" ToRole="attachment" />
         </EntityType>
         <Association Name="FK_comment_task_id">
           <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
@@ -888,6 +962,46 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="attachment">
+          <Key>
+            <PropertyRef Name="attachment_id" />
+          </Key>
+          <Property Name="attachment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="filename" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="mimetype" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="content_length" Type="Int32" />
+          <Property Name="created_on" Type="DateTime" Precision="3" />
+          <Property Name="is_disabled" Type="Boolean" Nullable="false" />
+          <Property Name="filepath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="attachment" ToRole="task" />
+          <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="attachment" ToRole="user" />
+        </EntityType>
+        <Association Name="FK_attachment_task_id">
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
+          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_attachment_user_id">
+          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -945,6 +1059,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="CatchMeDBModel.user">
               <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="nickname" ColumnName="nickname" />
                 <ScalarProperty Name="active_project" ColumnName="active_project" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="is_active" ColumnName="is_active" />
@@ -1096,6 +1211,21 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
                 <ScalarProperty Name="task_id" ColumnName="task_id" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="log_id" ColumnName="log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="attachments">
+            <EntityTypeMapping TypeName="CatchMeDBModel.attachment">
+              <MappingFragment StoreEntitySet="attachment">
+                <ScalarProperty Name="filepath" ColumnName="filepath" />
+                <ScalarProperty Name="is_disabled" ColumnName="is_disabled" />
+                <ScalarProperty Name="created_on" ColumnName="created_on" />
+                <ScalarProperty Name="content_length" ColumnName="content_length" />
+                <ScalarProperty Name="mimetype" ColumnName="mimetype" />
+                <ScalarProperty Name="filename" ColumnName="filename" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="attachment_id" ColumnName="attachment_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

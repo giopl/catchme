@@ -92,7 +92,7 @@
                             </td>
 
                             <td >
-                                <div class="readmore">                                 
+                                <div class="readmore"> <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>                                 
                                     <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
                                 </div>
 

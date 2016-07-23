@@ -134,65 +134,16 @@ namespace CatchMe.Helpers
         {
             return ConfigurationManager.AppSettings["UserImgPath"];
         }
+        
+        
 
-        public static string GetProviderImgPath()
+
+
+        public static int MaxUploadSize()
         {
-            return ConfigurationManager.AppSettings["ProviderImgPath"];
+            return Convert.ToInt32(ConfigurationManager.AppSettings["MaxUploadSize"]);
         }
-
-        public static string GetRoomImgPath()
-        {
-            return ConfigurationManager.AppSettings["RoomImgPath"];
-        }
-
-        public static string GetActivityImgPath()
-        {
-            return ConfigurationManager.AppSettings["ActivityImgPath"];
-        }
-
-        public static string GetVehicleImgPath()
-        {
-            return ConfigurationManager.AppSettings["VehicleImgPath"];
-        }
-
-
-        public static string PlaceholderImgPath
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["PlaceholderImgPath"];
-            }
-        }
-
-
-
-
-
-        public static int MaxUploadSizeUser()
-        {
-            return Convert.ToInt32(ConfigurationManager.AppSettings["MaxUploadSizeUser"]);
-        }
-
-        public static int MaxUploadSizeProvider()
-        {
-            return Convert.ToInt32(ConfigurationManager.AppSettings["MaxUploadSizeProvider"]);
-        }
-
-        public static int MaxUploadSizeRoom()
-        {
-            return Convert.ToInt32(ConfigurationManager.AppSettings["MaxUploadSizeRoom"]);
-        }
-
-        public static int MaxUploadSizeVehicle()
-        {
-            return Convert.ToInt32(ConfigurationManager.AppSettings["MaxUploadSizeVehicle"]);
-        }
-
-        public static int MaxUploadSizeActivity()
-        {
-            return Convert.ToInt32(ConfigurationManager.AppSettings["MaxUploadSizeActivity"]);
-        }
-
+        
         #region email
 
 

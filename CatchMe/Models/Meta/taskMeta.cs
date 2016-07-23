@@ -92,6 +92,14 @@ namespace CatchMe.Models
         
         }
 
+        public bool HasAttachment
+        {
+            get
+            {
+                return attachments.Count > 0;
+            }
+        }
+
         public bool IsDeleted { get
             {
                 return state == 1;

@@ -10,6 +10,7 @@ using CatchMe.Models;
 using CatchMe.Helpers;
 using System.Net.Mail;
 using System.Text;
+using System.Data.Entity.Validation;
 
 namespace CatchMe.Controllers
 {
@@ -28,6 +29,11 @@ namespace CatchMe.Controllers
 
             //find current user
             var user_id = UserSession.Current.UserId;
+            if(user_id == 0)
+            {
+               return    RedirectToAction("Index", "Home");
+            }
+
             var user = db.users.Find(user_id);
 
             //find user's active project
@@ -79,6 +85,128 @@ namespace CatchMe.Controllers
         public ActionResult NoProject()
         {
             return View();
+        }
+
+
+
+        [HttpPost]
+        public ActionResult UploadFile(HttpPostedFileBase file, int taskid, int projectid)
+        {
+            try
+            {
+
+                attachment attachment = new attachment
+                {
+                    filename = file.FileName,
+                    content_length = file.ContentLength,
+                    mimetype = file.ContentType,
+                    created_on = DateTime.Now,
+                    task_id = taskid,
+                    user_id = UserSession.Current.UserId,
+                    filepath = string.Format("{0}/{1}/{2}", projectid, taskid, file.FileName)
+
+                };
+
+                if(SaveResourceToDisk(file,taskid))
+                {
+
+                    try
+                    {
+                    db.attachments.Add(attachment);
+                    db.SaveChanges();
+
+                    
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        // Retrieve the error messages as a list of strings.
+                        var errorMessages = ex.EntityValidationErrors
+                                .SelectMany(x => x.ValidationErrors)
+                                .Select(x => x.ErrorMessage);
+
+                        // Join the list to a single string.
+                        var fullErrorMessage = string.Join("; ", errorMessages);
+
+                        // Combine the original exception message with the new one.
+                        var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+
+                        // Throw a new DbEntityValidationException with the improved exception message.
+                        throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+                    }
+                
+
+            }
+
+                
+                return RedirectToAction("EditTask", new { id = taskid });
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+
+
+        private bool SaveResourceToDisk(HttpPostedFileBase mainFile, int taskid)
+        {
+            try
+            {
+                bool saved = false;
+
+                string imageExt = string.Empty;
+                string imageName = string.Empty;
+
+                bool hasResourceFile = mainFile != null && mainFile.ContentLength > 0;
+
+                if (hasResourceFile)
+                {
+
+
+                    var projectid = db.tasks.Find(taskid).project_id;
+                    //var serverpath = Helpers.ConfigurationHelper.GetServerPath();
+                    var serverpath = System.IO.Path.GetFullPath("/");
+                    string id = Guid.NewGuid().ToString();
+
+                
+
+                    imageExt = System.IO.Path.GetExtension(mainFile.FileName);
+                    imageName = System.IO.Path.GetFileName(mainFile.FileName);
+
+                    string dirPath = System.Web.HttpContext.Current.Server.MapPath("~") + "uploads/" + string.Format("{0}/",projectid) + string.Format("{0}/", taskid) ;
+
+
+                    //bool exists = System.IO.Directory.Exists(Server.MapPath(dirPath));
+                    bool exists = System.IO.Directory.Exists(dirPath);
+
+                    if (!exists)
+                        System.IO.Directory.CreateDirectory(dirPath);
+
+                    string path = System.IO.Path.Combine(dirPath, imageName);
+
+                    bool isValidItem = Helpers.ConfigurationHelper.AuthorizedImagesExt().Contains(imageExt.ToLower().Replace(".",""));
+                    int sizeKb = Convert.ToInt32(Math.Round(Convert.ToDecimal(mainFile.ContentLength / 1024), 0));
+
+                    int maxAllowedSize = Helpers.ConfigurationHelper.MaxUploadSize();
+
+                    
+                    //int maxAllowedSize = 0;
+                    
+
+                    if (isValidItem && (sizeKb <= maxAllowedSize))
+                    {
+                        mainFile.SaveAs(path);
+                        saved = true;
+                    
+                    }
+                }
+                return saved;
+            }
+            catch (Exception e)
+            {
+                return false;
+    
+            }
         }
 
         private void SetActiveProject(int projectId)
@@ -450,7 +578,8 @@ namespace CatchMe.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             task task = db.tasks.Find(id);
 

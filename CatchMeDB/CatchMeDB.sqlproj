@@ -84,6 +84,7 @@
     <Build Include="dbo\Stored Procedures\PopulateDates.sql" />
     <Build Include="dbo\Stored Procedures\get_backlog.sql" />
     <Build Include="dbo\Views\v_figures.sql" />
+    <Build Include="dbo\Tables\attachment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Initialisation.sql" />
