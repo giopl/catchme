@@ -76,7 +76,8 @@
                             @Html.DisplayNameFor(model => model.due_date)
                         </th>
 
-                        <th width="1%">
+                        <th width="1%"></th>
+                        <td></td>
                     </tr>
                 </thead>
 
@@ -92,7 +93,7 @@
                             </td>
 
                             <td >
-                                <div class="readmore"> <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>                                 
+                                <div class="readmore">                                  
                                     <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
                                 </div>
 
@@ -112,6 +113,9 @@
                                 <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
                                 <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
+                            </td>
+                            <td>
+                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
                             </td>
                         </tr>
                     }
@@ -147,7 +151,8 @@
                             @Html.DisplayNameFor(model => model.due_date)
                         </th>
 
-                        <th width="1%">
+                        <th width="1%"></th>
+                        <td></td>
                     </tr>
                 </thead>
 
@@ -184,6 +189,9 @@
                                 @*<a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>*@
 
                             </td>
+                            <td>
+                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -216,7 +224,8 @@
                             @Html.DisplayNameFor(model => model.due_date)
                         </th>
 
-                        <th width="1%">
+                        <th width="1%"></th>
+                        <td></td>
                     </tr>
                 </thead>
 
@@ -253,6 +262,9 @@
                                 @*<a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>*@
 
                             </td>
+                            <td>
+                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -288,7 +300,8 @@
                             @Html.DisplayNameFor(model => model.due_date)
                         </th>
 
-                        <th width="1%">
+                        <th width="1%"></th>
+                        <td></td>
                     </tr>
                 </thead>
 
@@ -324,6 +337,9 @@
                                 <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
                                 <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
+                            </td>
+                            <td>
+                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
                             </td>
                         </tr>
                     }

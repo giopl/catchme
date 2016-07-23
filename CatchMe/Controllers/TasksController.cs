@@ -146,7 +146,51 @@ namespace CatchMe.Controllers
                 throw;
             }
         }
+        public ActionResult DeleteAttachment(int id, int taskid)
+        {
+            try
+            {
+                if(DeleteResourceFromDisk(id))
+                {
+                    var file = db.attachments.Find(id);
+                    db.attachments.Remove(file);
 
+                    db.SaveChanges();
+
+
+                }
+                return RedirectToAction("EditTask", new { id = taskid });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+        private bool DeleteResourceFromDisk(int id)
+        {
+            try
+            {
+                var file = db.attachments.Find(id);
+
+                string dirPath = System.Web.HttpContext.Current.Server.MapPath("~") + "uploads/" + file.filepath;
+
+                bool exists = System.IO.File.Exists(dirPath);
+
+                if (!exists)
+                    System.IO.File.Delete(dirPath);
+
+                return true; 
+            }
+
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
 
         private bool SaveResourceToDisk(HttpPostedFileBase mainFile, int taskid)
         {

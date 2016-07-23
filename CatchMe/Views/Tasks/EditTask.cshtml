@@ -208,7 +208,7 @@
                         {
                             <div class="col-md-12">
                                 <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
-                            &nbsp;<a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id})"><span class="fa fa-trash"></span></a>
+                            &nbsp;<a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})"><span class="fa fa-trash"></span></a>
                             </div>
                         }
 
