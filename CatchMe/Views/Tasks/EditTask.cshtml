@@ -13,9 +13,6 @@
 }
 
 
-<style>
-
-</style>
         <div class="row">
             <div class="col-md-8">
 
@@ -48,8 +45,9 @@
 
                 <a href="#" class="showsection" data-sectionnum=".section2"><span class="fa fa-envelope"></span>&nbsp;Notify </a>&nbsp;|&nbsp;
                 <a href="#" class="showsection" data-sectionnum=".section3"><span class="fa fa-history"></span>&nbsp;History</a>&nbsp;|&nbsp;
-                <a href="#" class="showsection" data-sectionnum=".section4"><span class="fa fa-paperclip"></span>&nbsp;Attachments (@Model.attachments.Count)</a>
-
+                <a href="#" class="showsection" data-sectionnum=".section4"><span class="fa fa-paperclip"></span>&nbsp;Attachments (@Model.attachments.Count)</a>&nbsp;|&nbsp;
+                <a href="javascript:void(0);" class="expandall" title="show all"><span class="fa fa-expand"></span></a>
+                <a href="javascript:void(0);" class="collapseall" title="collapse all"><span class="fa fa-compress"></span></a>
                 <br />
                 <section style="display:none" class="section1">
 
@@ -87,7 +85,6 @@
                     }
 
                 </section>
-
 
                 <section style="display:none" class="section2">
                     <h4><span class="fa fa-envelope"></span> &nbsp;Notifications</h4>
@@ -200,7 +197,6 @@
 
                 </section>
 
-
                 <section style="display:none" class="section4">
                     <h4><span class="fa fa-paperclip"></span> &nbsp;Attachments (@Model.attachments.Count)</h4>
                     <div class="row">
@@ -208,7 +204,7 @@
                         {
                             <div class="col-md-12">
                                 <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
-                            &nbsp;<a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})"><span class="fa fa-trash"></span></a>
+                                &nbsp;<a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash"></span></a>
                             </div>
                         }
 
@@ -247,30 +243,33 @@
                     </section>
 
                         <br /><br />
+                
+            @{ var cnt = 0;}
                         @foreach (var comment in Model.comments.OrderByDescending(x => x.created_on))
                         {
 
                             <div class="task-title">@(string.IsNullOrWhiteSpace(comment.title) ? "No Title.." : comment.title) - </div>
                             <small>@comment.user.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
-                            <h4 style="word-break:break-all">
+                            <a href="javascript:void(0);" class="shownextsection toggleshowhide">@(cnt==0?"(hide)":"[more]")</a>
 
-                                <span style="word-wrap:break-word">
-                                    @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
-                                </span>
-                            </h4>
+                            <section class="allcomments" style="display:@(cnt==0?"block":"none")">
+                                <h4 style="word-break:break-all">
+                                    <span style="word-wrap:break-word">
+                                        @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
+                                    </span>
+                                </h4>
 
-                            if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
-                            {
-
+                                @if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
+                                {
                                 <a href="javascript:void(0);" class="shownextsection"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>
-                            }
+                                }
 
-                            <section style="display:none">
-                                @Html.Partial("_EditComment", comment)
+                                <section style="display:none">
+                                    @Html.Partial("_EditComment", comment)
+                                </section>
                             </section>
-
                             <hr />
-
+                            { cnt++;}
                         }
 
 
@@ -537,6 +536,31 @@
             });
 
 
+
+
+            
+            
+            $('body').on('click', '.collapseall', function () {
+                $('.toggleshowhide').text('(more)');
+                $('.allcomments').hide();
+            });
+
+
+
+            $('body').on('click', '.expandall', function () {
+                $('.toggleshowhide').text('(hide)');
+                $('.allcomments').show();
+            });
+
+
+            $('body').on('click', '.toggleshowhide', function () {
+                if($(this).html()=='[more]')
+                {
+                    $(this).text('(hide)');
+                } else {
+                    $(this).text('[more]');
+                }
+            });
 
             $('.combodate').combodate({
     

@@ -224,6 +224,7 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\select2.css" />
+    <Content Include="Content\sweetalert.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -290,6 +291,7 @@
     <Content Include="Scripts\plugins\nicEditorIcons.gif" />
     <Content Include="Scripts\plugins\readmore.js" />
     <Content Include="Scripts\plugins\select2.js" />
+    <Content Include="Scripts\plugins\sweetalert.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\select2.full.js" />

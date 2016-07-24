@@ -179,7 +179,7 @@ namespace CatchMe.Controllers
 
                 bool exists = System.IO.File.Exists(dirPath);
 
-                if (!exists)
+                if (exists)
                     System.IO.File.Delete(dirPath);
 
                 return true; 
@@ -239,8 +239,16 @@ namespace CatchMe.Controllers
 
                     if (isValidItem && (sizeKb <= maxAllowedSize))
                     {
+                        if(System.IO.Directory.Exists(path))
+                        {
+                            saved = false;
+                        } else
+                        {
+                            saved = true;
+                        }
+
                         mainFile.SaveAs(path);
-                        saved = true;
+                        //saved = true;
                     
                     }
                 }

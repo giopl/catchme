@@ -35,7 +35,10 @@ namespace CatchMe
                       //"~/Scripts/plugins/select2.js",
                       "~/Scripts/plugins/readmore.js",
                       "~/Scripts/plugins/moment.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/sweetalert.js",
+                      "~/Scripts/respond.js"
+
+                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/nicedit").Include(
                       "~/Scripts/plugins/nicEdit.js"
@@ -63,6 +66,7 @@ namespace CatchMe
                       "~/Content/font-awesome.css",
                       "~/Content/select2.css",
                       "~/Content/DataTables.css",
+                      "~/Content/sweetalert.css",
 
                       "~/Content/site.css"));
 
