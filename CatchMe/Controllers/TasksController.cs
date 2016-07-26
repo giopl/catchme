@@ -16,6 +16,7 @@ namespace CatchMe.Controllers
 {
     public class TasksController : BaseController
     {
+        log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private CatchMeDBEntities db = new CatchMeDBEntities();
 
         public ActionResult Index()
@@ -196,6 +197,7 @@ namespace CatchMe.Controllers
         {
             try
             {
+                log.Info("Saving resource to disk");
                 bool saved = false;
 
                 string imageExt = string.Empty;
@@ -206,9 +208,12 @@ namespace CatchMe.Controllers
                 if (hasResourceFile)
                 {
 
-
+                    log.Info("Saving resource to disk - Resource file found");
                     var projectid = db.tasks.Find(taskid).project_id;
-                    //var serverpath = Helpers.ConfigurationHelper.GetServerPath();
+                    var serverpathprod = Helpers.ConfigurationHelper.GetServerPathProd();
+                    var IsProd = Helpers.ConfigurationHelper.IsProd();
+
+
                     var serverpath = System.IO.Path.GetFullPath("/");
                     string id = Guid.NewGuid().ToString();
 
@@ -217,8 +222,17 @@ namespace CatchMe.Controllers
                     imageExt = System.IO.Path.GetExtension(mainFile.FileName);
                     imageName = System.IO.Path.GetFileName(mainFile.FileName);
 
-                    string dirPath = System.Web.HttpContext.Current.Server.MapPath("~") + "uploads/" + string.Format("{0}/",projectid) + string.Format("{0}/", taskid) ;
 
+
+                    string dirPath = System.Web.HttpContext.Current.Server.MapPath("~") + "/uploads/" + string.Format("{0}/",projectid) + string.Format("{0}/", taskid) ;
+
+                    if (IsProd)
+                    {
+                      //  dirPath = System.Web.HttpContext.Current.Server.MapPath(serverpathprod) + "/uploads/" + string.Format("{0}/", projectid) + string.Format("{0}/", taskid);
+                    }
+
+                    
+                    log.DebugFormat("dirpath: {0}", dirPath);
 
                     //bool exists = System.IO.Directory.Exists(Server.MapPath(dirPath));
                     bool exists = System.IO.Directory.Exists(dirPath);
@@ -256,6 +270,7 @@ namespace CatchMe.Controllers
             }
             catch (Exception e)
             {
+                log.ErrorFormat("Error saving resource to disk {0}", e.ToString());
                 return false;
     
             }

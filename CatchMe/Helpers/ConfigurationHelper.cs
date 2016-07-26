@@ -17,6 +17,13 @@ namespace CatchMe.Helpers
         }
 
 
+        public static string GetServerPathProd()
+        {
+            return ConfigurationManager.AppSettings["ServerPathProd"];
+        }
+
+
+
 
         public static string GetEnvironment()
         {
@@ -28,6 +35,13 @@ namespace CatchMe.Helpers
         {
             return ConfigurationManager.AppSettings["ApplicationName"];
         }
+
+
+        public static bool IsProd()
+        {
+            return Convert.ToBoolean(ConfigurationManager.AppSettings["IsProd"]);
+        }
+
 
 
         #region "connection strings"
