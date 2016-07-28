@@ -797,6 +797,15 @@ namespace CatchMe.Controllers
             db.Entry(task).State = EntityState.Modified;
             db.SaveChanges();
 
+
+            /* log */
+            log log = new log { logtime = DateTime.Now, operation = "DELETE", task_id = id, user_id = UserSession.Current.UserId , description = string.Format(" Task deleted by user {0}", UserSession.Current.Username ) };
+            db.logs.Add(log);
+            db.SaveChanges();
+
+
+
+
             return RedirectToAction("TaskList");
         }
 
