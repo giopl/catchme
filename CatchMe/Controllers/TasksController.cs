@@ -673,10 +673,21 @@ namespace CatchMe.Controllers
 
             ViewBag.assigned_to = new SelectList(users, "user_id", "firstname", task.assigned_to);
 
-            ViewBag.status = new SelectList(getStatuses(task.status.Value), "value", "name", task.status );
+            var statuslist = getStatuses(task.status.Value);
+            
+            if(task.user1.user_id != UserSession.Current.UserId) 
+            {
+                                
+                statuslist.Remove(new OptionItem { name = "Closed", value = 9 });
+            }
+                
+
+            ViewBag.status = new SelectList(statuslist, "value", "name", task.status );
             
             
             
+
+
             ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name", task.test_status);
             ViewBag.complexity = new SelectList(getComplexities(), "value", "name", task.complexity);
             ViewBag.type = new SelectList(getTypes(), "value", "name", task.type);

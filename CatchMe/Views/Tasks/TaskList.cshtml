@@ -8,7 +8,9 @@
     var countopen = Model.Where(x => x.status != 9).Count();
     var countme = Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9).Count();
     var countclosed = Model.Where(x => x.status == 9).Count();
-    var countopenbyme = Model.Where(x => x.created_by == session.Current.UserId).Count();
+    var countopenbyme = Model.Where(x => x.created_by == session.Current.UserId && x.status != 9).Count();
+    
+    
     
 }
 
@@ -67,13 +69,13 @@
                             </td>
 
                         <th width="20%">
-                            Assigned To
+                            Assigned
                             </th>
                         <th width="10%">
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
                         <th width="14%">
-                            @Html.DisplayNameFor(model => model.due_date)
+                            Due On
                         </th>
 
                         <th width="1%"></th>
@@ -138,17 +140,17 @@
                         <td></td>
 
                         <td width="45%">
-                            Desc
+                            Title
                         </td>
 
                         <th width="20%">
-                            Assigned To
+                            Assigned
                         </th>
                         <th width="10%">
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
                         <th width="14%">
-                            @Html.DisplayNameFor(model => model.due_date)
+                          Due on
                         </th>
 
                         <th width="1%"></th>
@@ -211,17 +213,15 @@
                         <td></td>
 
                         <td width="45%">
-                            Desc
+                            Title
                         </td>
-
+                        <th>Opened</th>
                         <th width="20%">
-                            Assigned To
+                            Assigned
                         </th>
-                        <th width="10%">
-                            @Html.DisplayNameFor(model => model.priority)
-                        </th>
+                        
                         <th width="14%">
-                            @Html.DisplayNameFor(model => model.due_date)
+                            Due On
                         </th>
 
                         <th width="1%"></th>
@@ -246,13 +246,12 @@
                                 </div>
 
                             </td>
+                            <td>@item.user1.firstname</td>
                             <td>
                                 @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
                                 @assignee
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PriorityDesc)
-                            </td>
+                            
                             <td>
                                 @Html.DisplayFor(modelItem => item.due_date)
                             </td>
@@ -287,17 +286,17 @@
                         <td></td>
 
                         <td width="45%">
-                            Desc
+                            Title
                         </td>
 
                         <th width="20%">
-                            Assigned To
+                            Assigned
                         </th>
                         <th width="10%">
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
                         <th width="14%">
-                            @Html.DisplayNameFor(model => model.due_date)
+                            Due On
                         </th>
 
                         <th width="1%"></th>
@@ -306,7 +305,7 @@
                 </thead>
 
                 <tbody>
-                    @foreach (var item in Model.Where(x => x.created_by == session.Current.UserId))
+                    @foreach (var item in Model.Where(x => x.created_by == session.Current.UserId && x.status != 9))
                     {
                         <tr>
                             <td>

@@ -17,8 +17,14 @@ namespace CatchMe.Models
         [DisplayName("Task Id")]
         public int task_id { get; set; }
 
+        /* user */
         [DisplayName("Assigned To")]
         public int assigned_to { get; set; }
+
+        /* user1 */
+        [DisplayName("Created By")]
+        public Nullable<int> created_by { get; set; }
+
 
         [DisplayName("Projet")]
         public int project_id { get; set; }
