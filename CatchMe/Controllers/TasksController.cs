@@ -11,6 +11,8 @@ using CatchMe.Helpers;
 using System.Net.Mail;
 using System.Text;
 using System.Data.Entity.Validation;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 
 namespace CatchMe.Controllers
 {
@@ -788,26 +790,74 @@ namespace CatchMe.Controllers
         public ActionResult DeleteTaskConfirmed(int id)
         {
 
+            try
+            {
+                task task = db.tasks.Find(id);
+
+
+                //state 1 = deleted, 2 = archived, 0 = active
+                task.state = 1;
+                db.Entry(task).State = EntityState.Modified;
+                db.SaveChanges();
+
+
+                log log = new log(AppEnums.LogOperationEnum.DELETE, AppEnums.LogTypeEnum.TASK, string.Format(" Task deleted by user {0}", UserSession.Current.Username), id);
+                CreateLog(log);
+
+            }
+            catch (Exception ex)
+            {
+
+                HandleException(ex);
+            }
             
-            task task = db.tasks.Find(id);
-
-
-            //state 1 = deleted, 2 = archived, 0 = active
-            task.state = 1;
-            db.Entry(task).State = EntityState.Modified;
-            db.SaveChanges();
-
-
-            /* log */
-            log log = new log { logtime = DateTime.Now, operation = "DELETE", task_id = id, user_id = UserSession.Current.UserId , description = string.Format(" Task deleted by user {0}", UserSession.Current.Username ) };
-            db.logs.Add(log);
-            db.SaveChanges();
-
 
 
 
             return RedirectToAction("TaskList");
         }
+
+        public virtual void HandleException(Exception exception)
+        {
+            DbUpdateConcurrencyException concurrencyEx = exception as DbUpdateConcurrencyException;
+            if (concurrencyEx != null)
+            {
+                // A custom exception of yours for concurrency issues
+                throw new DBConcurrencyException();
+            }
+
+            DbUpdateException dbUpdateEx = exception as DbUpdateException;
+            if (dbUpdateEx != null)
+            {
+                if (dbUpdateEx != null
+                        && dbUpdateEx.InnerException != null
+                        && dbUpdateEx.InnerException.InnerException != null)
+                {
+                    SqlException sqlException = dbUpdateEx.InnerException.InnerException as SqlException;
+                    if (sqlException != null)
+                    {
+                        switch (sqlException.Number)
+                        {
+                            case 2627:  // Unique constraint error
+                            case 547:   // Constraint check violation
+                            case 2601:  // Duplicated key row error
+                                // Constraint violation exception
+                                throw new DBConcurrencyException();   // A custom exception of yours for concurrency issues
+
+                            default:
+                                // A custom exception of yours for other DB issues
+                                throw new DbUpdateException(dbUpdateEx.Message, dbUpdateEx.InnerException);
+                        }
+                    }
+
+                    throw new DbUpdateException(dbUpdateEx.Message, dbUpdateEx.InnerException);
+                }
+            }
+
+            // If we're here then no exception has been thrown
+            // So add another piece of code below for other exceptions not yet handled...
+        }
+
 
 
         [HttpPost]

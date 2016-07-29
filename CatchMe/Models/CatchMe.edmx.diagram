@@ -26,12 +26,12 @@
         <AssociationConnector Association="CatchMeDBModel.FK_task_hist_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_task_id" />
-        <EntityTypeShape EntityType="CatchMeDBModel.log" Width="1.5" PointX="13.5" PointY="7.625" />
-        <AssociationConnector Association="CatchMeDBModel.FK_log_task_id" />
-        <AssociationConnector Association="CatchMeDBModel.FK_log_user_id" />
         <EntityTypeShape EntityType="CatchMeDBModel.attachment" Width="1.5" PointX="13.5" PointY="11.625" />
         <AssociationConnector Association="CatchMeDBModel.FK_attachment_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_attachment_user_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.log" Width="1.5" PointX="13.5" PointY="7.75" />
+        <AssociationConnector Association="CatchMeDBModel.FK_log_task_id" />
+        <AssociationConnector Association="CatchMeDBModel.FK_log_user_id" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -15,6 +15,7 @@ using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using CatchMe.Models.ViewModel;
+using CatchMe.Helpers;
 
 namespace CatchMe.Controllers
 {
@@ -45,6 +46,13 @@ namespace CatchMe.Controllers
 
                 db.Entry(task).State = EntityState.Modified;
                 db.SaveChanges();
+
+
+                log log = new log(AppEnums.LogOperationEnum.RECOVER, AppEnums.LogTypeEnum.TASK, string.Format(" Task recovered by user {0}", UserSession.Current.Username), id);
+                CreateLog(log);
+
+
+                
 
 
                 return RedirectToAction("ListDeleted");

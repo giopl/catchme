@@ -183,6 +183,7 @@
     </Compile>
     <Compile Include="Models\Meta\attachmentMeta.cs" />
     <Compile Include="Models\Meta\commentMeta.cs" />
+    <Compile Include="Models\Meta\logMeta.cs" />
     <Compile Include="Models\Meta\projectMeta.cs" />
     <Compile Include="Models\Meta\taskHistMeta.cs" />
     <Compile Include="Models\Meta\taskMeta.cs" />

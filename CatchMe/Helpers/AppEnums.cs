@@ -98,6 +98,24 @@ namespace CatchMe.Helpers
         }
 
 
+        public enum LogOperationEnum
+        {
+            CREATE,
+            DELETE,
+            UPDATE,
+            RECOVER
+        }
+
+        public enum LogTypeEnum
+        {
+            TASK,
+            USER,
+            COMMENT
+
+        }
+
+
+
         public static string DescEnum(string text, bool toTitleCase)
         {
 

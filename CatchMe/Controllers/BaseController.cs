@@ -22,11 +22,9 @@ namespace CatchMe.Controllers
         {
             if (ModelState.IsValid)
             {
-          //      db.logs.Add(log);
-            //    db.SaveChanges();
-                //return RedirectToAction("Index");
-            }
-            
+                db.logs.Add(log);
+                db.SaveChanges();                
+            }            
         }
 
 
