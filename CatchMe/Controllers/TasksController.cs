@@ -118,7 +118,11 @@ namespace CatchMe.Controllers
                     db.attachments.Add(attachment);
                     db.SaveChanges();
 
-                    
+                        log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.ATTACHMENT, string.Format(" Attachment {0} - added by user {1}", file.FileName, UserSession.Current.Username), taskid);
+                        CreateLog(log);
+
+
+
                     }
                     catch (DbEntityValidationException ex)
                     {
@@ -156,15 +160,20 @@ namespace CatchMe.Controllers
                 if(DeleteResourceFromDisk(id))
                 {
                     var file = db.attachments.Find(id);
+                    var filename = file.filename;
                     db.attachments.Remove(file);
 
                     db.SaveChanges();
 
 
+                    log log = new log(AppEnums.LogOperationEnum.DELETE, AppEnums.LogTypeEnum.ATTACHMENT, string.Format(" Attachment {0} - deleted by user {1}",  filename, UserSession.Current.Username), id);
+                    CreateLog(log);
+
+
                 }
                 return RedirectToAction("EditTask", new { id = taskid });
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 throw;
@@ -326,10 +335,7 @@ namespace CatchMe.Controllers
 
         private List<OptionItem> getStatuses(int val)
         {
-
-
-
-
+            
             List<OptionItem> statuses = new List<OptionItem>();
 
             if (val == 0)
@@ -391,6 +397,7 @@ namespace CatchMe.Controllers
 
             if (val == 7)
             {
+                statuses.Add(new OptionItem { name = "Action", value = 1 });
                 statuses.Add(new OptionItem { name = "Passed", value = 7 });
                 statuses.Add(new OptionItem { name = "Closed", value = 9 });
             }
@@ -424,22 +431,7 @@ namespace CatchMe.Controllers
         }
 
 
-        private List<OptionItem> getTestStatuses()        
-        {
-
-            List<OptionItem> teststatuses = new List<OptionItem>();
-            //teststatuses.Add(new OptionItem { name = "None", value = 0 });
-            teststatuses.Add(new OptionItem { name = "Not Tested", value = 1 });
-            teststatuses.Add(new OptionItem { name = "Ready to Test", value = 2 });
-            teststatuses.Add(new OptionItem { name = "Re-Test", value = 3 });
-            teststatuses.Add(new OptionItem { name = "Passed", value = 4 });
-            teststatuses.Add(new OptionItem { name = "Failed", value = 5 });
-            teststatuses.Add(new OptionItem { name = "Incomplete", value = 6 });
-            teststatuses.Add(new OptionItem { name = "Cannot Test", value = 7 });
-            return teststatuses;
-
-        }
-
+        
         private List<OptionItem> getComplexities()
         {
 
@@ -526,7 +518,7 @@ namespace CatchMe.Controllers
             
 
             //ViewBag.status = new SelectList(getStatuses(), "value", "name");
-            ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name");
+            //ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name");
             ViewBag.complexity = new SelectList(getComplexities(), "value", "name");
             ViewBag.type= new SelectList(getTypes(), "value", "name");
             ViewBag.severity = new SelectList(getSeverities(), "value", "name");
@@ -553,6 +545,10 @@ namespace CatchMe.Controllers
                     {
                         db.comments.Add(comment);
                         db.SaveChanges();
+
+                        log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.COMMENT, string.Format(" Comment {0}-{1}-Added by user {2}", comment.comment_id, comment.title, UserSession.Current.Username), comment.task_id);
+
+                        CreateLog(log);
 
                     }
                 }
@@ -600,30 +596,32 @@ namespace CatchMe.Controllers
 
 
 
+                    log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.TASK, string.Format(" Task created by user {0}", UserSession.Current.Username), task.task_id);
+                    CreateLog(log);
 
-                    taskHist hist = new taskHist
-                    {
 
-                        task_id = task.task_id,
+                    //taskHist hist = new taskHist
+                    //{
 
-                        project_id = task.project_id,
-                        status = "0" ,
-                        test_status = task.test_status.HasValue?  task.test_status.Value.ToString():"0" ,
-                        title = task.title,
-                        description = task.description,
-                        initiator = task.initiator ,
-                        complexity = task.complexity.HasValue? task.complexity.Value.ToString():"0" ,
-                        priority = task.priority.HasValue? task.priority.Value.ToString():"0" ,
-                        due_date = task.due_date.HasValue?task.due_date.Value.ToString("yyyy MM dd") : "",
-                        created_on = task.created_on,
-                        created_by = task.created_by,
-                        firstname = UserSession.Current.Firstname,
-                        fullname = UserSession.Current.Fullname,
-                        hist_status = 0
+                    //    task_id = task.task_id,
 
-                    };
-                    db.taskHists.Add(hist);
-                    db.SaveChanges();
+                    //    project_id = task.project_id,
+                    //    status = "0" ,
+                    //    title = task.title,
+                    //    description = task.description,
+                    //    initiator = task.initiator ,
+                    //    complexity = task.complexity.HasValue? task.complexity.Value.ToString():"0" ,
+                    //    priority = task.priority.HasValue? task.priority.Value.ToString():"0" ,
+                    //    due_date = task.due_date.HasValue?task.due_date.Value.ToString("yyyy MM dd") : "",
+                    //    created_on = task.created_on,
+                    //    created_by = task.created_by,
+                    //    firstname = UserSession.Current.Firstname,
+                    //    fullname = UserSession.Current.Fullname,
+                    //    hist_status = 0
+
+                    //};
+                    //db.taskHists.Add(hist);
+                    //db.SaveChanges();
 
 
 
@@ -685,12 +683,8 @@ namespace CatchMe.Controllers
                 
 
             ViewBag.status = new SelectList(statuslist, "value", "name", task.status );
-            
-            
-            
 
-
-            ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name", task.test_status);
+            
             ViewBag.complexity = new SelectList(getComplexities(), "value", "name", task.complexity);
             ViewBag.type = new SelectList(getTypes(), "value", "name", task.type);
             ViewBag.severity = new SelectList(getSeverities(), "value", "name", task.severity);
@@ -713,11 +707,7 @@ namespace CatchMe.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,type,title,description,initiator,complexity,priority,due_date,created_on,created_by,assigned_to")] task task)
         {
-                
-
             var oldtask = db.tasks.AsNoTracking().Where(x=>x.task_id == task.task_id).FirstOrDefault();
-
-
 
             if (ModelState.IsValid)
             {
@@ -727,39 +717,41 @@ namespace CatchMe.Controllers
                 db.Entry(task).State = EntityState.Modified;
                 db.SaveChanges();
 
-                taskHist hist = new taskHist
-                {
-                    
-                    task_id = task.task_id,
+                logChanges(oldtask, task);
 
-                    project_id = task.project_id,
-                    status = oldtask.status != task.status ? string.Concat(oldtask.status, ">", task.status) : task.status.Value.ToString(),
-                    test_status = oldtask.test_status != task.test_status ? string.Concat(oldtask.test_status,">",task.status) : null,
-                    title = string.Concat(oldtask.title,">",task.title),
-                    description = string.Concat(oldtask.description,">",task.description),
-                    initiator = oldtask.initiator != task.initiator? string.Concat(oldtask.initiator,">",task.initiator) : null,
-                    complexity = oldtask.complexity != task.complexity ? string.Concat(oldtask.complexity,">",task.complexity) : null,
-                    priority = oldtask.priority != task.priority ? string.Concat(oldtask.priority,">",task.priority) : null,
-                    due_date = oldtask.due_date != task.due_date ? 
-                        string.Concat((oldtask.due_date.HasValue?oldtask.due_date.Value.ToString("yyyy MM dd"):""),
-                                        ">",
-                        (task.due_date.HasValue?task.due_date.Value.ToString("yyyy MM dd"):""))
-                        : null,
-                    created_on = DateTime.Now,
-                    created_by = UserSession.Current.UserId,
-                    firstname = UserSession.Current.Firstname,
-                    fullname = UserSession.Current.Fullname,
-                    hist_status = 1
+                //taskHist hist = new taskHist
+                //{
                     
-                };
-                db.taskHists.Add(hist);
-                db.SaveChanges();
+                //    task_id = task.task_id,
+
+                //    project_id = task.project_id,
+                //    status = oldtask.status != task.status ? string.Concat(oldtask.status, ">", task.status) : task.status.Value.ToString(),
+                //    title = string.Concat(oldtask.title,">",task.title),
+                //    description = string.Concat(oldtask.description,">",task.description),
+                //    initiator = oldtask.initiator != task.initiator? string.Concat(oldtask.initiator,">",task.initiator) : null,
+                //    complexity = oldtask.complexity != task.complexity ? string.Concat(oldtask.complexity,">",task.complexity) : null,
+                //    priority = oldtask.priority != task.priority ? string.Concat(oldtask.priority,">",task.priority) : null,
+                //    due_date = oldtask.due_date != task.due_date ? 
+                //        string.Concat((oldtask.due_date.HasValue?oldtask.due_date.Value.ToString("yyyy MM dd"):""),
+                //                        ">",
+                //        (task.due_date.HasValue?task.due_date.Value.ToString("yyyy MM dd"):""))
+                //        : null,
+                //    created_on = DateTime.Now,
+                //    created_by = UserSession.Current.UserId,
+                //    firstname = UserSession.Current.Firstname,
+                //    fullname = UserSession.Current.Fullname,
+                //    hist_status = 1
+                    
+                //};
+                //db.taskHists.Add(hist);
+                //db.SaveChanges();
 
                 return RedirectToAction("EditTask", new { id = task.task_id });
             }
+
             ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);
             ViewBag.status = new SelectList(getStatuses(task.status.Value), "value", "name", task.status);
-            ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name", task.test_status);
+            //ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name", task.test_status);
             ViewBag.complexity = new SelectList(getComplexities(), "value", "name", task.complexity);
             ViewBag.type = new SelectList(getTypes(), "value", "name", task.type);
             ViewBag.severity = new SelectList(getSeverities(), "value", "name", task.severity);
@@ -768,6 +760,108 @@ namespace CatchMe.Controllers
 
             return View(task);
         }
+
+        private void logChanges(task oldtask, task newtask)
+        {
+            try 
+	        {
+                //status 
+                if (oldtask.status != newtask.status)
+                {
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.STATUS, string.Format(" {0} changed by user {1}", Utils.EnumToString(AppEnums.LogTypeEnum.STATUS.ToString(),true) , UserSession.Current.Username), oldtask.StatusDesc, newtask.StatusDesc, newtask.task_id);
+                    CreateLog(log);
+                }
+
+                //owner
+
+                if (oldtask.assigned_to!= newtask.assigned_to)
+                {
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.ASSIGNEE,
+                        string.Format(" {0} changed by user {1}", Utils.EnumToString(AppEnums.LogTypeEnum.ASSIGNEE.ToString(), true),
+                        UserSession.Current.Username), oldtask.assigned_to.ToString(), newtask.assigned_to.ToString(), newtask.task_id);
+                    CreateLog(log);
+                }
+
+
+
+                //title
+                if (!oldtask.title.Equals(newtask.title))
+                {
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.TITLE,
+                        string.Format(" {0} changed by user {1}", Utils.EnumToString(AppEnums.LogTypeEnum.TITLE.ToString(), true),
+                        UserSession.Current.Username), oldtask.title, newtask.title, newtask.task_id);
+                    CreateLog(log);
+                }
+
+                //type
+                if (oldtask.type!=newtask.type)
+                {
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.TYPE,
+                        string.Format(" {0} changed by user {1}", Utils.EnumToString(AppEnums.LogTypeEnum.TYPE.ToString(), true),
+                        UserSession.Current.Username), oldtask.TypeDesc, newtask.TypeDesc, newtask.task_id);
+                    CreateLog(log);
+                }
+
+                //severity
+                if (oldtask.severity != newtask.severity)
+                {
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.SEVERITY,
+                        string.Format(" {0} changed by user {1}", Utils.EnumToString(AppEnums.LogTypeEnum.SEVERITY.ToString(), true),
+                        UserSession.Current.Username), oldtask.SeverityDesc, newtask.SeverityDesc, newtask.task_id);
+                    CreateLog(log);
+                }
+                //priority
+
+                if (oldtask.priority != newtask.priority)
+                {
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.PRIORITY,
+                        string.Format(" {0} changed by user {1}", Utils.EnumToString(AppEnums.LogTypeEnum.PRIORITY.ToString(), true),
+                        UserSession.Current.Username), oldtask.PriorityDesc, newtask.PriorityDesc, newtask.task_id);
+                    CreateLog(log);
+                }
+
+                //complexity
+
+                if (oldtask.complexity != newtask.complexity)
+                {
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.COMPLEXITY,
+                        string.Format(" {0} changed by user {1}", Utils.EnumToString(AppEnums.LogTypeEnum.COMPLEXITY.ToString(), true),
+                        UserSession.Current.Username), oldtask.ComplexityDesc, newtask.ComplexityDesc, newtask.task_id);
+                    CreateLog(log);
+                }
+
+                //due date
+                if (oldtask.due_date!= newtask.due_date)
+                {
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.DATE,
+                        string.Format(" {0} changed by user {1}", Utils.EnumToString(AppEnums.LogTypeEnum.DATE.ToString(), true),
+                        UserSession.Current.Username), oldtask.due_date.HasValue? oldtask.due_date.Value.ToString("dd-MM-yyyy"): string.Empty,
+                        newtask.due_date.HasValue ? newtask.due_date.Value.ToString("dd-MM-yyyy") : string.Empty
+                        , newtask.task_id);
+                    CreateLog(log);
+                }
+
+                //owner
+
+                if (oldtask.owner != newtask.owner)
+                {
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.OWNER,
+                        string.Format(" {0} changed by user {1}", Utils.EnumToString(AppEnums.LogTypeEnum.OWNER.ToString(), true),
+                        UserSession.Current.Username), oldtask.owner.ToString(), newtask.owner.ToString(), newtask.task_id);
+                    CreateLog(log);
+                }
+
+
+
+            }
+            catch (Exception)
+	        {
+
+		        throw;
+	        }
+
+            }
+
 
         // GET: Tasks/Delete/5
         public ActionResult DeleteTask(int? id)
@@ -984,12 +1078,15 @@ namespace CatchMe.Controllers
                 {
                     db.Entry(comment).State = EntityState.Modified;
                     db.SaveChanges();
+
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.COMMENT, string.Format(" Comment {0}-{1}-Edited by user {2}",comment.comment_id, comment.title, UserSession.Current.Username), comment.task_id);
+                    CreateLog(log);
                 }
 
 
                 return RedirectToAction("EditTask", new { id = comment.task_id });
                 }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 throw;
@@ -1004,6 +1101,9 @@ namespace CatchMe.Controllers
                 comment comment = db.comments.Find(id);
                 db.comments.Remove(comment);
                 db.SaveChanges();
+
+               log log = new log(AppEnums.LogOperationEnum.DELETE, AppEnums.LogTypeEnum.COMMENT, string.Concat(comment.comment_id, "-", comment.description), comment.task_id);
+                CreateLog(log);
                 return RedirectToAction("EditTask", new { id=taskId });
 
             }

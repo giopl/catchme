@@ -72,6 +72,8 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="type" Type="nvarchar" MaxLength="60" />
           <Property Name="logtime" Type="datetime" />
           <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="old_val" Type="nvarchar" MaxLength="1000" />
+          <Property Name="new_val" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="notification">
           <Key>
@@ -108,7 +110,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="task_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="project_id" Type="int" Nullable="false" />
           <Property Name="status" Type="int" />
-          <Property Name="test_status" Type="int" />
           <Property Name="title" Type="nvarchar" MaxLength="500" />
           <Property Name="description" Type="nvarchar(max)" />
           <Property Name="initiator" Type="nvarchar" MaxLength="100" />
@@ -122,6 +123,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="assigned_to" Type="int" />
           <Property Name="updated_on" Type="datetime" />
           <Property Name="state" Type="int" Nullable="false" />
+          <Property Name="owner" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="task_hist">
           <Key>
@@ -131,7 +133,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="task_id" Type="int" Nullable="false" />
           <Property Name="project_id" Type="int" />
           <Property Name="status" Type="nvarchar" MaxLength="10" />
-          <Property Name="test_status" Type="nvarchar" MaxLength="10" />
           <Property Name="title" Type="nvarchar" MaxLength="500" />
           <Property Name="description" Type="nvarchar(max)" />
           <Property Name="initiator" Type="nvarchar" MaxLength="100" />
@@ -540,7 +541,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
             <End Role="project" EntitySet="projects" />
             <End Role="user" EntitySet="users" />
           </AssociationSet>
-          <EntitySet Name="taskHists" EntityType="CatchMeDBModel.taskHist" />
           <EntitySet Name="notifications" EntityType="CatchMeDBModel.notification" />
           <EntitySet Name="comments" EntityType="CatchMeDBModel.comment" />
           <AssociationSet Name="FK_comment_user_id" Association="CatchMeDBModel.FK_comment_user_id">
@@ -552,7 +552,17 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Parameter Name="project_id" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="viewFigures" EntityType="CatchMeDBModel.viewFigures" />
+          <EntitySet Name="attachments" EntityType="CatchMeDBModel.attachment" />
+          <AssociationSet Name="FK_attachment_user_id" Association="CatchMeDBModel.FK_attachment_user_id">
+            <End Role="user" EntitySet="users" />
+            <End Role="attachment" EntitySet="attachments" />
+          </AssociationSet>
           <EntitySet Name="tasks" EntityType="CatchMeDBModel.task" />
+          <EntitySet Name="taskHists" EntityType="CatchMeDBModel.taskHist" />
+          <AssociationSet Name="FK_attachment_task_id" Association="CatchMeDBModel.FK_attachment_task_id">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="attachment" EntitySet="attachments" />
+          </AssociationSet>
           <AssociationSet Name="FK_comment_task_id" Association="CatchMeDBModel.FK_comment_task_id">
             <End Role="task" EntitySet="tasks" />
             <End Role="comment" EntitySet="comments" />
@@ -571,7 +581,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           </AssociationSet>
           <AssociationSet Name="FK_task_hist_task_id" Association="CatchMeDBModel.FK_task_hist_task_id">
             <End Role="task" EntitySet="tasks" />
-            <End Role="taskHist" EntitySet="taskHists" />
+            <End Role="task_hist" EntitySet="taskHists" />
           </AssociationSet>
           <AssociationSet Name="FK_task_user_id" Association="CatchMeDBModel.FK_task_user_id">
             <End Role="user" EntitySet="users" />
@@ -580,15 +590,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <AssociationSet Name="FK_task_user_task_id" Association="CatchMeDBModel.FK_task_user_task_id">
             <End Role="task" EntitySet="tasks" />
             <End Role="taskUser" EntitySet="taskUsers" />
-          </AssociationSet>
-          <EntitySet Name="attachments" EntityType="CatchMeDBModel.attachment" />
-          <AssociationSet Name="FK_attachment_task_id" Association="CatchMeDBModel.FK_attachment_task_id">
-            <End Role="task" EntitySet="tasks" />
-            <End Role="attachment" EntitySet="attachments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_attachment_user_id" Association="CatchMeDBModel.FK_attachment_user_id">
-            <End Role="user" EntitySet="users" />
-            <End Role="attachment" EntitySet="attachments" />
           </AssociationSet>
           <EntitySet Name="logs" EntityType="CatchMeDBModel.log" />
           <AssociationSet Name="FK_log_task_id" Association="CatchMeDBModel.FK_log_task_id">
@@ -668,10 +669,10 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <NavigationProperty Name="task_user" Relationship="CatchMeDBModel.FK_task_user_user_id" FromRole="user" ToRole="taskUser" />
           <NavigationProperty Name="projects" Relationship="CatchMeDBModel.project_user" FromRole="user" ToRole="project" />
           <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_user_id" FromRole="user" ToRole="comment" />
-          <NavigationProperty Name="tasks" Relationship="CatchMeDBModel.FK_task_assigned_user_id" FromRole="user" ToRole="task" />
-          <NavigationProperty Name="tasks1" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="user" ToRole="task" />
           <Property Name="nickname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="user" ToRole="attachment" />
+          <NavigationProperty Name="tasks" Relationship="CatchMeDBModel.FK_task_assigned_user_id" FromRole="user" ToRole="task" />
+          <NavigationProperty Name="tasks1" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_user_id" FromRole="user" ToRole="log" />
         </EntityType>
         <Association Name="FK_task_user_user_id">
@@ -690,30 +691,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <End Type="CatchMeDBModel.project" Role="project" Multiplicity="*" />
           <End Type="CatchMeDBModel.user" Role="user" Multiplicity="*" />
         </Association>
-        <EntityType Name="taskHist">
-          <Key>
-            <PropertyRef Name="task_hist_id" />
-          </Key>
-          <Property Name="task_hist_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="task_id" Type="Int32" Nullable="false" />
-          <Property Name="project_id" Type="Int32" />
-          <Property Name="status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="test_status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="initiator" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="complexity" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="due_date" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="severity" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="priority" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="created_by" Type="Int32" />
-          <Property Name="created_on" Type="DateTime" Precision="3" />
-          <Property Name="hist_status" Type="Int32" />
-          <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="fullname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_task_hist_task_id" FromRole="taskHist" ToRole="task" />
-        </EntityType>
         <EntityType Name="notification">
           <Key>
             <PropertyRef Name="notification_id" />
@@ -795,6 +772,34 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Property Name="closed_ontime" Type="Int32" />
           <Property Name="closed_late" Type="Int32" />
         </EntityType>
+        <EntityType Name="attachment">
+          <Key>
+            <PropertyRef Name="attachment_id" />
+          </Key>
+          <Property Name="attachment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="filename" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="mimetype" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="content_length" Type="Int32" />
+          <Property Name="created_on" Type="DateTime" Precision="3" />
+          <Property Name="is_disabled" Type="Boolean" Nullable="false" />
+          <Property Name="filepath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="attachment" ToRole="user" />
+          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="attachment" ToRole="task" />
+        </EntityType>
+        <Association Name="FK_attachment_user_id">
+          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="task">
           <Key>
             <PropertyRef Name="task_id" />
@@ -802,7 +807,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Property Name="task_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="project_id" Type="Int32" Nullable="false" />
           <Property Name="status" Type="Int32" />
-          <Property Name="test_status" Type="Int32" />
           <Property Name="title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="initiator" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -816,16 +820,52 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Property Name="assigned_to" Type="Int32" />
           <Property Name="updated_on" Type="DateTime" Precision="3" />
           <Property Name="state" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="task" ToRole="attachment" />
           <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="task" ToRole="comment" />
           <NavigationProperty Name="notifications" Relationship="CatchMeDBModel.FK_notification_task_id" FromRole="task" ToRole="notification" />
           <NavigationProperty Name="project" Relationship="CatchMeDBModel.FK_task_project_id" FromRole="task" ToRole="project" />
           <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_task_assigned_user_id" FromRole="task" ToRole="user" />
-          <NavigationProperty Name="task_hist" Relationship="CatchMeDBModel.FK_task_hist_task_id" FromRole="task" ToRole="taskHist" />
+          <NavigationProperty Name="task_hist" Relationship="CatchMeDBModel.FK_task_hist_task_id" FromRole="task" ToRole="task_hist" />
           <NavigationProperty Name="user1" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="task" ToRole="user" />
           <NavigationProperty Name="task_user" Relationship="CatchMeDBModel.FK_task_user_task_id" FromRole="task" ToRole="taskUser" />
-          <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="task" ToRole="attachment" />
+          <Property Name="owner" Type="Int32" Nullable="false" />
           <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_task_id" FromRole="task" ToRole="log" />
         </EntityType>
+        <EntityType Name="taskHist">
+          <Key>
+            <PropertyRef Name="task_hist_id" />
+          </Key>
+          <Property Name="task_hist_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="project_id" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="initiator" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="complexity" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="due_date" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="severity" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="priority" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="created_by" Type="Int32" />
+          <Property Name="created_on" Type="DateTime" Precision="3" />
+          <Property Name="hist_status" Type="Int32" />
+          <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fullname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_task_hist_task_id" FromRole="task_hist" ToRole="task" />
+        </EntityType>
+        <Association Name="FK_attachment_task_id">
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
+          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_comment_task_id">
           <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
           <End Type="CatchMeDBModel.comment" Role="comment" Multiplicity="*" />
@@ -876,12 +916,12 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
         </Association>
         <Association Name="FK_task_hist_task_id">
           <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
-          <End Type="CatchMeDBModel.taskHist" Role="taskHist" Multiplicity="*" />
+          <End Type="CatchMeDBModel.taskHist" Role="task_hist" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="task">
               <PropertyRef Name="task_id" />
             </Principal>
-            <Dependent Role="taskHist">
+            <Dependent Role="task_hist">
               <PropertyRef Name="task_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -910,46 +950,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="attachment">
-          <Key>
-            <PropertyRef Name="attachment_id" />
-          </Key>
-          <Property Name="attachment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="task_id" Type="Int32" Nullable="false" />
-          <Property Name="user_id" Type="Int32" Nullable="false" />
-          <Property Name="filename" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="mimetype" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="content_length" Type="Int32" />
-          <Property Name="created_on" Type="DateTime" Precision="3" />
-          <Property Name="is_disabled" Type="Boolean" Nullable="false" />
-          <Property Name="filepath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="attachment" ToRole="task" />
-          <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="attachment" ToRole="user" />
-        </EntityType>
-        <Association Name="FK_attachment_task_id">
-          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
-          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="task">
-              <PropertyRef Name="task_id" />
-            </Principal>
-            <Dependent Role="attachment">
-              <PropertyRef Name="task_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_attachment_user_id">
-          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
-          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="attachment">
-              <PropertyRef Name="user_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="log">
           <Key>
             <PropertyRef Name="log_id" />
@@ -961,6 +961,8 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Property Name="type" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
           <Property Name="logtime" Type="DateTime" Precision="3" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="old_val" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="new_val" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_log_task_id" FromRole="log" ToRole="task" />
           <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_log_user_id" FromRole="log" ToRole="user" />
         </EntityType>
@@ -1068,30 +1070,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
               <ScalarProperty Name="project_id" ColumnName="project_id" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="taskHists">
-            <EntityTypeMapping TypeName="CatchMeDBModel.taskHist">
-              <MappingFragment StoreEntitySet="task_hist">
-                <ScalarProperty Name="fullname" ColumnName="fullname" />
-                <ScalarProperty Name="firstname" ColumnName="firstname" />
-                <ScalarProperty Name="hist_status" ColumnName="hist_status" />
-                <ScalarProperty Name="created_on" ColumnName="created_on" />
-                <ScalarProperty Name="created_by" ColumnName="created_by" />
-                <ScalarProperty Name="priority" ColumnName="priority" />
-                <ScalarProperty Name="severity" ColumnName="severity" />
-                <ScalarProperty Name="type" ColumnName="type" />
-                <ScalarProperty Name="due_date" ColumnName="due_date" />
-                <ScalarProperty Name="complexity" ColumnName="complexity" />
-                <ScalarProperty Name="initiator" ColumnName="initiator" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="test_status" ColumnName="test_status" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="project_id" ColumnName="project_id" />
-                <ScalarProperty Name="task_id" ColumnName="task_id" />
-                <ScalarProperty Name="task_hist_id" ColumnName="task_hist_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="notifications">
             <EntityTypeMapping TypeName="CatchMeDBModel.notification">
               <MappingFragment StoreEntitySet="notification">
@@ -1164,29 +1142,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tasks">
-            <EntityTypeMapping TypeName="CatchMeDBModel.task">
-              <MappingFragment StoreEntitySet="task">
-                <ScalarProperty Name="state" ColumnName="state" />
-                <ScalarProperty Name="updated_on" ColumnName="updated_on" />
-                <ScalarProperty Name="assigned_to" ColumnName="assigned_to" />
-                <ScalarProperty Name="created_on" ColumnName="created_on" />
-                <ScalarProperty Name="created_by" ColumnName="created_by" />
-                <ScalarProperty Name="priority" ColumnName="priority" />
-                <ScalarProperty Name="severity" ColumnName="severity" />
-                <ScalarProperty Name="type" ColumnName="type" />
-                <ScalarProperty Name="due_date" ColumnName="due_date" />
-                <ScalarProperty Name="complexity" ColumnName="complexity" />
-                <ScalarProperty Name="initiator" ColumnName="initiator" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="test_status" ColumnName="test_status" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="project_id" ColumnName="project_id" />
-                <ScalarProperty Name="task_id" ColumnName="task_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="attachments">
             <EntityTypeMapping TypeName="CatchMeDBModel.attachment">
               <MappingFragment StoreEntitySet="attachment">
@@ -1202,9 +1157,57 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tasks">
+            <EntityTypeMapping TypeName="CatchMeDBModel.task">
+              <MappingFragment StoreEntitySet="task">
+                <ScalarProperty Name="owner" ColumnName="owner" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="updated_on" ColumnName="updated_on" />
+                <ScalarProperty Name="assigned_to" ColumnName="assigned_to" />
+                <ScalarProperty Name="created_on" ColumnName="created_on" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+                <ScalarProperty Name="severity" ColumnName="severity" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="due_date" ColumnName="due_date" />
+                <ScalarProperty Name="complexity" ColumnName="complexity" />
+                <ScalarProperty Name="initiator" ColumnName="initiator" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="taskHists">
+            <EntityTypeMapping TypeName="CatchMeDBModel.taskHist">
+              <MappingFragment StoreEntitySet="task_hist">
+                <ScalarProperty Name="fullname" ColumnName="fullname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="hist_status" ColumnName="hist_status" />
+                <ScalarProperty Name="created_on" ColumnName="created_on" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+                <ScalarProperty Name="severity" ColumnName="severity" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="due_date" ColumnName="due_date" />
+                <ScalarProperty Name="complexity" ColumnName="complexity" />
+                <ScalarProperty Name="initiator" ColumnName="initiator" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="task_hist_id" ColumnName="task_hist_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="logs">
             <EntityTypeMapping TypeName="CatchMeDBModel.log">
               <MappingFragment StoreEntitySet="log">
+                <ScalarProperty Name="new_val" ColumnName="new_val" />
+                <ScalarProperty Name="old_val" ColumnName="old_val" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="logtime" ColumnName="logtime" />
                 <ScalarProperty Name="type" ColumnName="type" />

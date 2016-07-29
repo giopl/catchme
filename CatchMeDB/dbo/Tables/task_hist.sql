@@ -3,7 +3,6 @@
     [task_id]      INT            NOT NULL,
     [project_id]   INT            NULL,
     [status]       NVARCHAR (10)  NULL,
-    [test_status]  NVARCHAR (10)  NULL,
     [title]        NVARCHAR (500) NULL,
     [description]  NVARCHAR (MAX) NULL,
     [initiator]    NVARCHAR (100) NULL,
@@ -20,6 +19,8 @@
     PRIMARY KEY CLUSTERED ([task_hist_id] ASC),
     CONSTRAINT [FK_task_hist_task_id] FOREIGN KEY ([task_id]) REFERENCES [dbo].[task] ([task_id])
 );
+
+
 
 
 

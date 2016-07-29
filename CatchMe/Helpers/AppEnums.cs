@@ -110,7 +110,17 @@ namespace CatchMe.Helpers
         {
             TASK,
             USER,
-            COMMENT
+            COMMENT,
+            ATTACHMENT,
+            STATUS,
+            TITLE,
+            TYPE,
+            SEVERITY,
+            PRIORITY,
+            COMPLEXITY,
+            DATE,
+            OWNER,
+            ASSIGNEE
 
         }
 

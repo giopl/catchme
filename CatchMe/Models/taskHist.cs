@@ -18,7 +18,6 @@ namespace CatchMe.Models
         public int task_id { get; set; }
         public Nullable<int> project_id { get; set; }
         public string status { get; set; }
-        public string test_status { get; set; }
         public string title { get; set; }
         public string description { get; set; }
         public string initiator { get; set; }

@@ -24,7 +24,7 @@ namespace CatchMe.Models
         public bool is_disabled { get; set; }
         public string filepath { get; set; }
     
-        public virtual task task { get; set; }
         public virtual user user { get; set; }
+        public virtual task task { get; set; }
     }
 }

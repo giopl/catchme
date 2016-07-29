@@ -32,8 +32,8 @@ namespace CatchMe.Models
         [DisplayName("Status")]
         public Nullable<int> status { get; set; }
 
-        [DisplayName("Testing")]
-        public Nullable<int> test_status { get; set; }
+        //[DisplayName("Testing")]
+        //public Nullable<int> test_status { get; set; }
 
         [DisplayName("Title")]
         public string title { get; set; }
@@ -234,25 +234,25 @@ namespace CatchMe.Models
         }
 
 
-        public string TestStatusDesc
-        {
-            get
-            {
+        //public string TestStatusDesc
+        //{
+        //    get
+        //    {
 
-                if (test_status.HasValue)
-                {
+        //        if (test_status.HasValue)
+        //        {
 
-                return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.TestStatusEnum), test_status).ToString(), false);
-                }
-                else
-                {
-                    return string.Empty;
-                }
+        //        return AppEnums.DescEnum(Enum.ToObject(typeof(AppEnums.TestStatusEnum), test_status).ToString(), false);
+        //        }
+        //        else
+        //        {
+        //            return string.Empty;
+        //        }
 
 
-            }
+        //    }
 
-        }
+        //}
 
 
         public string PriorityDesc

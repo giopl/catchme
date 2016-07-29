@@ -12,13 +12,16 @@
         <EntityTypeShape EntityType="CatchMeDBModel.user" Width="1.5" PointX="3" PointY="10.75" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_user_id" />
         <AssociationConnector Association="CatchMeDBModel.project_user" />
-        <EntityTypeShape EntityType="CatchMeDBModel.taskHist" Width="1.5" PointX="10.5" PointY="3" />
         <EntityTypeShape EntityType="CatchMeDBModel.notification" Width="1.5" PointX="5.25" PointY="1" />
         <EntityTypeShape EntityType="CatchMeDBModel.comment" Width="1.5" PointX="10.5" PointY="8.5" />
         <AssociationConnector Association="CatchMeDBModel.FK_comment_user_id" />
         <EntityTypeShape EntityType="CatchMeDBModel.viewTasks" Width="1.5" PointX="7.375" PointY="9.75" />
         <EntityTypeShape EntityType="CatchMeDBModel.viewFigures" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="CatchMeDBModel.task" Width="1.5" PointX="8.25" PointY="2.875" />
+        <EntityTypeShape EntityType="CatchMeDBModel.attachment" Width="1.5" PointX="13.5" PointY="11.625" />
+        <AssociationConnector Association="CatchMeDBModel.FK_attachment_user_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.task" Width="1.5" PointX="8.25" PointY="3.125" />
+        <EntityTypeShape EntityType="CatchMeDBModel.taskHist" Width="1.5" PointX="10.5" PointY="2.75" />
+        <AssociationConnector Association="CatchMeDBModel.FK_attachment_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_comment_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_notification_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_project_id" />
@@ -26,9 +29,6 @@
         <AssociationConnector Association="CatchMeDBModel.FK_task_hist_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_task_id" />
-        <EntityTypeShape EntityType="CatchMeDBModel.attachment" Width="1.5" PointX="13.5" PointY="11.625" />
-        <AssociationConnector Association="CatchMeDBModel.FK_attachment_task_id" />
-        <AssociationConnector Association="CatchMeDBModel.FK_attachment_user_id" />
         <EntityTypeShape EntityType="CatchMeDBModel.log" Width="1.5" PointX="13.5" PointY="7.75" />
         <AssociationConnector Association="CatchMeDBModel.FK_log_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_log_user_id" />

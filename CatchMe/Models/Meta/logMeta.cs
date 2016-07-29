@@ -44,6 +44,19 @@ namespace CatchMe.Models
         
         }
 
+        public log(AppEnums.LogOperationEnum operation, AppEnums.LogTypeEnum type, string description, string oldval, string newval , int task_id = 0)
+        {
+
+            this.user_id = UserSession.Current.UserId;
+            this.task_id = task_id;
+            this.operation = operation.ToString();
+            this.type = type.ToString();
+            this.description = description;
+            this.logtime = DateTime.Now;
+            this.old_val = oldval;
+                this.new_val = newval;
+        }
+
     }
 
 }

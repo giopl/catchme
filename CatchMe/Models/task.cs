@@ -16,18 +16,17 @@ namespace CatchMe.Models
     {
         public task()
         {
+            this.attachments = new HashSet<attachment>();
             this.comments = new HashSet<comment>();
             this.notifications = new HashSet<notification>();
             this.task_hist = new HashSet<taskHist>();
             this.task_user = new HashSet<taskUser>();
-            this.attachments = new HashSet<attachment>();
             this.logs = new HashSet<log>();
         }
     
         public int task_id { get; set; }
         public int project_id { get; set; }
         public Nullable<int> status { get; set; }
-        public Nullable<int> test_status { get; set; }
         public string title { get; set; }
         public string description { get; set; }
         public string initiator { get; set; }
@@ -41,7 +40,9 @@ namespace CatchMe.Models
         public Nullable<int> assigned_to { get; set; }
         public Nullable<System.DateTime> updated_on { get; set; }
         public int state { get; set; }
+        public int owner { get; set; }
     
+        public virtual ICollection<attachment> attachments { get; set; }
         public virtual ICollection<comment> comments { get; set; }
         public virtual ICollection<notification> notifications { get; set; }
         public virtual project project { get; set; }
@@ -49,7 +50,6 @@ namespace CatchMe.Models
         public virtual ICollection<taskHist> task_hist { get; set; }
         public virtual user user1 { get; set; }
         public virtual ICollection<taskUser> task_user { get; set; }
-        public virtual ICollection<attachment> attachments { get; set; }
         public virtual ICollection<log> logs { get; set; }
     }
 }

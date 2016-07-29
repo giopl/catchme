@@ -15,7 +15,6 @@ namespace CatchMe.Models
         public int task_id { get; set; }
         public String project_id { get; set; }
         public String status { get; set; }
-        public String test_status { get; set; }
         public string title { get; set; }
 
 
@@ -185,25 +184,25 @@ namespace CatchMe.Models
         }
 
 
-        public string TestStatusDesc
-        {
-            get
-            {
+        //public string TestStatusDesc
+        //{
+        //    get
+        //    {
 
-                if (!string.IsNullOrWhiteSpace(test_status))
-                {
+        //        if (!string.IsNullOrWhiteSpace(test_status))
+        //        {
                     
-                    return GetDesc(test_status, typeof(AppEnums.TestStatusEnum));
-                }
-                else
-                {
-                    return string.Empty;
-                }
+        //            return GetDesc(test_status, typeof(AppEnums.TestStatusEnum));
+        //        }
+        //        else
+        //        {
+        //            return string.Empty;
+        //        }
 
 
-            }
+        //    }
 
-        }
+        //}
 
 
         public string PriorityDesc
