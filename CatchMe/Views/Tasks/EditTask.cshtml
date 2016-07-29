@@ -255,9 +255,9 @@
 
                             <div class="task-title">@(string.IsNullOrWhiteSpace(comment.title) ? "No Title.." : comment.title) - </div>
                             <small>@comment.user.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
-                            <a href="javascript:void(0);" class="shownextsection toggleshowhide">@(cnt==0?"(hide)":"[more]")</a>
+                            <a href="javascript:void(0);" class="shownextsection toggleshowhide">@(cnt<3?"(hide)":"[more]")</a>
 
-                            <section class="allcomments" style="display:@(cnt==0?"block":"none")">
+                            <section class="allcomments" style="display:@(cnt<3?"block":"none")">
                                 <h4 style="word-break:break-all">
                                     <span style="word-wrap:break-word">
                                         @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
@@ -489,14 +489,9 @@
 
             nicEditors.allTextAreas();
             new nicEditor({
-                //  fullPanel: true,
-                //buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'xhtml']
-                buttonList : ['fontSize','bold','italic','underline','strikeThrough','subscript','superscript']
-
-
-
+                  fullPanel: true                
             });//.panelInstance('area2');
-            //nicEditors.findEditor('myArea2');
+            
         });
 
         $(document).ready(function () {

@@ -71,7 +71,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="operation" Type="nvarchar" MaxLength="60" />
           <Property Name="type" Type="nvarchar" MaxLength="60" />
           <Property Name="logtime" Type="datetime" />
-          <Property Name="description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="notification">
           <Key>
@@ -960,7 +960,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Property Name="operation" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
           <Property Name="type" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
           <Property Name="logtime" Type="DateTime" Precision="3" />
-          <Property Name="description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_log_task_id" FromRole="log" ToRole="task" />
           <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_log_user_id" FromRole="log" ToRole="user" />
         </EntityType>
