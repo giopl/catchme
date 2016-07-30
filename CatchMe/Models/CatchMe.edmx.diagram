@@ -32,6 +32,7 @@
         <EntityTypeShape EntityType="CatchMeDBModel.log" Width="1.5" PointX="13.5" PointY="7.75" />
         <AssociationConnector Association="CatchMeDBModel.FK_log_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_log_user_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.viewHistory" Width="1.5" PointX="9.375" PointY="12.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

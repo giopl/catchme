@@ -40,6 +40,7 @@ namespace CatchMe.Models
         public virtual DbSet<task> tasks { get; set; }
         public virtual DbSet<taskHist> taskHists { get; set; }
         public virtual DbSet<log> logs { get; set; }
+        public virtual DbSet<viewHistory> viewHistories { get; set; }
     
         public virtual ObjectResult<backlog> GetBacklog(Nullable<int> project_id)
         {

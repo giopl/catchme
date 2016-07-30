@@ -20,11 +20,20 @@ namespace CatchMe.Controllers
 
         public void CreateLog(log log)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.logs.Add(log);
-                db.SaveChanges();                
-            }            
+                if (ModelState.IsValid)
+                {
+                    db.logs.Add(log);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+                        
         }
 
 

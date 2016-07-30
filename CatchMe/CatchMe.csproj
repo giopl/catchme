@@ -188,6 +188,7 @@
     <Compile Include="Models\Meta\taskHistMeta.cs" />
     <Compile Include="Models\Meta\taskMeta.cs" />
     <Compile Include="Models\Meta\userMeta.cs" />
+    <Compile Include="Models\Meta\viewHistoryMeta.cs" />
     <Compile Include="Models\notification.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
@@ -208,6 +209,9 @@
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\viewFigures.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\viewHistory.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModel\RoleVM.cs" />

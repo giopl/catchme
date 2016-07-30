@@ -76,6 +76,9 @@ namespace CatchMe.Models
     public partial class task
     {
 
+
+        public IList<viewHistory> History { get; set; }
+
         /// <summary>
         /// http://stackoverflow.com/questions/29482/cast-int-to-enum-in-c-sharp
         /// </summary>

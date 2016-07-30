@@ -139,31 +139,27 @@
                 </section>
 
                 <section style="display:none" class="section3">
-                    <h4><span class="fa fa-history"></span> &nbsp;Task History (@Model.task_hist.Count)</h4>
+                    <h4><span class="fa fa-history"></span> &nbsp;Task History (@Model.History.Count)</h4>
                     <div class="row">
-                        @{var prevstatus = "none" ;
-                            var lastTask =  Model.task_hist.OrderBy(x => x.created_on).LastOrDefault();
+                        @{
+                            var lastTask =  Model.History.OrderBy(x => x.logtime).LastOrDefault();
                         }
 
-                        @foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))
+                        @*@foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))*@
+                        @foreach(var hist in Model.History.Where(x=>x.StatusChange == 1).OrderBy(x=>x.logtime))
                         {
 
-                            if(!prevstatus.Trim().ToUpper().Equals(hist.HistDesc.Trim().ToUpper()) )
-                            {
                         <div class="col-md-2 text-center">
-                            <span class="label label-@(hist.HistDescLabel)">@hist.HistDesc</span>
-                            <br /><small>@hist.created_on.Value.ToString("dd/MM/yy HH:mm") (@hist.firstname)</small>
+                            <span class="label label-@(hist.HistDescLabel)">@hist.new_val</span>
+                            <br /><small>@hist.logtime.Value.ToString("dd/MM/yy HH:mm") (@hist.firstname)</small>
                         </div>
                                 if(hist!=lastTask)
                                 {
-                        <div class="col-md-1"><span class="fa fa-2x fa-long-arrow-right"></span></div>
+                                    <div class="col-md-1"><span class="fa fa-2x fa-long-arrow-right"></span></div>
 
                                 }
 
-                            }
-
-                            prevstatus = hist.HistDesc;
-
+                            
                         }
 
                     </div>
@@ -172,22 +168,22 @@
                     <table class="table table-striped">
                         <tr>
                             <th>date</th>
-                            <th>status</th>
-                            <th>type</th>
-                            <th>priority</th>
-                            <th>severity</th>
+                            <th>who</th>
+                            <th></th>
+                            <th>description</th>
+                            <td></td>
                         </tr>
-                        @foreach (var hist in Model.task_hist.OrderByDescending(x => x.created_on))
+                        @foreach (var hist in Model.History)
                         {
                         <tr>
                             <td>
-                                @hist.created_on
+                                @hist.logtime
                             </td>
-                            <td> @(hist.hist_status == 0 ? "Task Created > " : "") @hist.StatusDesc</td>
+                            <td> @hist.firstname</td>
 
-                            <td>@hist.TypeDesc</td>
-                            <td>@hist.PriorityDesc</td>
-                            <td>@hist.SeverityDesc</td>
+                            <td> <span class="@hist.typeIcon" title="@hist.type"></span></td>
+                            <td>@Html.Raw(hist.htmlDesc)</td>
+                            <td>@hist.type @hist.operation</td>
                         </tr>
                         }
 

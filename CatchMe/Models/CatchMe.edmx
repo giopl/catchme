@@ -40,7 +40,7 @@
           <Property Name="is_disabled" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDBSIT.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="employee">
           <Key>
             <PropertyRef Name="user_id" />
@@ -174,7 +174,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="nickname" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDBSIT.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_figures">
           <Key>
             <PropertyRef Name="project_id" />
@@ -187,7 +187,33 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_figures' does not have a primary k
           <Property Name="closed_late" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDBSIT.dbo.v_history' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_history">
+          <Key>
+            <PropertyRef Name="log_id" />
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="username" />
+            <PropertyRef Name="task_id" />
+            <PropertyRef Name="StatusChange" />
+          </Key>
+          <Property Name="log_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="firstname" Type="nvarchar" MaxLength="60" />
+          <Property Name="lastname" Type="nvarchar" MaxLength="60" />
+          <Property Name="task_id" Type="int" Nullable="false" />
+          <Property Name="operation" Type="nvarchar" MaxLength="60" />
+          <Property Name="type" Type="nvarchar" MaxLength="60" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="logtime" Type="datetime" />
+          <Property Name="old_val" Type="nvarchar" MaxLength="1000" />
+          <Property Name="new_val" Type="nvarchar" MaxLength="1000" />
+          <Property Name="StatusChange" Type="int" Nullable="false" />
+          <Property Name="fname_new" Type="nvarchar" MaxLength="60" />
+          <Property Name="lname_new" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_tasks">
           <Key>
             <PropertyRef Name="project_id" />
@@ -438,6 +464,25 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
     [v_figures].[closed_late] AS [closed_late]
     FROM [dbo].[v_figures] AS [v_figures]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="v_history" EntityType="Self.v_history" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_history].[log_id] AS [log_id], 
+    [v_history].[user_id] AS [user_id], 
+    [v_history].[username] AS [username], 
+    [v_history].[firstname] AS [firstname], 
+    [v_history].[lastname] AS [lastname], 
+    [v_history].[task_id] AS [task_id], 
+    [v_history].[operation] AS [operation], 
+    [v_history].[type] AS [type], 
+    [v_history].[description] AS [description], 
+    [v_history].[logtime] AS [logtime], 
+    [v_history].[old_val] AS [old_val], 
+    [v_history].[new_val] AS [new_val], 
+    [v_history].[StatusChange] AS [StatusChange], 
+    [v_history].[fname_new] AS [fname_new], 
+    [v_history].[lname_new] AS [lname_new]
+    FROM [dbo].[v_history] AS [v_history]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="v_tasks" EntityType="Self.v_tasks" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [v_tasks].[project_id] AS [project_id], 
@@ -600,6 +645,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
             <End Role="user" EntitySet="users" />
             <End Role="log" EntitySet="logs" />
           </AssociationSet>
+          <EntitySet Name="viewHistories" EntityType="CatchMeDBModel.viewHistory" />
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -990,6 +1036,30 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="viewHistory">
+          <Key>
+            <PropertyRef Name="log_id" />
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="username" />
+            <PropertyRef Name="task_id" />
+            <PropertyRef Name="StatusChange" />
+          </Key>
+          <Property Name="log_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="firstname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="lastname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="operation" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="logtime" Type="DateTime" Precision="3" />
+          <Property Name="old_val" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="new_val" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="StatusChange" Type="Int32" Nullable="false" />
+          <Property Name="fname_new" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="lname_new" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1213,6 +1283,27 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="operation" ColumnName="operation" />
                 <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="log_id" ColumnName="log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="viewHistories">
+            <EntityTypeMapping TypeName="CatchMeDBModel.viewHistory">
+              <MappingFragment StoreEntitySet="v_history">
+                <ScalarProperty Name="lname_new" ColumnName="lname_new" />
+                <ScalarProperty Name="fname_new" ColumnName="fname_new" />
+                <ScalarProperty Name="StatusChange" ColumnName="StatusChange" />
+                <ScalarProperty Name="new_val" ColumnName="new_val" />
+                <ScalarProperty Name="old_val" ColumnName="old_val" />
+                <ScalarProperty Name="logtime" ColumnName="logtime" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="operation" ColumnName="operation" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="log_id" ColumnName="log_id" />
               </MappingFragment>
