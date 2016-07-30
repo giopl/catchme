@@ -343,12 +343,12 @@ namespace CatchMe.Controllers
             {
                 statuses.Add(new OptionItem { name = "New", value = 0 });
                 statuses.Add(new OptionItem { name = "Action", value = 1 });
-                statuses.Add(new OptionItem { name = "Investigation", value = 2 });
+                statuses.Add(new OptionItem { name = "Investigate", value = 2 });
             }
 
             if (val == 1)
             {
-                statuses.Add(new OptionItem { name = "New", value = 0 });
+                statuses.Add(new OptionItem { name = "Reset to New", value = 0 });
                 statuses.Add(new OptionItem { name = "Action", value = 1 });
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
@@ -359,8 +359,8 @@ namespace CatchMe.Controllers
 
             if (val == 2)
             {
-                statuses.Add(new OptionItem { name = "New", value = 0 });
-                statuses.Add(new OptionItem { name = "Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Reset to New", value = 0 });
+                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
                 statuses.Add(new OptionItem { name = "Investigation", value = 2 });
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
@@ -371,47 +371,47 @@ namespace CatchMe.Controllers
 
             if (val == 3)            
             {
-                statuses.Add(new OptionItem { name = "Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
-                statuses.Add(new OptionItem { name = "Passed", value = 7 });
-                statuses.Add(new OptionItem { name = "Failed", value = 8 });
+                statuses.Add(new OptionItem { name = "Test Passed", value = 7 });
+                statuses.Add(new OptionItem { name = "Test Failed", value = 8 });
             }
 
             if (val == 4)
             {
-                statuses.Add(new OptionItem { name = "Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Resume", value = 1 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
             }
 
             if (val == 5)
             {
-                statuses.Add(new OptionItem { name = "Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
             }
 
             if (val == 6)
             {
-                statuses.Add(new OptionItem { name = "Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Action Task", value = 1 });
                 statuses.Add(new OptionItem { name = "No Issue", value = 6 });
-                statuses.Add(new OptionItem { name = "Closed", value = 9 });
+                statuses.Add(new OptionItem { name = "Close Task", value = 9 });
             }
 
             if (val == 7)
             {
-                statuses.Add(new OptionItem { name = "Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
                 statuses.Add(new OptionItem { name = "Passed", value = 7 });
-                statuses.Add(new OptionItem { name = "Closed", value = 9 });
+                statuses.Add(new OptionItem { name = "Close Task", value = 9 });
             }
 
             if (val == 8)
             {
-                statuses.Add(new OptionItem { name = "Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
                 statuses.Add(new OptionItem { name = "Failed", value = 8 });
             }
 
             if (val == 9)
             {
-                statuses.Add(new OptionItem { name = "Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Re-Open", value = 1 });
                 statuses.Add(new OptionItem { name = "Closed", value = 9 });
             }
             
@@ -575,6 +575,8 @@ namespace CatchMe.Controllers
             {
 
                 task.created_by = UserSession.Current.UserId;
+                task.owner= UserSession.Current.UserId;
+
                 task.created_on = DateTime.Now;
                 task.state = 0;
                 if (ModelState.IsValid)
@@ -599,32 +601,6 @@ namespace CatchMe.Controllers
 
                     log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.TASK, "Task created", task.task_id);
                     CreateLog(log);
-
-
-                    //taskHist hist = new taskHist
-                    //{
-
-                    //    task_id = task.task_id,
-
-                    //    project_id = task.project_id,
-                    //    status = "0" ,
-                    //    title = task.title,
-                    //    description = task.description,
-                    //    initiator = task.initiator ,
-                    //    complexity = task.complexity.HasValue? task.complexity.Value.ToString():"0" ,
-                    //    priority = task.priority.HasValue? task.priority.Value.ToString():"0" ,
-                    //    due_date = task.due_date.HasValue?task.due_date.Value.ToString("yyyy MM dd") : "",
-                    //    created_on = task.created_on,
-                    //    created_by = task.created_by,
-                    //    firstname = UserSession.Current.Firstname,
-                    //    fullname = UserSession.Current.Fullname,
-                    //    hist_status = 0
-
-                    //};
-                    //db.taskHists.Add(hist);
-                    //db.SaveChanges();
-
-
 
                     return RedirectToAction("Index");
                 }
@@ -675,9 +651,14 @@ namespace CatchMe.Controllers
 
 
             var unassigned = new user { user_id = 0, firstname = "Unassigned" };
-            users.Add(unassigned);
+            //users.Add(unassigned);
 
             ViewBag.assigned_to = new SelectList(users, "user_id", "firstname", task.assigned_to);
+
+            var listwithoutunassigned = users.ToList();
+            listwithoutunassigned.Remove(new user { user_id = 0 });
+
+            ViewBag.owner = new SelectList(listwithoutunassigned, "user_id", "firstname", task.owner);
 
             var statuslist = getStatuses(task.status.Value);
             
@@ -711,7 +692,7 @@ namespace CatchMe.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,type,title,description,initiator,complexity,priority,due_date,created_on,created_by,assigned_to")] task task)
+        public ActionResult EditTask([Bind(Include = "task_id,project_id,status,test_status,type,title,description,initiator,complexity,priority,due_date,created_on,created_by,assigned_to,owner")] task task)
         {
             var oldtask = db.tasks.AsNoTracking().Where(x=>x.task_id == task.task_id).FirstOrDefault();
 
@@ -724,34 +705,7 @@ namespace CatchMe.Controllers
                 db.SaveChanges();
 
                 logChanges(oldtask, task);
-
-                //taskHist hist = new taskHist
-                //{
-                    
-                //    task_id = task.task_id,
-
-                //    project_id = task.project_id,
-                //    status = oldtask.status != task.status ? string.Concat(oldtask.status, ">", task.status) : task.status.Value.ToString(),
-                //    title = string.Concat(oldtask.title,">",task.title),
-                //    description = string.Concat(oldtask.description,">",task.description),
-                //    initiator = oldtask.initiator != task.initiator? string.Concat(oldtask.initiator,">",task.initiator) : null,
-                //    complexity = oldtask.complexity != task.complexity ? string.Concat(oldtask.complexity,">",task.complexity) : null,
-                //    priority = oldtask.priority != task.priority ? string.Concat(oldtask.priority,">",task.priority) : null,
-                //    due_date = oldtask.due_date != task.due_date ? 
-                //        string.Concat((oldtask.due_date.HasValue?oldtask.due_date.Value.ToString("yyyy MM dd"):""),
-                //                        ">",
-                //        (task.due_date.HasValue?task.due_date.Value.ToString("yyyy MM dd"):""))
-                //        : null,
-                //    created_on = DateTime.Now,
-                //    created_by = UserSession.Current.UserId,
-                //    firstname = UserSession.Current.Firstname,
-                //    fullname = UserSession.Current.Fullname,
-                //    hist_status = 1
-                    
-                //};
-                //db.taskHists.Add(hist);
-                //db.SaveChanges();
-
+                
                 return RedirectToAction("EditTask", new { id = task.task_id });
             }
 
@@ -778,7 +732,7 @@ namespace CatchMe.Controllers
                     CreateLog(log);
                 }
 
-                //owner
+                //assignee
 
                 if (oldtask.assigned_to!= newtask.assigned_to)
                 {

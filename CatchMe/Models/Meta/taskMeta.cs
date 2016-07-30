@@ -25,6 +25,11 @@ namespace CatchMe.Models
         [DisplayName("Created By")]
         public Nullable<int> created_by { get; set; }
 
+        /* user 2 */
+        [DisplayName("Owner")]
+        public int owner { get; set; }
+
+
 
         [DisplayName("Projet")]
         public int project_id { get; set; }

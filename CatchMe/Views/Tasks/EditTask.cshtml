@@ -10,6 +10,8 @@
     var users = ViewBag.EmailTo as List<CatchMe.Models.user>;
 
     var is_readonly = Model.IsReadonly;
+
+    var is_closed = Model.status == 9;
 }
 
 
@@ -142,7 +144,7 @@
                     <h4><span class="fa fa-history"></span> &nbsp;Task History (@Model.History.Count)</h4>
                     <div class="row">
                         @{
-                            var lastTask =  Model.History.OrderBy(x => x.logtime).LastOrDefault();
+                            var lastTask =  Model.History.Where(x => x.StatusChange == 1).OrderBy(x => x.logtime).LastOrDefault();
                         }
 
                         @*@foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))*@
@@ -169,7 +171,7 @@
                         <tr>
                             <th>date</th>
                             <th>who</th>
-                            <th></th>
+                            <th><span class="fa fa-info"></span></th>
                             <th>description</th>
                             <td></td>
                         </tr>
@@ -183,7 +185,7 @@
 
                             <td> <span class="@hist.typeIcon" title="@hist.type"></span></td>
                             <td>@Html.Raw(hist.htmlDesc)</td>
-                            <td>@hist.type @hist.operation</td>
+                            <td><small style="color:#ccc"> @hist.type @hist.operation</small></td>
                         </tr>
                         }
 
@@ -308,7 +310,22 @@
                                     @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+                            <div class="form-group pad20">
+                                @Html.LabelFor(model => model.owner, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @if (is_readonly)
+                                    {
+                                        <input type="text" class="form-control" readonly value="@Model.user2.fullname" />                                        
+                                        @Html.HiddenFor(model => model.owner)
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownList("owner", null, new { @class = "form-control" })
 
+                                    }
+                                    @Html.ValidationMessageFor(model => model.owner, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
 
 
                             <div class="form-group  pad20">
@@ -335,7 +352,9 @@
 
                                     @if (is_readonly)
                                     {
-                                        @Html.DropDownList("type", null, new { @class = "form-control", @readonly = "" })
+                                        
+                                        <input type="text" class="form-control" readonly value="@Model.TypeDesc" />
+                                        @Html.HiddenFor(model => model.type)
 
                                     }
                                     else
@@ -370,14 +389,12 @@
                                 <div class="col-md-8">
                                     @if (is_readonly)
                                     {
-
-                                        @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control", @readonly = "" })
+                                        <input type="text" class="form-control" readonly value="@Model.PriorityDesc" />
+                                        @Html.HiddenFor(model => model.priority)
                                     }
                                     else
                                     {
                                         @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control" })
-
-
                                     }
 
 
@@ -392,7 +409,10 @@
 
                                     @if (is_readonly)
                                     {
-                                        @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control", @readonly = "" })
+                                        
+                                        <input type="text" class="form-control" readonly value="@Model.ComplexityDesc" />
+                                        @Html.HiddenFor(model => model.complexity)
+
 
                                     }
                                     else

@@ -80,6 +80,7 @@ namespace CatchMe.Models
                 switch (type.Trim().ToLower())
                 {
                     case "assignee": return "fa fa-hand-o-right";
+                    case "owner": return "fa fa-user";
                     case "attachment": return "fa fa-paperclip";
                     case "comment": return "fa fa-comment";
                     case "complexity": return "fa fa-cogs";
@@ -106,7 +107,7 @@ namespace CatchMe.Models
             {
                 if(type=="TASK" && operation=="CREATE")
                 {
-                    return string.Format("<b>{0}</b> <span class='label label-info'>created</span>Task", firstname);
+                    return string.Format("<b>{0}</b> <span class='label label-info'>Created</span> Task", firstname);
                 }
 
 
@@ -162,12 +163,12 @@ namespace CatchMe.Models
 
                 if (type == "ASSIGNEE" && operation == "UPDATE")
                 {
-                    return string.Format("Task assigned to {0}", fname_new);
+                    return string.Format("Task <b>assigned</b> to {0}", fname_new);
                 }
 
                 if (type == "OWNER" && operation == "UPDATE")
                 {
-                    return string.Format("Task ownership given to {0}", fname_new);
+                    return string.Format("Task <b>ownership</b> transferred to {0}", fname_new);
                 }
 
 

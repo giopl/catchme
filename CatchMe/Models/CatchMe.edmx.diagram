@@ -19,20 +19,21 @@
         <EntityTypeShape EntityType="CatchMeDBModel.viewFigures" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="CatchMeDBModel.attachment" Width="1.5" PointX="13.5" PointY="11.625" />
         <AssociationConnector Association="CatchMeDBModel.FK_attachment_user_id" />
-        <EntityTypeShape EntityType="CatchMeDBModel.task" Width="1.5" PointX="8.25" PointY="3.125" />
         <EntityTypeShape EntityType="CatchMeDBModel.taskHist" Width="1.5" PointX="10.5" PointY="2.75" />
+        <EntityTypeShape EntityType="CatchMeDBModel.log" Width="1.5" PointX="13.5" PointY="7.75" />
+        <AssociationConnector Association="CatchMeDBModel.FK_log_user_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.viewHistory" Width="1.5" PointX="9.375" PointY="12.75" />
+        <EntityTypeShape EntityType="CatchMeDBModel.task" Width="1.5" PointX="8.25" PointY="2" />
         <AssociationConnector Association="CatchMeDBModel.FK_attachment_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_comment_task_id" />
+        <AssociationConnector Association="CatchMeDBModel.FK_log_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_notification_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_project_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_assigned_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_hist_task_id" />
+        <AssociationConnector Association="CatchMeDBModel.FK_task_owner_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_task_id" />
-        <EntityTypeShape EntityType="CatchMeDBModel.log" Width="1.5" PointX="13.5" PointY="7.75" />
-        <AssociationConnector Association="CatchMeDBModel.FK_log_task_id" />
-        <AssociationConnector Association="CatchMeDBModel.FK_log_user_id" />
-        <EntityTypeShape EntityType="CatchMeDBModel.viewHistory" Width="1.5" PointX="9.375" PointY="12.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
