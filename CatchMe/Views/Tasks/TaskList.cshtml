@@ -4,14 +4,20 @@
 @using appenums = CatchMe.Helpers.AppEnums
 @{
     ViewBag.Title = "Catch Me";
-    
+
     var countopen = Model.Where(x => x.status != 9).Count();
     var countme = Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9).Count();
     var countclosed = Model.Where(x => x.status == 9).Count();
     var countopenbyme = Model.Where(x => x.owner == session.Current.UserId && x.status != 9).Count();
-    
-    
-    
+    //var countsearched= Model.Where(x => x.IsFilteredOn).Count();
+
+
+    CatchMe.Models.ViewModel.SearchFilter searchFilter = session.Current.searchFilter;
+    if (searchFilter  == null)
+    {
+        searchFilter = new CatchMe.Models.ViewModel.SearchFilter();
+    }
+
 }
 
 <div>
@@ -35,6 +41,13 @@
 
 <div class="gap"></div>
 
+@*<a href="#" class="showsection">Advancd Search</a>
+
+<section>
+    @Html.Partial("_searchFilter", searchFilter)
+</section>*@
+    
+
 
 <div>
 
@@ -44,6 +57,7 @@
         <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me (@countme)</a></li>
         <li role="presentation"><a href="#closed" aria-controls="messages" role="tab" data-toggle="tab">Closed (@countclosed)</a></li>
         <li role="presentation"><a href="#openbyme" aria-controls="messages" role="tab" data-toggle="tab">Owned By Me (@countopenbyme)</a></li>
+      @*  <li role="presentation"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab">Searched (@countsearched)</a></li>*@
         
     </ul>
 
@@ -346,6 +360,84 @@
             </table>
 
         </div>
+
+
+        <div role="tabpanel" class="tab-pane" id="searched">
+
+            <div class="gap"></div>
+
+
+            <table class="table" id="tablesearched" style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th width="5%">
+                            Id
+                        </th>
+                        <td></td>
+
+                        <td width="45%">
+                            Desc
+                        </td>
+
+                        <th width="20%">
+                            Assigned
+                        </th>
+                        <th width="10%">
+                            @Html.DisplayNameFor(model => model.priority)
+                        </th>
+                        <th width="14%">
+                            Due On
+                        </th>
+
+                        <th width="1%"></th>
+                        <td></td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.IsFilteredOn).ToList())
+                    {
+                        <tr>
+                            <td>
+                                <span class="text-muted fa-15x">@item.task_id</span>
+                            </td>
+                            <td>
+                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                            </td>
+
+                            <td>
+                                <div class="readmore">
+                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                </div>
+
+                            </td>
+                            <td>
+                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
+                                @assignee
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PriorityDesc)
+                            </td>
+                            <td class="@(item.IsOverdue?"red":"")">
+                                @Html.DisplayFor(modelItem => item.due_date)
+                            </td>
+
+                            <td>
+                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
+                            </td>
+                            <td>
+                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                            </td>
+                        </tr>
+                                    }
+                </tbody>
+            </table>
+
+        </div>
+
         
     </div>
 
@@ -397,12 +489,22 @@
 
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('.readmore').readmore({
-                speed: 75,
-                collapsedHeight: 40,
-                lessLink: '<a href="#">Read less</a>'
+            //$('.readmore').readmore({
+            //    speed: 75,
+            //    collapsedHeight: 40,
+            //    lessLink: '<a href="#">Read less</a>'
+            //});
+
+            $('body').on('click', '.shownextsection', function () {
+
+                $(this).next('section').toggle();
             });
 
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                clearBtn: true
+            })
 
         });
 

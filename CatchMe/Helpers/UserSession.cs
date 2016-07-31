@@ -1,5 +1,6 @@
 ﻿
 using CatchMe.Models;
+using CatchMe.Models.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,12 @@ namespace CatchMe.Helpers
             CurrentProject = string.Empty;
             CurrentProjectId = 0;
             MyProjects = null;
+
+            SearchFilter searchFilter = new SearchFilter();
         }
 
 
+        public SearchFilter searchFilter { get; set; }
 
         public static UserSession Current
         {

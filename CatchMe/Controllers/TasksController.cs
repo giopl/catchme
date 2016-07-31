@@ -13,6 +13,7 @@ using System.Text;
 using System.Data.Entity.Validation;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
+using CatchMe.Models.ViewModel;
 
 namespace CatchMe.Controllers
 {
@@ -23,6 +24,13 @@ namespace CatchMe.Controllers
 
         public ActionResult Index()
         {
+            return RedirectToAction("TaskList");
+        }
+
+
+        public ActionResult SetSearchFilter(SearchFilter searchFilter)
+        {
+            UserSession.Current.searchFilter = searchFilter;
             return RedirectToAction("TaskList");
         }
 
@@ -38,6 +46,9 @@ namespace CatchMe.Controllers
             }
 
             var user = db.users.Find(user_id);
+
+
+
 
             //find user's active project
             var active_project = user.active_project.HasValue?  user.active_project.Value : 0;
@@ -62,10 +73,7 @@ namespace CatchMe.Controllers
                 }
             }
 
-
-
             
-
             if(id.HasValue && id.Value != active_project)
             {
                 SetActiveProject(id.Value);
@@ -81,7 +89,109 @@ namespace CatchMe.Controllers
             // find list of tasks for active project
             var tasks = db.tasks.Include(t => t.project).Where(p => p.project_id == active_project && p.state == 0).ToList();
 
-            return View(tasks);
+            //populate search filter
+            var currentprojectid = UserSession.Current.CurrentProjectId;
+            var users = db.users.Where(x => x.projects.Select(p => p.project_id).Contains(currentprojectid)).ToList();
+
+
+            var defaultoption = new OptionItem { name = "Any", value = -1 };
+
+            var statuses = getStatuses(-1);
+            statuses.Add(defaultoption);
+            statuses = statuses.OrderBy(x => x.value).ToList();
+
+
+            var types = getTypes();
+            types.Add(defaultoption);
+            types = types.OrderBy(x => x.value).ToList();
+            
+            var priorities = getPriorities();
+            priorities.Add(defaultoption);
+            priorities = priorities.OrderBy(x => x.value).ToList();
+
+            user defaultUser = new user { user_id = -1, firstname = "Any" };
+            users.Remove(new user { user_id = 0 });
+            users.Add(defaultUser);
+            users = users.OrderBy(x => x.user_id).ToList();
+
+            var session = UserSession.Current.searchFilter;
+
+
+
+            ViewBag.status = new SelectList(statuses, "value", "name", defaultoption);
+            ViewBag.type = new SelectList(types, "value", "name", defaultoption);            
+            ViewBag.priority = new SelectList(priorities, "value", "name", defaultoption);
+            ViewBag.createdBy= new SelectList(users, "user_id", "firstname", defaultUser);
+            ViewBag.owner = new SelectList(users, "user_id", "firstname", defaultUser);
+            ViewBag.assignedTo = new SelectList(users, "user_id", "firstname", defaultUser);
+
+
+            var result = MarkAsFiltered(tasks);
+
+            var filtered = result.Where(x => x.IsFilteredOn).ToList();
+            return View(result);
+        }
+
+
+        private List<task>  MarkAsFiltered (List<task> tasks)
+        {
+            try
+            {
+                var list = tasks;
+ 
+                var searchFilter = UserSession.Current.searchFilter;
+                if (searchFilter != null)
+                {
+                    if(searchFilter.assignedTo > 0 )
+                    {
+                        list = list.Where(x => x.assigned_to == searchFilter.assignedTo).ToList();
+                        
+                    }
+
+                    if (searchFilter.owner> 0)
+                    {
+                        list = list.Where(x => x.owner == searchFilter.owner).ToList();
+
+                    }
+
+                    if (searchFilter.createdBy> 0)
+                    {
+                        list = list.Where(x => x.created_by == searchFilter.createdBy).ToList();
+                        }
+
+                    if (searchFilter.status > 0)
+                    {
+                        list = list.Where(x => x.status == searchFilter.status).ToList();
+                        }
+
+
+                    if (searchFilter.priority> 0)
+                    {
+                        list = list.Where(x => x.priority == searchFilter.priority).ToList();
+                                           }
+
+
+
+                    if (searchFilter.type> 0)
+                    {
+                        list = list.Where(x => x.type == searchFilter.type).ToList();
+                    }
+
+
+                }
+
+                foreach (var item in list)
+                {
+                    item.IsFilteredOn = true;
+                }
+                return list;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
 
@@ -338,6 +448,22 @@ namespace CatchMe.Controllers
         {
             
             List<OptionItem> statuses = new List<OptionItem>();
+
+            if (val == -1)
+            {
+                statuses.Add(new OptionItem { name = "New", value = 0 });
+                statuses.Add(new OptionItem { name = "Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Investigation", value = 2 });
+                statuses.Add(new OptionItem { name = "Completed", value = 3 });
+                statuses.Add(new OptionItem { name = "On Hold", value = 4 });
+                statuses.Add(new OptionItem { name = "Problem", value = 5 });
+                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                statuses.Add(new OptionItem { name = "Test Passed", value = 7 });
+                statuses.Add(new OptionItem { name = "Test Failed", value = 8 });
+                statuses.Add(new OptionItem { name = "Closed", value = 9 });
+
+            }
+        
 
             if (val == 0)
             {

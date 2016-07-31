@@ -335,8 +335,7 @@
 
                                     @if (is_readonly)
                                     {
-                                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
-
+                                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })                                        
                                     }
                                     else
                                     {
@@ -427,10 +426,28 @@
                                 </div>
                             </div>
 
-                            <div class="form-group  pad20">
+                            <div class="form-group pad20">
                                 @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-4" })
                                 <div class="col-md-8">
-                                    @*            @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker" } })*@
+                                    @if (is_readonly)
+                                    {
+                                        @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                                    }
+                                    else
+                                    {
+                                    @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" } })
+
+                                    }
+
+                                    @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            @*<div class="form-group  pad20">
+                                @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    
 
                                     @if (is_readonly)
                                     {
@@ -458,7 +475,7 @@
                                     }
                                     @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
                                 </div>
-                            </div>
+                            </div>*@
 
 
                             <div class="form-group pad20">
@@ -518,6 +535,15 @@
 
                 $(this).next('section').toggle();
             });
+
+            $('.datepicker').datepicker({
+                startDate: '0',
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                clearBtn: true
+
+            })
+
 
 
             $('body').on('click', '.showsection', function () {

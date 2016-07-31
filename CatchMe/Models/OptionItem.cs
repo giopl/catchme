@@ -8,7 +8,7 @@ namespace CatchMe.Models
     public class OptionItem
     {
         public string name { get; set; }
-        public int value { get; set; }
+        public int? value { get; set; }
 
 
 

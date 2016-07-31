@@ -31,7 +31,9 @@ namespace CatchMe
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/bootstrap3-typeahead.js",
-                //https://select2.github.io/
+                      //https://bootstrap-datepicker.readthedocs.io/en/latest/options.html#autoclose
+                      "~/Scripts/bootstrap-datepicker.js",
+                      //https://select2.github.io/
                       //"~/Scripts/plugins/select2.js",
                       "~/Scripts/plugins/readmore.js",
                       "~/Scripts/plugins/moment.js",
@@ -63,6 +65,7 @@ namespace CatchMe
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/bootstrap-datepicker3.css",
                       "~/Content/font-awesome.css",
                       "~/Content/select2.css",
                       "~/Content/DataTables.css",

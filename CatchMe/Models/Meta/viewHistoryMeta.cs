@@ -90,6 +90,7 @@ namespace CatchMe.Models
                     case "task": return "fa fa-tasks";
                     case "type": return "fa fa-flask";
                     case "mail": return "fa fa-envelope";
+                    case "title": return "fa fa-text-width";
 
 
 
@@ -176,6 +177,13 @@ namespace CatchMe.Models
                 {
                     return string.Format("<b>Notification</b> sent by {0}", firstname);
                 }
+
+                if (type == "TITLE" && operation == "UPDATE")
+                {
+                    return string.Format("<strong>Title</strong> changed by <b>{0}</b>", firstname);
+                }
+
+
 
 
 

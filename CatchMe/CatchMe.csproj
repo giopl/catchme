@@ -215,12 +215,14 @@
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModel\RoleVM.cs" />
+    <Compile Include="Models\ViewModel\SearchFilter.cs" />
     <Compile Include="Models\viewTasks.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-datepicker3.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -275,6 +277,7 @@
     <None Include="Properties\PublishProfiles\TestSite %28dwh-appsdev%29.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="notes\todo.txt" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap3-typeahead.js" />
@@ -349,6 +352,7 @@
     <Content Include="Views\Tasks\_EditComment.cshtml" />
     <Content Include="Views\Admin\Home.cshtml" />
     <Content Include="Views\Admin\ListDeleted.cshtml" />
+    <Content Include="Views\Shared\_searchFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

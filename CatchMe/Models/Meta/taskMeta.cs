@@ -41,6 +41,7 @@ namespace CatchMe.Models
         //public Nullable<int> test_status { get; set; }
 
         [DisplayName("Title")]
+        [Required]
         public string title { get; set; }
 
         [AllowHtml]
@@ -56,7 +57,7 @@ namespace CatchMe.Models
         public Nullable<int> complexity { get; set; }
 
         [DisplayName("Due Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}",
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",
                ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> due_date { get; set; }
 
@@ -81,6 +82,7 @@ namespace CatchMe.Models
     public partial class task
     {
 
+        public bool IsFilteredOn { get; set; }
 
         public IList<viewHistory> History { get; set; }
 
