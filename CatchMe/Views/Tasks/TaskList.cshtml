@@ -23,7 +23,7 @@
 <div>
     <div class="pull-left"><h2>@session.Current.CurrentProject</h2></div>
     <div class="pull-right" style="margin-top:20px;">
-        <span class="text-muted">change project:</span>
+        <span class="text-muted">change project:&nbsp;&nbsp;</span>
         @if (session.Current.MyProjects != null && session.Current.MyProjects.Count() > 1)
         {
             @Html.DropDownList("project_id", null, htmlAttributes: new { @class = "projectselect pull-right changeproject" })
@@ -455,21 +455,25 @@
 
 
             $('#tableopen').DataTable({
-                "pageLength": 50
+                "pageLength": 50,
+                "order": [[0, "desc"]]
             });
 
             $('#tableclose').DataTable({
-                "pageLength": 50
+                "pageLength": 50,
+                "order": [[0, "desc"]]
             });
 
 
             $('#tableme').DataTable({
-                "pageLength": 50
+                "pageLength": 50,
+                "order": [[0, "desc"]]
             });
 
 
             $('#tableopenbyme').DataTable({
-                "pageLength": 50
+                "pageLength": 50,
+                "order": [[0, "desc"]]
             });
 
 

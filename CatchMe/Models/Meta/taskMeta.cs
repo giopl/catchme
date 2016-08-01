@@ -57,8 +57,8 @@ namespace CatchMe.Models
         public Nullable<int> complexity { get; set; }
 
         [DisplayName("Due Date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",
-               ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",ApplyFormatInEditMode = true)]
+        [Required]
         public Nullable<System.DateTime> due_date { get; set; }
 
 

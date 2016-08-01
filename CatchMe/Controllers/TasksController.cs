@@ -788,7 +788,7 @@ namespace CatchMe.Controllers
 
             var statuslist = getStatuses(task.status.Value);
             
-            if(task.user1.user_id != UserSession.Current.UserId) 
+            if(task.user1.user_id != UserSession.Current.UserId && task.status.Value != 9) 
             {
                                 
                 statuslist.Remove(new OptionItem { name = "Closed", value = 9 });
