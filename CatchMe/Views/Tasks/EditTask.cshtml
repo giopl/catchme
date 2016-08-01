@@ -14,7 +14,7 @@
     var is_closed = Model.status == 9;
 }
 
-
+<br />
         <div class="row">
             <div class="col-md-8">
 
@@ -22,7 +22,7 @@
                     <div class="taskid">
                         <span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span>
                     </div>
-                    <div class="taskname truncate" title="@Model.title">
+                    <div class="taskname truncate" data-toggle="tooltip" data-placement="right" title="@Model.title">
                         @Model.title
                     </div>
 
@@ -31,7 +31,7 @@
 
                 @*<h2 class="tasktitle"><span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span> @Model.title </h2>*@
 
-                <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.fullname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") </h5>
+                <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.firstname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") last updated on <strong>@Model.updated_on.Value.ToString("dd MMM yyyy HH:mm")</strong> by @Model.user3.firstname</h5>
 
 
                 @if (is_readonly)
@@ -297,7 +297,7 @@
                                 @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-4" })
                                 <div class="col-md-8">
 
-                                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select" })
                                     @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
                                     <span class="text-light"><small>&nbsp;<span class="fa fa-info-circle"></span> Only <b>Owner</b> can close task</small></span>
                                 </div>
@@ -307,7 +307,7 @@
                                 @Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-4" })
                                 <div class="col-md-8">
 
-                                    @Html.DropDownList("assigned_to", null, new { @class = "form-control" })
+                                    @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select" })
                                     @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -321,7 +321,7 @@
                                     }
                                     else
                                     {
-                                        @Html.DropDownList("owner", null, new { @class = "form-control" })
+                                        @Html.DropDownList("owner", null, new { @class = "form-control chosen-select" })
 
                                     }
                                     @Html.ValidationMessageFor(model => model.owner, "", new { @class = "text-danger" })
@@ -359,7 +359,7 @@
                                     }
                                     else
                                     {
-                                        @Html.DropDownList("type", null, new { @class = "form-control" })
+                                        @Html.DropDownList("type", null, new { @class = "form-control chosen-select" })
 
                                     }
                                     @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
@@ -394,7 +394,7 @@
                                     }
                                     else
                                     {
-                                        @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control" })
+                                        @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control chosen-select" })
                                     }
 
 
@@ -417,7 +417,7 @@
                                     }
                                     else
                                     {
-                                        @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control" })
+                                        @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control chosen-select" })
 
                                     }
 
@@ -427,7 +427,11 @@
                             </div>
 
                             <div class="form-group pad20">
-                                @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-4" })
+                                
+                                <div class="col-md-4">
+                                    <label for="due_date" class="control-label">Due Date <span style="color:#31B0D5;font-size:1.2em" class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="If date is lost, click on RESET"></span></label>
+                                    
+                                </div>
                                 <div class="col-md-8">
                                     @if (is_readonly)
                                     {
@@ -451,43 +455,11 @@
 
                                     }
                                     @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
-
+                                    
                                 </div>
                             </div>
 
 
-                            @*<div class="form-group  pad20">
-                                @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-4" })
-                                <div class="col-md-8">
-                                    
-
-                                    @if (is_readonly)
-                                    {
-                                        var duedt = "";
-                                        if (Model.due_date.HasValue)
-                                        {
-                                            duedt = Model.due_date.Value.ToString("yyyy-MM-dd");
-
-                                        }
-                                        <input type="text" value="@duedt" class="form-control" name="due_date" readonly />
-
-                                    }
-                                    else
-                                    {
-
-                                        @Html.EditorFor(model => model.due_date, new
-           {
-               htmlAttributes = new
-               {
-                   @class = "form-control combodate",
-                   @data_format = "YYYY-MM-DD",
-                   @data_template = "D MMM YYYY"
-               }
-           })
-                                    }
-                                    @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
-                                </div>
-                            </div>*@
 
 
                             <div class="form-group pad20">
@@ -540,6 +512,10 @@
         });
 
         $(document).ready(function () {
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('.chosen-select').chosen();
 
             var _minyear = new Date().getFullYear();
             var _max_year = _minyear + 1;

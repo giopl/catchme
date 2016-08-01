@@ -140,41 +140,57 @@ namespace CatchMe.Controllers
                 var list = tasks;
  
                 var searchFilter = UserSession.Current.searchFilter;
+                var result = new List<task>();
                 if (searchFilter != null)
                 {
-                    if(searchFilter.assignedTo > 0 )
+                    if (searchFilter.assignedTo != null)
                     {
-                        list = list.Where(x => x.assigned_to == searchFilter.assignedTo).ToList();
                         
+                        foreach (var person in searchFilter.assignedTo)
+                        {
+                            var mylist = list.Where(x => x.assigned_to.Value == person).ToList();
+
+                            result.AddRange(mylist);
+                        }
+                        list = result;
+                     
                     }
 
-                    if (searchFilter.owner> 0)
+                    if (searchFilter.owner != null)
                     {
-                        list = list.Where(x => x.owner == searchFilter.owner).ToList();
+                        result.Clear();
+                        foreach (var person in searchFilter.owner)
+                        {
+                            var mylist = list.Where(x => x.owner == person).ToList();
+
+                            result.AddRange(mylist);
+
+                        }
+                        list = result;
 
                     }
 
-                    if (searchFilter.createdBy> 0)
+                    if (searchFilter.createdBy != null)
                     {
-                        list = list.Where(x => x.created_by == searchFilter.createdBy).ToList();
+                        //list = list.Where(x => x.created_by == searchFilter.createdBy).ToList();
                         }
 
-                    if (searchFilter.status > 0)
+                    //if (searchFilter.status > 0)
+                    //{
+                    //    list = list.Where(x => x.status == searchFilter.status).ToList();
+                    //    }
+
+
+                    if (searchFilter.priority != null)
                     {
-                        list = list.Where(x => x.status == searchFilter.status).ToList();
-                        }
+                       // list = list.Where(x => x.priority == searchFilter.priority).ToList();
+                      }
 
 
-                    if (searchFilter.priority> 0)
+
+                    if (searchFilter.type != null)
                     {
-                        list = list.Where(x => x.priority == searchFilter.priority).ToList();
-                                           }
-
-
-
-                    if (searchFilter.type> 0)
-                    {
-                        list = list.Where(x => x.type == searchFilter.type).ToList();
+                        //list = list.Where(x => x.type == searchFilter.type).ToList();
                     }
 
 
@@ -231,6 +247,7 @@ namespace CatchMe.Controllers
                         log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.ATTACHMENT, file.FileName, taskid);
                         CreateLog(log);
 
+                        updateTask(taskid);
 
 
                     }
@@ -263,6 +280,24 @@ namespace CatchMe.Controllers
                 throw;
             }
         }
+
+
+
+        /// <summary>
+        /// update task everytime an event is recorded
+        /// </summary>
+        /// <param name="taskid"></param>
+        private void updateTask(int taskid)
+        {
+            //update item with changes.
+            var task = db.tasks.Find(taskid);
+            task.updated_on = DateTime.Now;
+            task.updated_by = UserSession.Current.UserId;
+            db.Entry(task).State = EntityState.Modified;
+            db.SaveChanges();
+
+        }
+
         public ActionResult DeleteAttachment(int id, int taskid)
         {
             try
@@ -677,10 +712,7 @@ namespace CatchMe.Controllers
                         CreateLog(log);
 
                         //update task last edited on
-                        var task = db.tasks.Find(comment.task_id);
-                        task.updated_on = DateTime.Now;                        
-                        db.Entry(task).State = EntityState.Modified;
-                        db.SaveChanges();
+                        updateTask(comment.task_id);
 
 
                     }
@@ -708,8 +740,10 @@ namespace CatchMe.Controllers
 
                 task.created_by = UserSession.Current.UserId;
                 task.owner= UserSession.Current.UserId;
+                task.updated_by = UserSession.Current.UserId;
 
                 task.created_on = DateTime.Now;
+                task.updated_on = DateTime.Now;
                 task.state = 0;
                 if (ModelState.IsValid)
                 {
@@ -832,6 +866,7 @@ namespace CatchMe.Controllers
             {
 
                 task.updated_on = DateTime.Now;
+                task.updated_by = UserSession.Current.UserId;
                 task.state = 0;
                 db.Entry(task).State = EntityState.Modified;
                 db.SaveChanges();
@@ -1173,6 +1208,8 @@ namespace CatchMe.Controllers
 
                     log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.COMMENT, string.Format(" Comment Edited: {0}-{1}",comment.comment_id, comment.title), comment.task_id);
                     CreateLog(log);
+
+                    updateTask(comment.task_id);
                 }
 
 

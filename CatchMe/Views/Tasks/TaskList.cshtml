@@ -9,16 +9,17 @@
     var countme = Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9).Count();
     var countclosed = Model.Where(x => x.status == 9).Count();
     var countopenbyme = Model.Where(x => x.owner == session.Current.UserId && x.status != 9).Count();
-    //var countsearched= Model.Where(x => x.IsFilteredOn).Count();
+    var countsearched= Model.Where(x => x.IsFilteredOn).Count();
 
+    var latest10 = Model.Where(x=>x.LastUpdatedSince!="" ).OrderByDescending(x => x.updated_on).Take(15).ToList();
 
     CatchMe.Models.ViewModel.SearchFilter searchFilter = session.Current.searchFilter;
     if (searchFilter  == null)
     {
         searchFilter = new CatchMe.Models.ViewModel.SearchFilter();
-    }
-
+    }    
 }
+
 
 <div>
     <div class="pull-left"><h2>@session.Current.CurrentProject</h2></div>
@@ -36,6 +37,10 @@
     
         table.fixed { table-layout:fixed; }    
         table.fixed td { overflow: hidden; }
+
+        .chosen-select-multi {
+        width:80%;
+    }
 </style>
 
 
@@ -48,23 +53,110 @@
 </section>*@
     
 
-
 <div>
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation"><a href="#open" aria-controls="settings" role="tab" data-toggle="tab">Open (@countopen)</a></li>
-        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me (@countme)</a></li>
-        <li role="presentation"><a href="#closed" aria-controls="messages" role="tab" data-toggle="tab">Closed (@countclosed)</a></li>
-        <li role="presentation"><a href="#openbyme" aria-controls="messages" role="tab" data-toggle="tab">Owned By Me (@countopenbyme)</a></li>
-      @*  <li role="presentation"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab">Searched (@countsearched)</a></li>*@
+        @if (countme > 0)
+        {
+            <li role="presentation" class="active assignedcolor"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me (@countme)</a></li>
+        }
+        <li role="presentation" class="@(countme>0?"":"active") opencolor"><a href="#open" aria-controls="settings"  role="tab" data-toggle="tab">Open (@countopen)</a></li>
+
+        @if(countclosed>0)
+        {
+                    <li role="presentation" class="closecolor"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed (@countclosed)</a></li>
+        }
+        @if(countopenbyme>0)
+        {
+            <li role="presentation" class="ownedcolor"><a href="#openbyme" aria-controls="openbyme" role="tab" data-toggle="tab">Owned By Me (@countopenbyme)</a></li>
+        }
+        @if (latest10.Count>0)
+        {
+            <li role="presentation" class="recentcolor"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Recent updates (@latest10.Count())</a></li>
+        }
+       @*<li role="presentation"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab">Searched (@countsearched)</a></li>*@
         
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
 
-        <div role="tabpanel" class="tab-pane" id="open">
+        <div role="tabpanel" class="tab-pane @(countme > 0?"active":"" )" id="home">
+
+            <div class="gap"></div>
+
+
+            <table class="table" id="tableme" style="width:100%">
+                <thead>
+                    <tr>
+                        <th width="5%">
+                            Id
+                        </th>
+                        <td></td>
+
+                        <td width="45%">
+                            Title
+                        </td>
+
+                        <th width="20%">
+                            Assigned
+                        </th>
+                        <th width="10%">
+                            @Html.DisplayNameFor(model => model.priority)
+                        </th>
+                        <th width="14%">
+                            Due on
+                        </th>
+
+                        <th width="1%"></th>
+                        <td></td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9))
+                    {
+                        <tr>
+                            <td>
+                                <span class="text-muted fa-15x">@item.task_id</span>
+                            </td>
+                            <td>
+                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                            </td>
+                            <td class="">
+                                <div class="readmore">
+                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                </div>
+
+                            </td>
+                            <td>
+                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
+                                @assignee
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PriorityDesc)
+                            </td>
+                            <td class="@(item.IsOverdue?"red":"")">
+
+                                @Html.DisplayFor(modelItem => item.due_date)
+                            </td>
+
+                            <td>
+                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
+                                @*<a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>*@
+
+                            </td>
+                            <td>
+                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                            </td>
+                        </tr>
+                                    }
+                </tbody>
+            </table>
+
+        </div>
+        <div role="tabpanel" class="tab-pane @(countme > 0?"":"active" )" id="open">
 
             <div class="gap"></div>
 
@@ -126,7 +218,7 @@
                             </td>
 
                             <td>
-                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
                                 <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
                             </td>
@@ -140,80 +232,7 @@
 
         </div>
 
-        <div role="tabpanel" class="tab-pane active" id="home">
-
-            <div class="gap"></div>
-
-
-            <table class="table" id="tableme" style="width:100%">
-                <thead>
-                    <tr>
-                        <th width="5%">
-                            Id
-                        </th>
-                        <td></td>
-
-                        <td width="45%">
-                            Title
-                        </td>
-
-                        <th width="20%">
-                            Assigned
-                        </th>
-                        <th width="10%">
-                            @Html.DisplayNameFor(model => model.priority)
-                        </th>
-                        <th width="14%">
-                          Due on
-                        </th>
-
-                        <th width="1%"></th>
-                        <td></td>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9))
-                    {
-                        <tr>
-                            <td>
-                                <span class="text-muted fa-15x">@item.task_id</span>
-                            </td>
-                            <td>
-                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
-                            </td>
-                            <td class="">
-                                <div class="readmore">                                    
-                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                                </div>
-
-                            </td>
-                            <td>
-                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                @assignee
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PriorityDesc)
-                            </td>
-                            <td class="@(item.IsOverdue?"red":"")">
-
-                                @Html.DisplayFor(modelItem => item.due_date)
-                            </td>
-
-                            <td>
-                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
-                                @*<a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>*@
-
-                            </td>
-                            <td>
-                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-        </div>
+        
       
         <div role="tabpanel" class="tab-pane" id="closed">
             <div class="gap"></div>
@@ -271,7 +290,7 @@
                             </td>
 
                             <td>
-                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
                                 @*<a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>*@
 
                             </td>
@@ -347,7 +366,7 @@
                             </td>
 
                             <td>
-                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
                                 <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
                             </td>
@@ -356,6 +375,90 @@
                             </td>
                         </tr>
                     }
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+        <div role="tabpanel" class="tab-pane" id="recent">
+
+            <div class="gap"></div>
+
+
+            <table class="table" id="tablerecent" style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th width="5%">
+                            Id
+                        </th>
+                        <td></td>
+
+                        <td width="45%">
+                            Title
+                        </td>
+
+                        <th width="10%">
+                            Assigned
+                        </th>
+                        <th width="10%">
+                            Updated By
+                        </th>
+                        <th width="10%">
+                            @Html.DisplayNameFor(model => model.priority)
+                        </th>
+                        <th>Updated</th>
+                        <th width="14%">
+                            Due On
+                        </th>
+
+                        <th width="1%"></th>
+                        <td></td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in latest10)
+                    {
+                        <tr>
+                            <td>
+                                <span class="text-muted fa-15x">@item.task_id</span>
+                            </td>
+                            <td>
+                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                            </td>
+
+                            <td>
+                                <div class="readmore">
+                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                </div>
+
+                            </td>
+                            <td>
+                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
+                                @assignee
+                            </td>
+                            <td>@item.user3.firstname</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PriorityDesc)
+                            </td>
+                            <td>@Html.Raw(item.LastUpdatedSince)</td>
+                            <td class="@(item.IsOverdue?"red":"")">
+                                @Html.DisplayFor(modelItem => item.due_date)
+                            </td>
+
+                            <td>
+                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
+                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
+                            </td>
+                            <td>
+                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                            </td>
+                        </tr>
+                                    }
                 </tbody>
             </table>
 
@@ -424,7 +527,7 @@
                             </td>
 
                             <td>
-                                <a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>
+                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
                                 <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
                             </td>
@@ -443,14 +546,19 @@
 
 </div>
 
+
+
+
+
 @section scripts {
+ 
+    
 
-    @Scripts.Render("~/bundles/datatables")
+    @*@Scripts.Render("~/bundles/datatables")*@
 
+    <script src="@Url.Content("~/Scripts/plugins/datatables.min.js")"></script> 
 
     <script>
-
-
         $(document).ready(function () {
 
 
@@ -477,6 +585,10 @@
             });
 
 
+            //});
+
+            $('.chosen-select-multi').chosen();
+
 
             $('body').on('change', '.changeproject', function () {
                 var project_id = $(this).val();
@@ -492,6 +604,10 @@
             });
 
             $('[data-toggle="tooltip"]').tooltip();
+
+
+
+
 
             //$('.readmore').readmore({
             //    speed: 75,
@@ -510,7 +626,13 @@
                 clearBtn: true
             })
 
-        });
 
-    </script>
-}
+
+        });
+            </script>
+
+    
+        }
+
+    
+

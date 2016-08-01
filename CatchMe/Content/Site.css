@@ -193,6 +193,61 @@ width:100px;
    background: #777777;
 }
 
+/* tab active colors */
+
+    .nav-tabs > li.active.opencolor > a, .nav-tabs > li.active.opencolor > a:hover, .nav-tabs > li.active.opencolor > a:focus {    
+    background-color: #5BC0DE;
+    color: #fff;
+    
+}
+
+        .nav-tabs > li.active.closecolor > a, .nav-tabs > li.active.closecolor > a:hover, .nav-tabs > li.active.closecolor > a:focus {    
+    background-color: #777;
+    color: #fff;
+    
+}
+
+               .nav-tabs > li.active.assignedcolor > a, .nav-tabs > li.active.assignedcolor > a:hover, .nav-tabs > li.active.assignedcolor > a:focus {    
+    background-color: #F0AD4E;
+    color: #fff;
+    
+}
+
+
+ .nav-tabs > li.active.ownedcolor > a, .nav-tabs > li.active.ownedcolor > a:hover, .nav-tabs > li.active.ownedcolor > a:focus {    
+    background-color: #D9534F;
+    color: #fff;
+    
+}
+
+  .nav-tabs > li.active.recentcolor > a, .nav-tabs > li.active.recentcolor > a:hover, .nav-tabs > li.active.recentcolor > a:focus {    
+    background-color: #5CB85C;
+    color: #fff;
+    
+}
+
+
+/* overriding chosen */
+
+.chosen-container-single .chosen-single {
+    height: 30px;
+    border-radius: 3px;
+    border: 1px solid #CCCCCC;
+}
+.chosen-container-single .chosen-single span {
+    padding-top: 2px;
+}
+.chosen-container-single .chosen-single div b {
+    margin-top: 2px;
+}
+
+/* fix when popover too long*/
+
+.tooltip-inner {
+    word-wrap: break-word;
+    max-width:none;
+}
+
 
 /* miscellanesous*/
 

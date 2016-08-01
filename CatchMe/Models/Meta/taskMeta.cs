@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -29,6 +30,9 @@ namespace CatchMe.Models
         [DisplayName("Owner")]
         public int owner { get; set; }
 
+        /* user 3 */
+        [DisplayName("Updated By")]
+        public int updated_by { get; set; }
 
 
         [DisplayName("Projet")]
@@ -81,6 +85,51 @@ namespace CatchMe.Models
     [MetadataType(typeof(taskMeta))]
     public partial class task
     {
+
+        public string LastUpdatedSince {
+
+            get
+            {
+                StringBuilder result = new StringBuilder();
+                if (updated_on.HasValue)
+                {
+
+
+
+                    TimeSpan t = DateTime.Now - updated_on.Value;
+
+                    var seconds = t.TotalSeconds;
+                    var minutes = t.TotalMinutes;
+                    var hours = t.TotalHours;
+                    var days = t.TotalDays;
+
+
+                    if (seconds < 60.0)
+                    {
+                        result.AppendFormat("<span class='label label-danger'><b>{0}</b>s ago</label>", (int)seconds);
+                    }
+
+                    if (seconds >= 60.0 && minutes < 60)
+                    {
+                        result.AppendFormat("<span class='label label-danger'><b>{0}</b>m ago</label>", (int)minutes);
+                    }
+
+                    if (minutes >= 60.0 && hours < 24)
+                    {
+                        result.AppendFormat("<span class='label label-warning'><b>{0}</b>h ago</label>", (int)hours);
+                    }
+                    //if (hours >= 24.0 && days <= 5)
+                    //{
+                    //    result.AppendFormat("<span class='label label-primary'><b>{0}</b> day(s) ago</label>", (int)days);
+                    //}
+                }
+                return result.ToString();
+
+            }
+        
+                
+                }
+
 
         public bool IsFilteredOn { get; set; }
 

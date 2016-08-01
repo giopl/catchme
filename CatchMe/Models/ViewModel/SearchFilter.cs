@@ -13,24 +13,24 @@ namespace CatchMe.Models.ViewModel
         public Nullable<int> id { get; set; }
 
         [DisplayName("Status")]
-        public Nullable<int> status { get; set; }
+        public List<int> status { get; set; }
 
 
         [DisplayName("Priority")]
-        public Nullable<int> priority { get; set; }
+        public List<int> priority { get; set; }
 
 
         [DisplayName("Type")]
-        public Nullable<int> type { get; set; }
+        public List<int> type { get; set; }
 
         [DisplayName("Created By")]
-        public Nullable<int> createdBy { get; set; }
+        public List<int> createdBy { get; set; }
 
         [DisplayName("Owner")]
-        public Nullable<int> owner { get; set; }
+        public List<int> owner { get; set; }
 
         [DisplayName("AssignedTo")]
-        public Nullable<int> assignedTo { get; set; }
+        public List<int> assignedTo { get; set; }
 
         [DisplayName("Title")]
         public string title { get; set; }

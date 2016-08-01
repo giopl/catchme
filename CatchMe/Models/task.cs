@@ -41,6 +41,7 @@ namespace CatchMe.Models
         public Nullable<System.DateTime> updated_on { get; set; }
         public int state { get; set; }
         public int owner { get; set; }
+        public int updated_by { get; set; }
     
         public virtual ICollection<attachment> attachments { get; set; }
         public virtual ICollection<comment> comments { get; set; }
@@ -51,6 +52,7 @@ namespace CatchMe.Models
         public virtual ICollection<taskHist> task_hist { get; set; }
         public virtual user user1 { get; set; }
         public virtual user user2 { get; set; }
+        public virtual user user3 { get; set; }
         public virtual ICollection<taskUser> task_user { get; set; }
     }
 }

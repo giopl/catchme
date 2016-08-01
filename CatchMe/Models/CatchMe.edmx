@@ -124,6 +124,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.employee' does not have a primary
           <Property Name="updated_on" Type="datetime" />
           <Property Name="state" Type="int" Nullable="false" />
           <Property Name="owner" Type="int" Nullable="false" />
+          <Property Name="updated_by" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="task_hist">
           <Key>
@@ -397,6 +398,18 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_task_updated_by_user_id">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="task" Type="Self.task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="task">
+              <PropertyRef Name="updated_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_task_user_id">
           <End Role="user" Type="Self.user" Multiplicity="0..1" />
           <End Role="task" Type="Self.task" Multiplicity="*" />
@@ -571,6 +584,10 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             <End Role="project" EntitySet="project" />
             <End Role="task" EntitySet="task" />
           </AssociationSet>
+          <AssociationSet Name="FK_task_updated_by_user_id" Association="Self.FK_task_updated_by_user_id">
+            <End Role="user" EntitySet="user" />
+            <End Role="task" EntitySet="task" />
+          </AssociationSet>
           <AssociationSet Name="FK_task_user_id" Association="Self.FK_task_user_id">
             <End Role="user" EntitySet="user" />
             <End Role="task" EntitySet="task" />
@@ -658,6 +675,10 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             <End Role="user" EntitySet="users" />
             <End Role="task" EntitySet="tasks" />
           </AssociationSet>
+          <AssociationSet Name="FK_task_updated_by_user_id" Association="CatchMeDBModel.FK_task_updated_by_user_id">
+            <End Role="user" EntitySet="users" />
+            <End Role="task" EntitySet="tasks" />
+          </AssociationSet>
           <AssociationSet Name="FK_task_user_id" Association="CatchMeDBModel.FK_task_user_id">
             <End Role="user" EntitySet="users" />
             <End Role="task" EntitySet="tasks" />
@@ -740,7 +761,8 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_user_id" FromRole="user" ToRole="log" />
           <NavigationProperty Name="tasks" Relationship="CatchMeDBModel.FK_task_assigned_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="tasks1" Relationship="CatchMeDBModel.FK_task_owner_user_id" FromRole="user" ToRole="task" />
-          <NavigationProperty Name="tasks2" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="user" ToRole="task" />
+          <NavigationProperty Name="tasks2" Relationship="CatchMeDBModel.FK_task_updated_by_user_id" FromRole="user" ToRole="task" />
+          <NavigationProperty Name="tasks3" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="user" ToRole="task" />
         </EntityType>
         <Association Name="FK_task_user_user_id">
           <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
@@ -963,6 +985,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <Property Name="updated_on" Type="DateTime" Precision="3" />
           <Property Name="state" Type="Int32" Nullable="false" />
           <Property Name="owner" Type="Int32" Nullable="false" />
+          <Property Name="updated_by" Type="Int32" Nullable="false" />
           <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="task" ToRole="attachment" />
           <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="task" ToRole="comment" />
           <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_task_id" FromRole="task" ToRole="log" />
@@ -971,7 +994,8 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_task_assigned_user_id" FromRole="task" ToRole="user" />
           <NavigationProperty Name="task_hist" Relationship="CatchMeDBModel.FK_task_hist_task_id" FromRole="task" ToRole="taskHist" />
           <NavigationProperty Name="user1" Relationship="CatchMeDBModel.FK_task_owner_user_id" FromRole="task" ToRole="user" />
-          <NavigationProperty Name="user2" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="task" ToRole="user" />
+          <NavigationProperty Name="user2" Relationship="CatchMeDBModel.FK_task_updated_by_user_id" FromRole="task" ToRole="user" />
+          <NavigationProperty Name="user3" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="task" ToRole="user" />
           <NavigationProperty Name="task_user" Relationship="CatchMeDBModel.FK_task_user_task_id" FromRole="task" ToRole="taskUser" />
         </EntityType>
         <Association Name="FK_attachment_task_id">
@@ -1067,6 +1091,18 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             </Principal>
             <Dependent Role="task">
               <PropertyRef Name="owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_task_updated_by_user_id">
+          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="task">
+              <PropertyRef Name="updated_by" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1323,6 +1359,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <EntitySetMapping Name="tasks">
             <EntityTypeMapping TypeName="CatchMeDBModel.task">
               <MappingFragment StoreEntitySet="task">
+                <ScalarProperty Name="updated_by" ColumnName="updated_by" />
                 <ScalarProperty Name="owner" ColumnName="owner" />
                 <ScalarProperty Name="state" ColumnName="state" />
                 <ScalarProperty Name="updated_on" ColumnName="updated_on" />

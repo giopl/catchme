@@ -16,12 +16,15 @@
     [updated_on]  DATETIME       DEFAULT (getdate()) NULL,
     [state]       INT            DEFAULT ((0)) NOT NULL,
     [owner]       INT            DEFAULT ((0)) NOT NULL,
+    [updated_by]  INT            DEFAULT ((100)) NOT NULL,
     PRIMARY KEY CLUSTERED ([task_id] ASC),
     CONSTRAINT [FK_task_assigned_user_id] FOREIGN KEY ([assigned_to]) REFERENCES [dbo].[user] ([user_id]),
-    CONSTRAINT [FK_task_owner_user_id] FOREIGN KEY ([owner]) REFERENCES [dbo].[user] ([user_id]),
     CONSTRAINT [FK_task_project_id] FOREIGN KEY ([project_id]) REFERENCES [dbo].[project] ([project_id]),
+    CONSTRAINT [FK_task_updated_by_user_id] FOREIGN KEY ([updated_by]) REFERENCES [dbo].[user] ([user_id]),
     CONSTRAINT [FK_task_user_id] FOREIGN KEY ([created_by]) REFERENCES [dbo].[user] ([user_id])
 );
+
+
 
 
 
