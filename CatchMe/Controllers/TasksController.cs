@@ -674,8 +674,14 @@ namespace CatchMe.Controllers
                         db.SaveChanges();
 
                         log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.COMMENT, string.Format(" Comment Added: {0}-{1}", comment.comment_id, comment.title), comment.task_id);
-
                         CreateLog(log);
+
+                        //update task last edited on
+                        var task = db.tasks.Find(comment.task_id);
+                        task.updated_on = DateTime.Now;                        
+                        db.Entry(task).State = EntityState.Modified;
+                        db.SaveChanges();
+
 
                     }
                 }

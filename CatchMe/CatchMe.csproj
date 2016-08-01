@@ -230,6 +230,9 @@
     <Content Include="Content\DataTables.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\plugin\chosen-sprite%402x.png" />
+    <Content Include="Content\plugin\chosen-sprite.png" />
+    <Content Include="Content\plugin\chosen.css" />
     <Content Include="Content\select2.css" />
     <Content Include="Content\sweetalert.css" />
     <Content Include="favicon.ico" />
@@ -294,6 +297,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\plugins\chosen.jquery.js" />
     <Content Include="Scripts\plugins\combodate.js" />
     <Content Include="Scripts\plugins\DataTables.js" />
     <Content Include="Scripts\plugins\list.js" />

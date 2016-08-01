@@ -34,7 +34,7 @@ namespace CatchMe
                       //https://bootstrap-datepicker.readthedocs.io/en/latest/options.html#autoclose
                       "~/Scripts/bootstrap-datepicker.js",
                       //https://select2.github.io/
-                      //"~/Scripts/plugins/select2.js",
+                      "~/Scripts/plugins/chosen.jquery.js",
                       "~/Scripts/plugins/readmore.js",
                       "~/Scripts/plugins/moment.js",
                       "~/Scripts/sweetalert.js",
@@ -67,7 +67,7 @@ namespace CatchMe
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap-datepicker3.css",
                       "~/Content/font-awesome.css",
-                      "~/Content/select2.css",
+                      "~/Content/plugin/chosen.css",
                       "~/Content/DataTables.css",
                       "~/Content/sweetalert.css",
 
