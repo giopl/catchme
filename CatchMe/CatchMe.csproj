@@ -273,6 +273,7 @@
     <Content Include="notes\catchme_data.7z" />
     <Content Include="notes\New folder.zip" />
     <Content Include="notes\cmdb.zip" />
+    <Content Include="notes\chosen_v1.6.1.zip" />
     <None Include="Properties\PublishProfiles\dwh-appsdev %28Debug%29.pubxml" />
     <None Include="Properties\PublishProfiles\TestSite %28dwh-appsdev%29.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
