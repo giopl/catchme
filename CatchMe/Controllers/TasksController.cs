@@ -133,19 +133,14 @@ namespace CatchMe.Controllers
         }
 
 
-        private List<task>  MarkAsFiltered (List<task> tasks)
-        
-        
+        private List<task>  MarkAsFiltered (List<task> tasks)                
         {
             try
             {
                 var list = tasks;
  
                 var searchFilter = UserSession.Current.searchFilter;
-                var result = new List<task>();
-
-                
-
+                var result = new List<task>();                              
 
                 if (searchFilter != null)
                 {
@@ -156,10 +151,15 @@ namespace CatchMe.Controllers
 
                             var commentList = comments.Where(x => x.description.ToLower().Contains(searchFilter.keywords.ToLower())).ToList();
 
-                            //var tasklist = db.tasks.Where(x=>x.title.ToLower())
-                            var foundTasks = new List<task>();
+                        var tasklist = db.tasks.Where(x => x.title.ToLower().Contains(searchFilter.keywords.ToLower())).ToList();
 
-                            foreach (var comm in commentList)
+                        var foundTasks = new List<task>();
+                        foreach(var tsk in tasklist)
+                        {
+                           foundTasks.Add(new task { task_id = tsk.task_id });
+
+                        }
+                        foreach (var comm in commentList)
                             {
                                 foundTasks.Add(new task { task_id = comm.task_id });
                             }
