@@ -905,6 +905,13 @@ namespace CatchMe.Controllers
             if (ModelState.IsValid)
             {
 
+
+                //if the task is marked as completed or No Issue, assign it back to the owner
+                if (task.status == 3 || task.status == 6)
+                {
+                    task.assigned_to = task.owner;
+                }
+
                 task.updated_on = DateTime.Now;
                 task.updated_by = UserSession.Current.UserId;
                 task.state = 0;

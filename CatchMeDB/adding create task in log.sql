@@ -1,4 +1,9 @@
 ﻿
+/* update owner where status is completed passed, closed or no issue) */
+update task set assigned_to = [owner] where status in  ( 3, 6, 7, 9)
+
+
+
 insert into log(user_id, task_id, operation, type, logtime, description)
 
 select created_by, task_id, 'CREATE', 'TASK', created_on, 'Task created'
@@ -21,6 +26,7 @@ and o2.option_type = 'STATUS'
 inner join [user] u 
 on t.created_by = u.user_id
 where [status] like '%>%'
+
 
 
 
