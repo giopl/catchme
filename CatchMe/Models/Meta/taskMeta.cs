@@ -22,15 +22,15 @@ namespace CatchMe.Models
         [DisplayName("Assigned To")]
         public int assigned_to { get; set; }
 
-        /* user1 */
+        /* user3 */
         [DisplayName("Created By")]
         public Nullable<int> created_by { get; set; }
 
-        /* user 2 */
+        /* user 1 */
         [DisplayName("Owner")]
         public int owner { get; set; }
 
-        /* user 3 */
+        /* user 2 */
         [DisplayName("Updated By")]
         public int updated_by { get; set; }
 

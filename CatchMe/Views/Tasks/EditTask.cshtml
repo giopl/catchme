@@ -31,7 +31,7 @@
 
                 @*<h2 class="tasktitle"><span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span> @Model.title </h2>*@
 
-                <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.firstname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") last updated on <strong>@Model.updated_on.Value.ToString("dd MMM yyyy HH:mm")</strong> by @Model.user3.firstname</h5>
+                <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.firstname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") last updated on <strong>@Model.updated_on.Value.ToString("dd MMM yyyy HH:mm")</strong> by @Model.user2.firstname</h5>
 
 
                 @if (is_readonly)
