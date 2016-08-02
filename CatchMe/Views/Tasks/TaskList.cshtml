@@ -39,18 +39,20 @@
         table.fixed td { overflow: hidden; }
 
         .chosen-select-multi {
-        width:80%;
-    }
+
+            width:300px;
+        
+                }
 </style>
 
 
 <div class="gap"></div>
 
-@*<a href="#" class="showsection">Advancd Search</a>
+<a href="#" class="shownextsection">Advanced Search</a>
 
-<section>
+<section style="display:none">
     @Html.Partial("_searchFilter", searchFilter)
-</section>*@
+</section>
     
 
 <div>
@@ -75,7 +77,7 @@
         {
             <li role="presentation" class="recentcolor"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Recent updates (@latest10.Count())</a></li>
         }
-       @*<li role="presentation"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab">Searched (@countsearched)</a></li>*@
+       <li role="presentation"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab">Searched (@countsearched)</a></li>
         
     </ul>
 
@@ -440,7 +442,7 @@
                                 @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
                                 @assignee
                             </td>
-                            <td>@item.user3.firstname</td>
+                            <td>@item.user2.firstname</td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.PriorityDesc)
                             </td>
@@ -587,7 +589,7 @@
 
             //});
 
-            $('.chosen-select-multi').chosen();
+            $('.chosen-select-multi').chosen({ width: "95%" });
 
 
             $('body').on('change', '.changeproject', function () {

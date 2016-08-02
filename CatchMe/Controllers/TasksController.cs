@@ -134,6 +134,8 @@ namespace CatchMe.Controllers
 
 
         private List<task>  MarkAsFiltered (List<task> tasks)
+        
+        
         {
             try
             {
@@ -141,8 +143,39 @@ namespace CatchMe.Controllers
  
                 var searchFilter = UserSession.Current.searchFilter;
                 var result = new List<task>();
+
+                
+
+
                 if (searchFilter != null)
                 {
+                        if(searchFilter.keywords != null)
+                        {
+                            var projectId = tasks.FirstOrDefault().project_id;
+                            var comments = db.comments.Where(x => x.task.project_id == projectId);
+
+                            var commentList = comments.Where(x => x.description.ToLower().Contains(searchFilter.keywords.ToLower())).ToList();
+
+                            //var tasklist = db.tasks.Where(x=>x.title.ToLower())
+                            var foundTasks = new List<task>();
+
+                            foreach (var comm in commentList)
+                            {
+                                foundTasks.Add(new task { task_id = comm.task_id });
+                            }
+
+                            foreach(var item in list.ToList())
+                            {
+                                if(foundTasks.Contains(item))
+                                {
+                                    item.IsFilteredOn = true;
+                                }
+                            }
+
+                            //return list;
+                        }
+                    
+                    
                     if (searchFilter.assignedTo != null)
                     {
                         
@@ -196,14 +229,14 @@ namespace CatchMe.Controllers
 
                 }
 
-                foreach (var item in list)
-                {
-                    item.IsFilteredOn = true;
-                }
+                //foreach (var item in list)
+                //{
+                //    item.IsFilteredOn = true;
+                //}
                 return list;
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 throw;

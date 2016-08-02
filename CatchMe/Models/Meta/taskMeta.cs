@@ -392,6 +392,30 @@ namespace CatchMe.Models
 
 
 
+
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            var t = obj as task;
+            if (t == null)
+                return false;
+            if (task_id == t.task_id)
+                return true;
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash += (hash * 43) + task_id.GetHashCode();
+
+            return hash;
+
+        }
+
+
     }
 
 }

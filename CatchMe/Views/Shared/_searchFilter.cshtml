@@ -3,94 +3,123 @@
 @using (Html.BeginForm("SetSearchFilter","Tasks",FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>SearchFilter</h4>
+        <h4>Search Filter</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.id)
 
-        <div class="form-group">
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label" })                
-                @Html.DropDownList("status", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple="multiple" })
-                @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
-            </div>
-        
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label" })
-                @Html.DropDownList("priority", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
-                @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
-            </div>
-            
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label " })
-                @Html.DropDownList("type", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        <fieldset>
+            <legend>Characteristics</legend>
+            <div class="form-group">
 
-        <div class="form-group">
-            
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
+                    @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
+                </div>
 
-            <div class="col-md-3">
-            @Html.LabelFor(model => model.createdBy, htmlAttributes: new { @class = "control-label" })
-                @Html.DropDownList("createdBy", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
-                @Html.ValidationMessageFor(model => model.createdBy, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.owner, htmlAttributes: new { @class = "control-label" })
-                @Html.DropDownList("owner", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
-                @Html.ValidationMessageFor(model => model.owner, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.assignedTo, htmlAttributes: new { @class = "control-label" })
-                @Html.DropDownList("assignedTo", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
-                @Html.ValidationMessageFor(model => model.assignedTo, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownList("priority", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
+                    @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
+                </div>
 
-        
-        <div class="form-group">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.createdOnMin, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.createdOnMin, new { htmlAttributes = new { @class = "form-control datepicker" } })
-                @Html.ValidationMessageFor(model => model.createdOnMin, "", new { @class = "text-danger" })
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label " })
+                    @Html.DropDownList("type", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
+                    @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
+                </div>
             </div>
-            <div class="col-md-3">
-            @Html.LabelFor(model => model.createdOnMax, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.createdOnMax, new { htmlAttributes = new { @class = "form-control datepicker" } })
-                @Html.ValidationMessageFor(model => model.createdOnMax, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.dueOnMin, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.dueOnMin, new { htmlAttributes = new { @class = "form-control datepicker" } })
-                @Html.ValidationMessageFor(model => model.dueOnMin, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.dueOnMax, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.dueOnMax, new { htmlAttributes = new { @class = "form-control datepicker" } })
-                @Html.ValidationMessageFor(model => model.dueOnMax, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        </fieldset>
 
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Search" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+        <fieldset>
+            <legend>people</legend>
+
+            <div class="form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.createdBy, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownList("createdBy", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
+                    @Html.ValidationMessageFor(model => model.createdBy, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.owner, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownList("owner", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
+                    @Html.ValidationMessageFor(model => model.owner, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.assignedTo, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownList("assignedTo", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
+                    @Html.ValidationMessageFor(model => model.assignedTo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    </fieldset>
+
+        <fieldset>
+            <legend>keywords</legend>
+
+
+            <div class="form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.keywords, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.keywords, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.keywords, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Dates</legend>
+
+            <div class="form-group">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.createdOnMin, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.createdOnMin, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                    @Html.ValidationMessageFor(model => model.createdOnMin, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.createdOnMax, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.createdOnMax, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                    @Html.ValidationMessageFor(model => model.createdOnMax, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.dueOnMin, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.dueOnMin, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                    @Html.ValidationMessageFor(model => model.dueOnMin, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.dueOnMax, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.dueOnMax, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                    @Html.ValidationMessageFor(model => model.dueOnMax, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </fieldset>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Search" class="btn btn-default" />
+                </div>
+            </div>
 </div>
+            }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
 
-}
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+
+            }
 
 
 
