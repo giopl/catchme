@@ -554,7 +554,7 @@ namespace CatchMe.Controllers
             if (val == 2)
             {
                 statuses.Add(new OptionItem { name = "Reset to New", value = 0 });
-                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Start Development", value = 1 });
                 statuses.Add(new OptionItem { name = "Investigation", value = 2 });
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
@@ -565,7 +565,7 @@ namespace CatchMe.Controllers
 
             if (val == 3)            
             {
-                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Re-Open", value = 1 });
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "Test Passed", value = 7 });
                 statuses.Add(new OptionItem { name = "Test Failed", value = 8 });
@@ -579,27 +579,27 @@ namespace CatchMe.Controllers
 
             if (val == 5)
             {
-                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Resume", value = 1 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
             }
 
             if (val == 6)
             {
-                statuses.Add(new OptionItem { name = "Action Task", value = 1 });
+                statuses.Add(new OptionItem { name = "Re-Open", value = 1 });
                 statuses.Add(new OptionItem { name = "No Issue", value = 6 });
                 statuses.Add(new OptionItem { name = "Close Task", value = 9 });
             }
 
             if (val == 7)
             {
-                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Re-Open", value = 1 });
                 statuses.Add(new OptionItem { name = "Passed", value = 7 });
                 statuses.Add(new OptionItem { name = "Close Task", value = 9 });
             }
 
             if (val == 8)
             {
-                statuses.Add(new OptionItem { name = "Resume Action", value = 1 });
+                statuses.Add(new OptionItem { name = "Re-Work", value = 1 });
                 statuses.Add(new OptionItem { name = "Failed", value = 8 });
             }
 
