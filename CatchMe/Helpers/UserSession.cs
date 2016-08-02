@@ -26,7 +26,7 @@ namespace CatchMe.Helpers
             CurrentProject = string.Empty;
             CurrentProjectId = 0;
             MyProjects = null;
-
+            ImpersonatedUser = string.Empty;
             SearchFilter searchFilter = new SearchFilter();
         }
 
@@ -60,6 +60,7 @@ namespace CatchMe.Helpers
 
         public IList<project> MyProjects { get; set; }
 
+        public string ImpersonatedUser { get; set; }
         public bool IsValid { get; set; }
         public bool ReadOnlyMode { get; set; }
         public int UserId { get; set; }

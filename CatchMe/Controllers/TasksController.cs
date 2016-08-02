@@ -864,7 +864,14 @@ namespace CatchMe.Controllers
             if(task.user1.user_id != UserSession.Current.UserId && task.status.Value != 9) 
             {
                                 
+
                 statuslist.Remove(new OptionItem { name = "Closed", value = 9 });
+                
+                if(task.status.Value != 8)
+                statuslist.Remove(new OptionItem { name = "Failed", value = 8 });
+
+                if(task.status.Value!= 7)
+                statuslist.Remove(new OptionItem { name = "Passed", value = 7 });
             }
                 
 

@@ -1,0 +1,56 @@
+﻿@model CatchMe.Models.user
+
+@{
+    ViewBag.Title = "Impersonation";
+    var users = ViewBag.Users as List<CatchMe.Models.user>;
+}
+
+<h2>Impersonation</h2>
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index")">Home</a></li>
+    <li class="active">Impersonation</li>
+</ol>
+
+
+@using (Html.BeginForm("Impersonate", "Admin", FormMethod.Get)
+    )
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>user</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+
+
+
+        <div class="form-group">
+
+            <div class="control-label col-md-2">Pick a User</div> 
+            <div class="col-md-3">
+                <select name="user" class="form-control">
+                    @foreach (var usr in users)
+                    {
+                    <option value="@usr.username">@usr.fullname</option>
+                    }
+
+
+                </select>
+
+                
+            </div>
+        </div>
+
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Impersonate" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

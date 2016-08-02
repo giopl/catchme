@@ -19,7 +19,8 @@ using CatchMe.Helpers;
 
 namespace CatchMe.Controllers
 {
-    public class AdminController : BaseController
+    public class 
+        AdminController : BaseController
     {
         private CatchMeDBEntities db = new CatchMeDBEntities();
         log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -63,6 +64,32 @@ namespace CatchMe.Controllers
                 throw;
             }
         }
+
+
+        public ActionResult Impersonation()
+        {
+
+            ViewBag.Users = db.users.ToList();
+            return View();
+        }
+
+        public ActionResult Impersonate(string user)
+        {
+
+            UserSession.Current.ImpersonatedUser = user;
+            return RedirectToAction("Index", "Home");
+            
+        }
+
+        public ActionResult Unimpersonate(string user)
+        {
+
+            UserSession.Current.ImpersonatedUser = "";
+            return RedirectToAction("Index", "Home");
+
+        }
+
+
 
 
 

@@ -359,6 +359,7 @@
     <Content Include="Views\Admin\Home.cshtml" />
     <Content Include="Views\Admin\ListDeleted.cshtml" />
     <Content Include="Views\Shared\_searchFilter.cshtml" />
+    <Content Include="Views\Admin\Impersonation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

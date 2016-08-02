@@ -32,7 +32,17 @@ namespace CatchMe.Controllers
         {
             log.Debug("Hello World");
 
-            var _user = User.Identity.Name;
+            string _user = string.Empty;
+            if (string.IsNullOrWhiteSpace(UserSession.Current.ImpersonatedUser))
+            { 
+                 _user = User.Identity.Name;
+            }
+            else
+            {
+                _user = UserSession.Current.ImpersonatedUser;
+            }
+            
+                        
 
             if(!string.IsNullOrWhiteSpace(_user))
             {                

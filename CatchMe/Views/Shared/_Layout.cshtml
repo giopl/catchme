@@ -36,7 +36,12 @@
                 {
                     <a href="@Url.Action("Index","Admin")" title="Admin"><span class="fa fa-15x fa-wrench"></span></a>@:&nbsp;
                 }
-                    Hello, @session.Current.Firstname!
+                    Hello, @session.Current.Firstname! 
+
+                    @if (!String.IsNullOrWhiteSpace(session.Current.ImpersonatedUser))
+                    { 
+                        <a href="@Url.Action("Unimpersonate","Admin")">(back)</a>
+                    }
                 
                 </p>
             </div>

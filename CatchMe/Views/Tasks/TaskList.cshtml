@@ -2,7 +2,10 @@
 
 @using session = CatchMe.Helpers.UserSession
 @using appenums = CatchMe.Helpers.AppEnums
+
 @{
+    
+    
     ViewBag.Title = "Catch Me";
 
     var countopen = Model.Where(x => x.status != 9).Count();
@@ -48,11 +51,11 @@
 
 <div class="gap"></div>
 
-<a href="#" class="shownextsection">Advanced Search</a>
+@*<a href="#" class="shownextsection">Advanced Search</a>
 
 <section style="display:none">
     @Html.Partial("_searchFilter", searchFilter)
-</section>
+</section>*@
     
 
 <div>
@@ -77,7 +80,7 @@
         {
             <li role="presentation" class="recentcolor"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Recent updates (@latest10.Count())</a></li>
         }
-       <li role="presentation"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab">Searched (@countsearched)</a></li>
+       @*<li role="presentation"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab">Searched (@countsearched)</a></li>*@
         
     </ul>
 
@@ -117,7 +120,7 @@
                 </thead>
 
                 <tbody>
-                    @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9))
+                    @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId &&  ( x.status != 9 ) || x.owner == session.Current.UserId && ( x.status == 7 || x.status == 8 || x.status == 3) ))
                     {
                         <tr>
                             <td>
@@ -340,7 +343,7 @@
                 </thead>
 
                 <tbody>
-                    @foreach (var item in Model.Where(x => x.owner == session.Current.UserId && x.status != 9))
+                    @foreach (var item in Model.Where(x => x.owner == session.Current.UserId && x.status != 9  ))
                     {
                         <tr>
                             <td>
