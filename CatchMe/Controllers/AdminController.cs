@@ -69,7 +69,18 @@ namespace CatchMe.Controllers
         public ActionResult Impersonation()
         {
 
-            ViewBag.Users = db.users.ToList();
+
+            var projectId = UserSession.Current.CurrentProjectId;
+
+            var project = db.projects.Find(projectId);
+
+            var users = project.users.ToList();
+
+            ViewBag.Users = project.users.ToList();
+
+
+
+            //ViewBag.Users = db.users.ToList();
             return View();
         }
 

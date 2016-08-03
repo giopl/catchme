@@ -38,21 +38,15 @@
 <div style="clear:both"></div>
 
 <style>
-    
-        table.fixed { table-layout:fixed; }    
-        table.fixed td { overflow: hidden; }
-
-        .chosen-select-multi {
-
-            width:300px;
-        
-                }
+table.fixed { table-layout:fixed; }    
+table.fixed td { overflow: hidden; }
+.chosen-select-multi { width:300px; }
 </style>
 
 
 <div class="gap"></div>
 
-<a href="#" class="shownextsection">Advanced Search</a>
+@*<a href="#" class="shownextsection">Advanced Search</a>*@
 
 <section style="display:none">
     @Html.Partial("_searchFilter", searchFilter)
@@ -81,7 +75,11 @@
         {
             <li role="presentation" class="recentcolor"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Recent updates (@latest10.Count())</a></li>
         }
-       <li role="presentation"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab">Searched (@countsearched)</a></li>
+        
+        @if(countsearched >0)
+        {
+            <li role="presentation"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab">Searched (@countsearched)</a></li>            
+        }
         
     </ul>
 
@@ -141,7 +139,7 @@
                                 @assignee
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.PriorityDesc)
+                                <span class="circle bg-danger"></span> @Html.DisplayFor(modelItem => item.PriorityDesc)
                             </td>
                             <td class="@(item.IsOverdue?"red":"")">
 

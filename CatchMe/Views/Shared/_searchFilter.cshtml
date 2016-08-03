@@ -37,14 +37,9 @@
 
 
         <fieldset>
-            <legend>people</legend>
+            <legend>People</legend>
 
             <div class="form-group">
-                <div class="col-md-4">
-                    @Html.LabelFor(model => model.createdBy, htmlAttributes: new { @class = "control-label" })
-                    @Html.DropDownList("createdBy", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
-                    @Html.ValidationMessageFor(model => model.createdBy, "", new { @class = "text-danger" })
-                </div>
                 <div class="col-md-4">
                     @Html.LabelFor(model => model.owner, htmlAttributes: new { @class = "control-label" })
                     @Html.DropDownList("owner", null, htmlAttributes: new { @class = "chosen-select-multi", @multiple = "multiple" })
