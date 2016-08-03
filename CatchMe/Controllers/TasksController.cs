@@ -474,11 +474,21 @@ namespace CatchMe.Controllers
 
                 user.active_project = projectId;
 
+                
+
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
 
                 // change the user session accordingly
                 var project = db.projects.Find(projectId);
+
+                var roles = project.project_user_role.Where(x => x.user_id == user.user_id).ToList();
+
+                if (roles.Count()>0)
+                {
+                    UserSession.Current.CurrentProjectRole = roles.FirstOrDefault().role;
+                }
+
                 UserSession.Current.CurrentProject = project.name;
                 UserSession.Current.CurrentProjectId = projectId;
                 
@@ -525,7 +535,7 @@ namespace CatchMe.Controllers
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
-                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                //statuses.Add(new OptionItem { name = "No Issue", value = 6 });
                 statuses.Add(new OptionItem { name = "Test Passed", value = 7 });
                 statuses.Add(new OptionItem { name = "Test Failed", value = 8 });
                 statuses.Add(new OptionItem { name = "Closed", value = 9 });
@@ -547,7 +557,7 @@ namespace CatchMe.Controllers
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
-                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                //statuses.Add(new OptionItem { name = "No Issue", value = 6 });
             }
 
 
@@ -559,7 +569,7 @@ namespace CatchMe.Controllers
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
-                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                //statuses.Add(new OptionItem { name = "No Issue", value = 6 });
             }
 
 
@@ -586,7 +596,7 @@ namespace CatchMe.Controllers
             if (val == 6)
             {
                 statuses.Add(new OptionItem { name = "Re-Open", value = 1 });
-                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                //statuses.Add(new OptionItem { name = "No Issue", value = 6 });
                 statuses.Add(new OptionItem { name = "Close Task", value = 9 });
             }
 
@@ -697,8 +707,11 @@ namespace CatchMe.Controllers
 
             var currentprojectid = UserSession.Current.CurrentProjectId;
 
+            
+
             var currentproject = db.projects.Find(currentprojectid);
             
+
             
             //http://stackoverflow.com/questions/13405568/linq-unable-to-create-a-constant-value-of-type-xxx-only-primitive-types-or-enu
             var users = db.users.Where(x=>x.projects.Select(p=>p.project_id).Contains(currentprojectid)).ToList();
@@ -907,7 +920,7 @@ namespace CatchMe.Controllers
 
 
                 //if the task is marked as completed or No Issue, assign it back to the owner
-                if (task.status == 3 || task.status == 6)
+                if (task.status == 3)
                 {
                     task.assigned_to = task.owner;
                 }

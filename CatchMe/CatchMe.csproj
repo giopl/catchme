@@ -185,6 +185,7 @@
     <Compile Include="Models\Meta\commentMeta.cs" />
     <Compile Include="Models\Meta\logMeta.cs" />
     <Compile Include="Models\Meta\projectMeta.cs" />
+    <Compile Include="Models\Meta\projectUserRoleMeta.cs" />
     <Compile Include="Models\Meta\taskHistMeta.cs" />
     <Compile Include="Models\Meta\taskMeta.cs" />
     <Compile Include="Models\Meta\userMeta.cs" />
@@ -194,6 +195,9 @@
     </Compile>
     <Compile Include="Models\OptionItem.cs" />
     <Compile Include="Models\project.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\projectUserRole.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\task.cs">

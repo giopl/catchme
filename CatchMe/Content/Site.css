@@ -257,6 +257,11 @@ width:100px;
   }
 
 
+  .color-low { color: #5BC0DE;}
+  .color-medium { color: #ffd800;}
+  .color-high { color: #D9534F;}
+  .color-immediate {color: #b200ff;}
+
 /* overriding chosen */
 
 .chosen-container-single .chosen-single {

@@ -302,23 +302,31 @@
                             @Html.HiddenFor(model => model.description)
 
                             <div class="form-group pad20">
-                                @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-4" })
+                                @*@Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-4" })*@
+                                <div class="col-md-4">
+                                    <label for="status" class="control-label">Status <span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
+
+                                </div>
+
                                 <div class="col-md-8">
 
-                                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select" })
+                                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select submitme" })
                                     @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
                                     <span class="text-light"><small>&nbsp;<span class="fa fa-info-circle"></span> Only <b>Owner</b> can close task</small></span>
                                 </div>
                             </div>
 
                             <div class="form-group pad20">
-                                @Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-4" })
-                                <div class="col-md-8">
+                                @*@Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-4" })*@
+                                <div class="col-md-4">
+                                    <label for="assigned_to" class="control-label">Assigned&nbsp;<span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
+                                    </div>
+                                    <div class="col-md-8">
 
-                                    @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select" })
-                                    @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
+                                        @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select submitme" })
+                                        @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
+                                    </div>
                                 </div>
-                            </div>
                             <div class="form-group pad20">
                                 @Html.LabelFor(model => model.owner, htmlAttributes: new { @class = "control-label col-md-4" })
                                 <div class="col-md-8">
@@ -468,15 +476,18 @@
                             </div>
 
 
+                            if (!is_readonly)
+                            {
 
+                                <div class="form-group pad20">
+                                    <div class="col-md-offset-4 col-md-8 text-center">
 
-                            <div class="form-group pad20">
-                                <div class="col-md-offset-4 col-md-8 text-center">
-
-                                    <input type="submit" id="savestatusbutton" value="Save" class="btn btn-info" />
-                                    <input type="reset" value="Reset" class="btn btn-default" />
+                                        <input type="submit" id="savestatusbutton" value="Save" class="btn btn-info" />
+                                        <input type="reset" value="Reset" class="btn btn-default" />
+                                    </div>
                                 </div>
-                            </div>
+
+                            }
 
 
                             <div class="form-group pad20" id="infosave" style="display:none">
@@ -538,8 +549,11 @@
                 format: 'dd/mm/yyyy',
                 autoclose: true,
                 clearBtn: true
-
             })
+
+            $('body').on('change', '.submitme', function () {
+                $(this).closest('form').trigger('submit');
+            });
 
 
 

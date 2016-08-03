@@ -25,6 +25,7 @@ namespace CatchMe.Helpers
             Role = 0;
             CurrentProject = string.Empty;
             CurrentProjectId = 0;
+            CurrentProjectRole = 0;
             MyProjects = null;
             ImpersonatedUser = string.Empty;
             SearchFilter searchFilter = new SearchFilter();
@@ -68,14 +69,25 @@ namespace CatchMe.Helpers
         public string Fullname { get; set; }
         public string Firstname { get; set; }
         public string CurrentProject { get; set; }
-        
+        public int CurrentProjectRole { get; set; }
+
+
         public string UserImage { get; set; }
         public bool IsProjectLead {
             get
             {
-                return Role == 2;
+                return CurrentProjectRole == 2;
             }
-                }
+         }
+
+        public bool IsBusiness
+        {
+            get
+            {
+                return CurrentProjectRole == 1;
+            }
+        }
+
 
         public int Role { get; set; }
 
@@ -88,6 +100,8 @@ namespace CatchMe.Helpers
             
             }
         public int CurrentProjectId { get; set; }
+
+        public int ProjectRole { get; set; }
 
         /// <summary>
         /// Clears the current session.

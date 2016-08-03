@@ -74,8 +74,17 @@ namespace CatchMe.Controllers
                 UserSession.Current.MyProjects = myProjects;
                 if(UserSession.Current.CurrentProjectId  > 0)
                 {
-                    UserSession.Current.CurrentProject = db.projects.Find(UserSession.Current.CurrentProjectId).name;
-                    
+                    var project = db.projects.Find(UserSession.Current.CurrentProjectId);
+                    UserSession.Current.CurrentProject = project.name;
+
+
+
+                    var roles = project.project_user_role.Where(x => x.user_id == UserSession.Current.UserId).ToList();
+                    if(roles.Count() > 0)
+                    {
+                        UserSession.Current.CurrentProjectRole = roles.FirstOrDefault().role;
+                    }
+
 
                     ViewBag.project_id = new SelectList(myProjects, "project_id", "name");
                     

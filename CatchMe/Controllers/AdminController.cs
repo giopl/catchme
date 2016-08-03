@@ -365,50 +365,7 @@ namespace CatchMe.Controllers
             return View();
 
         }
-
-
-
-        //public ActionResult FindUser(string q)
-        //{
-        //    ContentResult result = new ContentResult();
-
-        //    var users = db.employees.Where(x => x.user_id.StartsWith(q)).ToList();
-
-
-        //    var userlist = new List<string>();
-
-
-        //    StringBuilder sb = new StringBuilder();
-        //    sb.Append("[");
-        //    foreach (var u in users)
-        //    {
-
-        //        var fullname = string.Concat(u.user_id, "- ", u.common_name, " ", u.fam_name.Replace("'", ""));
-
-        //        userlist.Add(fullname);
-        //        sb.AppendFormat(@"'{0} - {1}',", u.user_id, fullname );
-
-        //    }
-
-        //    sb.Length--;
-        //    sb.Append("]");
-
-        //   // result.Content = @"['Amsterdam','Washington', 'Sydney', 'Beijing', 'Cairo']";
-
-
-
-        //    //return Json(userlist, JsonRequestBehavior.AllowGet);
- 
-            
-        //    result.Content = sb.ToString();
-
-        //    return result;
-
-        //}
-
-
-
-
+        
 
 
 
@@ -493,7 +450,7 @@ namespace CatchMe.Controllers
             ViewBag.Tab = tab;
                        
             var project_users = project.users;
-
+            
             var user_id = db.users.ToList();
 
 
@@ -522,14 +479,20 @@ namespace CatchMe.Controllers
 
             var user = db.users.Find(user_id);
             var project = db.projects.Find(project_id);
+            projectUserRole role = new projectUserRole { project_id = project_id, user_id = user_id, role = 0 };
+
             project.users.Add(user);
+            project.project_user_role.Add(role);
             if (ModelState.IsValid)
             {
 
 
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
+
                 
+
+
                 if(fromuser)
                 {
                     return RedirectToAction("EditUser", new { id = user_id });
@@ -552,13 +515,43 @@ namespace CatchMe.Controllers
         // POST: projectUsers/Delete/5
         
 
+        public ActionResult UpdateProjectUserRole(int project_id, int user_id, int role)
+        {
+            try
+            {
+                var projectUserRoles = db.projectUserRoles.Where(x=>x.project_id == project_id && x.user_id == user_id ).ToList();
+
+                projectUserRole purole = new projectUserRole();
+                if (projectUserRoles.Count > 0)
+                {
+                    purole = projectUserRoles.FirstOrDefault();
+
+                purole.role = role;
+                db.Entry(purole).State = EntityState.Modified;
+                db.SaveChanges();
+
+                }
+
+                return RedirectToAction("EditProject", new { id = project_id, tab = 2 });
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public ActionResult RemoveUserFromProject(int project_id, int user_id, bool fromuser = false)
         {
 
 
             var user = db.users.Find(user_id);
             var project = db.projects.Find(project_id);
+            projectUserRole role = new projectUserRole { project_id = project_id, user_id = user_id, role = 0 };
+
             project.users.Remove(user);
+            project.project_user_role.Remove(role);
             if (ModelState.IsValid)
             {
 

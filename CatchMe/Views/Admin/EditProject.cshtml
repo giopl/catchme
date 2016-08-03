@@ -99,7 +99,16 @@
             }
 
 
+            <style>
+                .isbusiness {
+                    background:rgba(182, 255, 0, 0.47)
+                }
 
+                .isteamlead {
+                    background:rgba(0, 148, 255, 0.45)
+
+                }
+            </style>
 
 
 
@@ -119,13 +128,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var user in Model.users)
+                    @foreach (var item in Model.project_user_role)
                     {
-                        <tr>
-                            <td>@user.username</td>
-                            <td>@user.fullname</td>
-                            <td>@user.RoleDesc</td>
-                            <td><a href="@Url.Action("RemoveUserFromProject", new  { project_id = Model.project_id, user_id = user.user_id })" onclick="return confirm('Are you sure?')">Remove</a></td>
+                        <tr class="@(item.role==1?"isbusiness":(item.role==2?"isteamlead":""))">
+                            <td>@item.user.username</td>
+                            <td>@item.user.fullname</td>
+                            <td>
+                                
+                              @using (Html.BeginForm("UpdateProjectUserRole", "Admin", FormMethod.Get, new { @class = "form-inline" }))
+                              {
+                                  <input type="hidden" name="user_id" value="@item.user.user_id" />
+                                <input type="hidden" name="project_id" value="@item.project_id" />
+
+                                <select name="role" class="form-control submitme">
+                                    <option value="0" @(item.role==0?"selected":"")>Developer</option>
+                                    <option value="1" @(item.role == 1 ? "selected" : "")>Business</option>
+                                    <option value="2" @(item.role == 2 ? "selected" : "")>Team Leader</option>
+                                </select>
+
+                              }
+
+                                
+                            
+                            </td>
+                            <td><a href="@Url.Action("RemoveUserFromProject", new  { project_id = Model.project_id, user_id = item.user.user_id })" onclick="return confirm('Are you sure?')">Remove</a></td>
                         </tr>
                     }
                 </tbody>
@@ -148,8 +174,16 @@
                 <script>
                     $(document).ready(function () {
 
-                        $('.select2').select2();
-                    })
+                        $('.submitme').chosen({
+                            width:'100px'
+                        });
+
+                    $('body').on('change', '.submitme', function () {
+                            $(this).closest('form').trigger('submit');                        
+                    });
+                 });
+
+
                 </script>
 
             }

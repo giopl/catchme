@@ -103,6 +103,15 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.employee' does not have a primary
           <Property Name="user_id" Type="int" Nullable="false" />
           <Property Name="project_id" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="project_user_role">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="project_id" Type="int" Nullable="false" />
+          <Property Name="role" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="task">
           <Key>
             <PropertyRef Name="task_id" />
@@ -338,6 +347,30 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_project_user_role_project_id">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="project_user_role" Type="Self.project_user_role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="project_user_role">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_project_user_role_user_id">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="project_user_role" Type="Self.project_user_role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="project_user_role">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_project_user_user_id">
           <End Role="user" Type="Self.user" Multiplicity="1" />
           <End Role="project_user" Type="Self.project_user" Multiplicity="*" />
@@ -371,18 +404,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             </Principal>
             <Dependent Role="task_hist">
               <PropertyRef Name="task_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_task_owner_user_id">
-          <End Role="user" Type="Self.user" Multiplicity="1" />
-          <End Role="task" Type="Self.task" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="task">
-              <PropertyRef Name="owner" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -457,6 +478,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <EntitySet Name="notification" EntityType="Self.notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project_user" EntityType="Self.project_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="project_user_role" EntityType="Self.project_user_role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="task" EntityType="Self.task" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="task_hist" EntityType="Self.task_hist" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="task_user" EntityType="Self.task_user" Schema="dbo" store:Type="Tables" />
@@ -564,6 +586,14 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             <End Role="project" EntitySet="project" />
             <End Role="project_user" EntitySet="project_user" />
           </AssociationSet>
+          <AssociationSet Name="FK_project_user_role_project_id" Association="Self.FK_project_user_role_project_id">
+            <End Role="project" EntitySet="project" />
+            <End Role="project_user_role" EntitySet="project_user_role" />
+          </AssociationSet>
+          <AssociationSet Name="FK_project_user_role_user_id" Association="Self.FK_project_user_role_user_id">
+            <End Role="user" EntitySet="user" />
+            <End Role="project_user_role" EntitySet="project_user_role" />
+          </AssociationSet>
           <AssociationSet Name="FK_project_user_user_id" Association="Self.FK_project_user_user_id">
             <End Role="user" EntitySet="user" />
             <End Role="project_user" EntitySet="project_user" />
@@ -575,10 +605,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <AssociationSet Name="FK_task_hist_task_id" Association="Self.FK_task_hist_task_id">
             <End Role="task" EntitySet="task" />
             <End Role="task_hist" EntitySet="task_hist" />
-          </AssociationSet>
-          <AssociationSet Name="FK_task_owner_user_id" Association="Self.FK_task_owner_user_id">
-            <End Role="user" EntitySet="user" />
-            <End Role="task" EntitySet="task" />
           </AssociationSet>
           <AssociationSet Name="FK_task_project_id" Association="Self.FK_task_project_id">
             <End Role="project" EntitySet="project" />
@@ -687,6 +713,15 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             <End Role="task" EntitySet="tasks" />
             <End Role="taskUser" EntitySet="taskUsers" />
           </AssociationSet>
+          <EntitySet Name="projectUserRoles" EntityType="CatchMeDBModel.projectUserRole" />
+          <AssociationSet Name="FK_project_user_role_project_id" Association="CatchMeDBModel.FK_project_user_role_project_id">
+            <End Role="project" EntitySet="projects" />
+            <End Role="project_user_role" EntitySet="projectUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_project_user_role_user_id" Association="CatchMeDBModel.FK_project_user_role_user_id">
+            <End Role="user" EntitySet="users" />
+            <End Role="project_user_role" EntitySet="projectUserRoles" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -706,6 +741,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <Property Name="is_active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="users" Relationship="CatchMeDBModel.project_user" FromRole="project" ToRole="user" />
           <NavigationProperty Name="tasks" Relationship="CatchMeDBModel.FK_task_project_id" FromRole="project" ToRole="task" />
+          <NavigationProperty Name="project_user_role" Relationship="CatchMeDBModel.FK_project_user_role_project_id" FromRole="project" ToRole="project_user_role" />
           </EntityType>
         <EntityType Name="taskUser">
           <Key>
@@ -763,6 +799,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <NavigationProperty Name="tasks1" Relationship="CatchMeDBModel.FK_task_owner_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="tasks2" Relationship="CatchMeDBModel.FK_task_updated_by_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="tasks3" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="user" ToRole="task" />
+          <NavigationProperty Name="project_user_role" Relationship="CatchMeDBModel.FK_project_user_role_user_id" FromRole="user" ToRole="project_user_role" />
         </EntityType>
         <Association Name="FK_task_user_user_id">
           <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
@@ -1130,6 +1167,41 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="projectUserRole">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="project_id" Type="Int32" Nullable="false" />
+          <Property Name="role" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="project" Relationship="CatchMeDBModel.FK_project_user_role_project_id" FromRole="project_user_role" ToRole="project" />
+          <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_project_user_role_user_id" FromRole="project_user_role" ToRole="user" />
+        </EntityType>
+        <Association Name="FK_project_user_role_project_id">
+          <End Type="CatchMeDBModel.project" Role="project" Multiplicity="1" />
+          <End Type="CatchMeDBModel.projectUserRole" Role="project_user_role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="project_user_role">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_project_user_role_user_id">
+          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="CatchMeDBModel.projectUserRole" Role="project_user_role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="project_user_role">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1377,6 +1449,15 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="project_id" ColumnName="project_id" />
                 <ScalarProperty Name="task_id" ColumnName="task_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="projectUserRoles">
+            <EntityTypeMapping TypeName="CatchMeDBModel.projectUserRole">
+              <MappingFragment StoreEntitySet="project_user_role">
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

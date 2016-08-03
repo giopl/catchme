@@ -86,11 +86,13 @@
     <Build Include="dbo\Views\v_figures.sql" />
     <Build Include="dbo\Tables\attachment.sql" />
     <Build Include="dbo\Views\v_history.sql" />
+    <Build Include="dbo\Tables\project_user_role.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Initialisation.sql" />
     <None Include="adding_updated_on_data.sql" />
     <None Include="adding_option_sets.sql" />
     <None Include="adding create task in log.sql" />
+    <None Include="project_user_role.sql" />
   </ItemGroup>
 </Project>

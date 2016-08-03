@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<CatchMe.Models.viewTasks>
-
+@using session = CatchMe.Helpers.UserSession
 @{
     ViewBag.Title = "Index";
     @Scripts.Render("~/bundles/chart")
@@ -16,7 +16,7 @@
     var s3 = Model.Where(x => x.status_code == 3).Count();
     var s4 = Model.Where(x => x.status_code == 4).Count();
     var s5 = Model.Where(x => x.status_code == 5).Count();
-    var s6 = Model.Where(x => x.status_code == 6).Count();
+    //var s6 = Model.Where(x => x.status_code == 6).Count();
     var s7 = Model.Where(x => x.status_code == 7).Count();
     var s8 = Model.Where(x => x.status_code == 8).Count();
     var s9 = Model.Where(x => x.status_code == 9).Count();
@@ -30,9 +30,9 @@
 
 
     var figures = ViewBag.Figures as CatchMe.Models.viewFigures;
-    
-    var lastbacklogdate = backlogs.Last().fulldate;
 
+    var lastbacklogdate = backlogs.Last().fulldate;
+    var openTasks = ViewBag.OpenTasks as List<CatchMe.Models.task>;
 
 }
 
@@ -55,11 +55,76 @@
     </div>
 
 </div>
+<br />
 
-<div class="row">
-    
+@if (session.Current.IsProjectLead || session.Current.IsAdmin)
+{
+    <div class="row">
+        <h3>By Person (open)</h3>
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-left">Assigned To</th>
+                        <th class="text-center"><span class="fa fa-asterisk"></span>&nbsp;New</th>
+                        <th class="text-center"><span class="fa fa-play"></span>&nbsp;Action</th>
+                        <th class="text-center" title="Investigation"><span class="fa fa-search"></span>&nbsp;invst</th>
+                        <th class="text-center" title="Completed"><span class="fa fa-check-circle"></span>&nbsp;Compld</th>
+                        <th class="text-center"><span class="fa fa-pause"></span>&nbsp;On Hold</th>
+                        <th class="text-center" title="problem"><span class="fa fa-bomb"></span>&nbsp;Prob</th>
+                        <th class="text-center"><span class="fa fa-trophy"></span>&nbsp;Passed</th>
+                        <th class="text-center"><span class="fa fa-warning"></span>&nbsp;Failed</th>
+                        <th class="text-center">Total</th>
 
-</div>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{var prevuser = -1; }
+                    @foreach (var task in openTasks.OrderBy(x => x.user.user_id))
+                    {
+                        if (task.user.user_id != prevuser)
+                        {
+                            <tr>
+                                <th>@task.user.firstname</th>
+                                <td class="text-center">@openTasks.Count(x => x.user == task.user & x.status == 0)</td>
+                                <td class="text-center">@openTasks.Count(x => x.user == task.user & x.status == 1)</td>
+                                <td class="text-center">@openTasks.Count(x => x.user == task.user & x.status == 2)</td>
+                                <td class="text-center">@openTasks.Count(x => x.user == task.user & x.status == 3)</td>
+                                <td class="text-center">@openTasks.Count(x => x.user == task.user & x.status == 4)</td>
+                                <td class="text-center">@openTasks.Count(x => x.user == task.user & x.status == 5)</td>
+                                <td class="text-center">@openTasks.Count(x => x.user == task.user & x.status == 7)</td>
+                                <td class="text-center">@openTasks.Count(x => x.user == task.user & x.status == 8)</td>
+                                <th class="text-center">@openTasks.Count(x => x.user == task.user & x.status < 9)</th>
+
+                            </tr>
+                        }
+
+                        prevuser = task.user.user_id;
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <th class="text-center">@openTasks.Count(x => x.status == 0)</th>
+                        <th class="text-center">@openTasks.Count(x => x.status == 1)</th>
+                        <th class="text-center">@openTasks.Count(x => x.status == 2)</th>
+                        <th class="text-center">@openTasks.Count(x => x.status == 3)</th>
+                        <th class="text-center">@openTasks.Count(x => x.status == 4)</th>
+                        <th class="text-center">@openTasks.Count(x => x.status == 5)</th>
+                        <th class="text-center">@openTasks.Count(x => x.status == 7)</th>
+                        <th class="text-center">@openTasks.Count(x => x.status == 8)</th>
+                        <th class="text-center"><span style="font-size:1.2em"> @openTasks.Count(x => x.status < 9)</span></th>
+
+                    </tr>
+                </tfoot>
+
+            </table>
+
+        </div>
+
+    </div>
+                        }
+
 
 
 <script>
@@ -124,7 +189,7 @@
               "Complete",
               "Hold",
               "Problem",
-              "No Issue",
+              //"No Issue",
               "Passed",
               "Failed",
               "Closed"
@@ -132,7 +197,7 @@
                 ], datasets: [{
                     label: '# status',
                     legend: false,
-                    data: [@s0,@s1,@s2,@s3,@s4,@s5,@s6,@s7,@s8,@s9],
+                    data: [@s0,@s1,@s2,@s3,@s4,@s5,@s7,@s8,@s9],
                     backgroundColor: [
                         'rgba(51,122,183, 0.6)',
                         'rgba(240,173,78, 0.6)',
@@ -140,7 +205,7 @@
                         'rgba(91,192,222, 0.6)',
                         'rgba(119,119,119,0.6)',
                         'rgba(217,83,79,  0.6)',
-                        'rgba(119,119,119,0.6)',
+                        //'rgba(119,119,119,0.6)',
                         'rgba(92,184,92,  0.6)',
                         'rgba(217,83,79,  0.6)',
                         'rgba(119,119,119,0.6)'
@@ -152,7 +217,7 @@
                         'rgba(91,192,222, 1)',
                         'rgba(119,119,119,1)',
                         'rgba(217,83,79,  1)',
-                        'rgba(119,119,119,1)',
+                        //'rgba(119,119,119,1)',
                         'rgba(92,184,92,  1)',
                         'rgba(217,83,79,  1)',
                         'rgba(119,119,119,1)'
@@ -202,45 +267,7 @@
     });
 
 
-    //var ctx = document.getElementById("backlog");
-    //var myLineChart = new Chart(ctx, {
-    //    type: 'line',
-    //    data: data,
-    //    options: options
-    //});
-
-    //var data = {
-    //    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    //    datasets: [
-    //        {
-    //            label: "My First dataset",
-    //            fill: false,
-    //            lineTension: 0.1,
-    //            backgroundColor: "rgba(75,192,192,0.4)",
-    //            borderColor: "rgba(75,192,192,1)",
-    //            borderCapStyle: 'butt',
-    //            borderDash: [],
-    //            borderDashOffset: 0.0,
-    //            borderJoinStyle: 'miter',
-    //            pointBorderColor: "rgba(75,192,192,1)",
-    //            pointBackgroundColor: "#fff",
-    //            pointBorderWidth: 1,
-    //            pointHoverRadius: 5,
-    //            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-    //            pointHoverBorderColor: "rgba(220,220,220,1)",
-    //            pointHoverBorderWidth: 2,
-    //            pointRadius: 1,
-    //            pointHitRadius: 10,
-    //            data: [65, 59, 80, 81, 56, 55, 40],
-    //        }
-    //    ]
-    //};
-
-    //var options = {
-    //    fill: true
-    //};
-
-
+    
 
 
 </script>

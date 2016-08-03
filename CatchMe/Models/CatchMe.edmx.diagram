@@ -35,6 +35,9 @@
         <AssociationConnector Association="CatchMeDBModel.FK_task_updated_by_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_task_user_task_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.projectUserRole" Width="1.5" PointX="5.25" PointY="16.375" />
+        <AssociationConnector Association="CatchMeDBModel.FK_project_user_role_project_id" />
+        <AssociationConnector Association="CatchMeDBModel.FK_project_user_role_user_id" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
