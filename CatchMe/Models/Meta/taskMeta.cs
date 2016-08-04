@@ -234,7 +234,7 @@ namespace CatchMe.Models
                     case 6: return "";                    
                     case 7: return "trophy";
                     case 8: return "warning";
-                    case 9: return "warning";
+                    case 9: return "folder";
 
                     default:
                         break;

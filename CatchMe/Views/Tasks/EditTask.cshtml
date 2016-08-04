@@ -102,7 +102,16 @@
 
                         foreach (var u in users.Where(u=>u.user_id !=0).ToList())
                             {
-                    <input type="checkbox" class="notification" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
+                                <input type="checkbox" class="notification" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
+                            }
+
+                        if (session.Current.UserId == Model.assigned_to)
+                        {
+                            <br />
+                                <br />
+                                @:Main Recipient(To): @Html.DropDownList("sendTo", null, new { @class = "form-control chosen-select-sendto" , @style="width:100px;" })
+                                <br /><small class="text-muted">Emails are sent <b>To</b> assignees, choose someone else if you don't want it to be sent to you</small>
+                                
                             }
 
                     <input type="submit" class="btn btn-info" value="Notify" />
@@ -535,6 +544,11 @@
             $('[data-toggle="tooltip"]').tooltip();
 
             $('.chosen-select').chosen();
+
+            $('.chosen-select-sendto').chosen(
+                {
+                    width:'150px'
+                });
 
             var _minyear = new Date().getFullYear();
             var _max_year = _minyear + 1;

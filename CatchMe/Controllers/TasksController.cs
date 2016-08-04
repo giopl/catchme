@@ -870,6 +870,15 @@ namespace CatchMe.Controllers
             var listwithoutunassigned = users.ToList();
             listwithoutunassigned.Remove(new user { user_id = 0 });
 
+
+            var listwithoutUnassignedAndCurrent = users.ToList();
+            listwithoutunassigned.Remove(new user { user_id = UserSession.Current.UserId });
+            listwithoutunassigned.Remove(new user { user_id = 0 });
+
+
+            ViewBag.sendTo = new SelectList(listwithoutUnassignedAndCurrent, "user_id", "firstname");
+
+
             ViewBag.owner = new SelectList(listwithoutunassigned, "user_id", "firstname", task.owner);
 
             var statuslist = getStatuses(task.status.Value);
@@ -1143,7 +1152,7 @@ namespace CatchMe.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult NotifyUsers(int taskId, int projectId, int[] notify)
+        public ActionResult NotifyUsers(int taskId, int projectId, int[] notify, int SendTo=0)
         {
 
             try
@@ -1166,13 +1175,19 @@ namespace CatchMe.Controllers
                     {
                         var isTo = false;
                         
-                        if(user.user_id == assigned_user || notify.Count() == 1)
+                        if(user.user_id == assigned_user || notify.Count() == 1 )
                         {
                             isTo = true;
-
                             task.HiUser = user.firstname;
-                        
                         }
+
+                        if (SendTo == user.user_id)
+                        {
+                            isTo = true;
+                            var userTo = db.users.Find(SendTo);
+                            task.HiUser = userTo.firstname;
+                        }
+
 
                         recipients.Add(new EmailRecipient { RecipientEmail = user.email, RecipientUserId = user.username, RecipientName = user.fullname , isTo = isTo });
 
