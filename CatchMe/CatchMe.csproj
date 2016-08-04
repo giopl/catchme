@@ -169,6 +169,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CatchMe.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\CatchMeDBEntities.cs" />
     <Compile Include="Models\category.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
