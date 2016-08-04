@@ -20,7 +20,7 @@
 
                 <div class="task-title2">
                     <div class="taskid">
-                        <span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span>
+                        <span class="label label-@(Model.StatusDescLabel)" style="padding:0.25em"><span class="fa fa-@(Model.statusIcon) fa-fw"></span>@Model.task_id</span>
                     </div>
                     <div class="taskname truncate" data-toggle="tooltip" data-placement="right" title="@Model.title">
                         @Model.title

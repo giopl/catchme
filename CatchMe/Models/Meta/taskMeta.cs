@@ -217,6 +217,35 @@ namespace CatchMe.Models
             }
         }
 
+        public string statusIcon
+        {
+
+
+            get
+            {
+                switch (status)
+                {
+                    case 0: return "asterisk";
+                    case 1: return "play";
+                    case 2: return "search";
+                    case 3: return "check-circle";
+                    case 4: return "pause";
+                    case 5: return "bomb";
+                    case 6: return "";                    
+                    case 7: return "trophy";
+                    case 8: return "warning";
+                    case 9: return "warning";
+
+                    default:
+                        break;
+                }
+                return string.Empty;
+
+            }
+        }
+
+
+
         public string StateColor
         {
             get
