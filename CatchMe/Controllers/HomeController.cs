@@ -18,12 +18,20 @@ namespace CatchMe.Controllers
 
         private void CreateLog(log log)
         {
-            if (ModelState.IsValid)
+            try
             {
-                      db.logs.Add(log);
-                   // db.SaveChanges();
-                //return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+
+                    db.logs.Add(log);
+                     db.SaveChanges();
+                }
             }
+            catch (Exception e)
+            {                
+                throw;
+            }
+            
 
         }
 
@@ -61,15 +69,14 @@ namespace CatchMe.Controllers
                 UserSession.Current.Username = founduser.username;
                 UserSession.Current.UserId = founduser.user_id;
 
-                
-
                 UserSession.Current.Fullname = founduser.fullname;
                 UserSession.Current.Firstname = founduser.firstname;
                 UserSession.Current.CurrentProjectId = founduser.active_project.HasValue?founduser.active_project.Value:0;
 
                 var myProjects = founduser.projects.ToList();
 
-                
+                log alog = new log(AppEnums.LogOperationEnum.LOGIN, AppEnums.LogTypeEnum.USER, string.Format("{0}", UserSession.Current.Username ), 100);
+                CreateLog(alog);
 
                 UserSession.Current.MyProjects = myProjects;
                 if(UserSession.Current.CurrentProjectId  > 0)
@@ -77,17 +84,13 @@ namespace CatchMe.Controllers
                     var project = db.projects.Find(UserSession.Current.CurrentProjectId);
                     UserSession.Current.CurrentProject = project.name;
 
-
-
                     var roles = project.project_user_role.Where(x => x.user_id == UserSession.Current.UserId).ToList();
                     if(roles.Count() > 0)
                     {
                         UserSession.Current.CurrentProjectRole = roles.FirstOrDefault().role;
                     }
 
-
                     ViewBag.project_id = new SelectList(myProjects, "project_id", "name");
-                    
                 }
             }
             else {

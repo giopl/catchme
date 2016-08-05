@@ -103,7 +103,8 @@ namespace CatchMe.Helpers
             CREATE,
             DELETE,
             UPDATE,
-            RECOVER
+            RECOVER,
+            LOGIN
         }
 
         public enum LogTypeEnum

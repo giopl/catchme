@@ -38,6 +38,8 @@
         <EntityTypeShape EntityType="CatchMeDBModel.projectUserRole" Width="1.5" PointX="5.25" PointY="16.375" />
         <AssociationConnector Association="CatchMeDBModel.FK_project_user_role_project_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_project_user_role_user_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.viewClosed" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CatchMeDBModel.viewVisit" Width="1.5" PointX="13.375" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

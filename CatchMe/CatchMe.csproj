@@ -191,6 +191,7 @@
     <Compile Include="Models\Meta\taskMeta.cs" />
     <Compile Include="Models\Meta\userMeta.cs" />
     <Compile Include="Models\Meta\viewHistoryMeta.cs" />
+    <Compile Include="Models\Meta\viewVisitMeta.cs" />
     <Compile Include="Models\notification.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
@@ -213,6 +214,9 @@
     <Compile Include="Models\user.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\viewClosed.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\viewFigures.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
@@ -222,6 +226,9 @@
     <Compile Include="Models\ViewModel\RoleVM.cs" />
     <Compile Include="Models\ViewModel\SearchFilter.cs" />
     <Compile Include="Models\viewTasks.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\viewVisit.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -366,6 +373,7 @@
     <Content Include="Views\Admin\ListDeleted.cshtml" />
     <Content Include="Views\Shared\_searchFilter.cshtml" />
     <Content Include="Views\Admin\Impersonation.cshtml" />
+    <Content Include="Views\Admin\Visits.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

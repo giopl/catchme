@@ -101,6 +101,20 @@ namespace CatchMe.Controllers
         }
 
 
+        public ActionResult Visits()
+        {
+            try
+            {
+                var visits = db.viewVisits.ToList();
+                return View(visits);
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
 
 
 

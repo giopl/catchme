@@ -40,7 +40,7 @@
           <Property Name="is_disabled" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="employee">
           <Key>
             <PropertyRef Name="user_id" />
@@ -184,7 +184,18 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.employee' does not have a primary
           <Property Name="nickname" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.v_closed' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_closed">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="project_id" Type="int" Nullable="false" />
+          <Property Name="count" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CatchMeDB.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_figures">
           <Key>
             <PropertyRef Name="project_id" />
@@ -197,7 +208,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_figures' does not have a primar
           <Property Name="closed_late" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.v_history' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.v_history' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_history">
           <Key>
             <PropertyRef Name="log_id" />
@@ -223,7 +234,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_history' does not have a primar
           <Property Name="lname_new" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_tasks">
           <Key>
             <PropertyRef Name="project_id" />
@@ -250,6 +261,19 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <Property Name="assignee_ln" Type="nvarchar" MaxLength="60" />
           <Property Name="updated_on" Type="date" />
           <Property Name="due_date" Type="date" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_visit">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="firstname" Type="nvarchar" MaxLength="60" />
+          <Property Name="lastname" Type="nvarchar" MaxLength="60" />
+          <Property Name="lastlogin" Type="datetime" />
+          <Property Name="operation" Type="nvarchar" MaxLength="60" />
+          <Property Name="type" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <Association Name="FK_attachment_task_id">
           <End Role="task" Type="Self.task" Multiplicity="1" />
@@ -356,18 +380,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             </Principal>
             <Dependent Role="project_user_role">
               <PropertyRef Name="project_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_project_user_role_user_id">
-          <End Role="user" Type="Self.user" Multiplicity="1" />
-          <End Role="project_user_role" Type="Self.project_user_role" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="project_user_role">
-              <PropertyRef Name="user_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -501,6 +513,13 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
     [employee].[team] AS [team]
     FROM [dbo].[employee] AS [employee]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="v_closed" EntityType="Self.v_closed" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_closed].[user_id] AS [user_id], 
+    [v_closed].[project_id] AS [project_id], 
+    [v_closed].[count] AS [count]
+    FROM [dbo].[v_closed] AS [v_closed]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="v_figures" EntityType="Self.v_figures" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [v_figures].[project_id] AS [project_id], 
@@ -554,6 +573,16 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
     [v_tasks].[due_date] AS [due_date]
     FROM [dbo].[v_tasks] AS [v_tasks]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="v_visit" EntityType="Self.v_visit" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_visit].[user_id] AS [user_id], 
+    [v_visit].[firstname] AS [firstname], 
+    [v_visit].[lastname] AS [lastname], 
+    [v_visit].[lastlogin] AS [lastlogin], 
+    [v_visit].[operation] AS [operation], 
+    [v_visit].[type] AS [type]
+    FROM [dbo].[v_visit] AS [v_visit]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_attachment_task_id" Association="Self.FK_attachment_task_id">
             <End Role="task" EntitySet="task" />
             <End Role="attachment" EntitySet="attachment" />
@@ -588,10 +617,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           </AssociationSet>
           <AssociationSet Name="FK_project_user_role_project_id" Association="Self.FK_project_user_role_project_id">
             <End Role="project" EntitySet="project" />
-            <End Role="project_user_role" EntitySet="project_user_role" />
-          </AssociationSet>
-          <AssociationSet Name="FK_project_user_role_user_id" Association="Self.FK_project_user_role_user_id">
-            <End Role="user" EntitySet="user" />
             <End Role="project_user_role" EntitySet="project_user_role" />
           </AssociationSet>
           <AssociationSet Name="FK_project_user_user_id" Association="Self.FK_project_user_user_id">
@@ -722,6 +747,8 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             <End Role="user" EntitySet="users" />
             <End Role="project_user_role" EntitySet="projectUserRoles" />
           </AssociationSet>
+          <EntitySet Name="viewCloseds" EntityType="CatchMeDBModel.viewClosed" />
+          <EntitySet Name="viewVisits" EntityType="CatchMeDBModel.viewVisit" />
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -1202,6 +1229,26 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="viewClosed">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="project_id" Type="Int32" Nullable="false" />
+          <Property Name="count" Type="Int32" />
+        </EntityType>
+        <EntityType Name="viewVisit">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="firstname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="lastname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="lastlogin" Type="DateTime" Precision="3" />
+          <Property Name="operation" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1457,6 +1504,27 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
               <MappingFragment StoreEntitySet="project_user_role">
                 <ScalarProperty Name="role" ColumnName="role" />
                 <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="viewCloseds">
+            <EntityTypeMapping TypeName="CatchMeDBModel.viewClosed">
+              <MappingFragment StoreEntitySet="v_closed">
+                <ScalarProperty Name="count" ColumnName="count" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="viewVisits">
+            <EntityTypeMapping TypeName="CatchMeDBModel.viewVisit">
+              <MappingFragment StoreEntitySet="v_visit">
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="operation" ColumnName="operation" />
+                <ScalarProperty Name="lastlogin" ColumnName="lastlogin" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
               </MappingFragment>
             </EntityTypeMapping>

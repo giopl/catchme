@@ -1,0 +1,44 @@
+﻿@model IEnumerable<CatchMe.Models.viewVisit>
+
+@{
+    ViewBag.Title = "Visits";
+}
+
+<h2>Visits</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.firstname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastlogin)
+        </th>
+        <th></th>
+        <th></th>
+    
+    </tr>
+
+@foreach (var item in Model.OrderByDescending(o=>o.lastlogin)) {
+    <tr>
+        <td>
+            <span class="fa fa-circle  @(item.since==0?"color-now":(item.since==1?"color-medium":"color-high"))"> </span>
+            @Html.DisplayFor(modelItem => item.firstname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lastname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lastlogin)
+        </td>
+        <td>@item.since</td>
+        <td class="text-light">@item.operation @item.type</td>
+
+    </tr>
+}
+
+</table>

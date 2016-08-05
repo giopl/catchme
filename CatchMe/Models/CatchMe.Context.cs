@@ -42,6 +42,8 @@ namespace CatchMe.Models
         public virtual DbSet<viewHistory> viewHistories { get; set; }
         public virtual DbSet<task> tasks { get; set; }
         public virtual DbSet<projectUserRole> projectUserRoles { get; set; }
+        public virtual DbSet<viewClosed> viewCloseds { get; set; }
+        public virtual DbSet<viewVisit> viewVisits { get; set; }
     
         public virtual ObjectResult<backlog> GetBacklog(Nullable<int> project_id)
         {

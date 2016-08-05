@@ -814,7 +814,7 @@ namespace CatchMe.Controllers
                     log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.TASK, "Task created", task.task_id);
                     CreateLog(log);
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("EditTask", new  { id=task.task_id });
                 }
 
                 
@@ -1161,6 +1161,29 @@ namespace CatchMe.Controllers
 
                 List<EmailRecipient> recipients = new List<EmailRecipient>();
                 var task = db.tasks.Find(taskId);
+
+                if(SendTo > 0)
+                {
+
+                    int pos = Array.IndexOf(notify, SendTo);
+                    if (pos < 0)
+                    {
+                        int newLength = notify.Length + 1;
+
+                        int[] result = new int[newLength];
+
+                        for (int i = 0; i < notify.Length; i++)
+                            result[i] = notify[i];
+
+                        result[newLength - 1] = SendTo;
+
+                        //swap back results
+                        notify = result;
+                        // the array contains the string and the pos variable
+                        // will have its position in the array
+                    }
+
+                }
 
                 task.HiUser = "Team";
 
