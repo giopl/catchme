@@ -62,12 +62,12 @@ namespace CatchMe.Models
 
                     if (seconds < 60.0)
                     {
-                        result.AppendFormat("<span class='label label-danger'><b>{0}</b>s ago</label>", (int)seconds);
+                        result.AppendFormat("<span class='label label-success'><b>{0}</b>s ago</label>", (int)seconds);
                     }
 
                     if (seconds >= 60.0 && minutes < 60)
                     {
-                        result.AppendFormat("<span class='label label-danger'><b>{0}</b>m ago</label>", (int)minutes);
+                        result.AppendFormat("<span class='label label-success'><b>{0}</b>m ago</label>", (int)minutes);
                     }
 
                     if (minutes >= 60.0 && hours < 24)
@@ -76,7 +76,7 @@ namespace CatchMe.Models
                     }
                     if (hours >= 24.0 && days <= 5)
                     {
-                        result.AppendFormat("<span class='label label-primary'><b>{0}</b> day(s) ago</label>", (int)days);
+                        result.AppendFormat("<span class='label label-danger'><b>{0}</b> day(s) ago</label>", (int)days);
                     }
                 }
                 return result.ToString();

@@ -231,7 +231,7 @@ namespace CatchMe.Models
                     case 3: return "check-circle";
                     case 4: return "pause";
                     case 5: return "bomb";
-                    case 6: return "";                    
+                    case 6: return "smile-o";                    
                     case 7: return "trophy";
                     case 8: return "warning";
                     case 9: return "folder";

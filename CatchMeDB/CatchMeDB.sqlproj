@@ -88,6 +88,7 @@
     <Build Include="dbo\Tables\attachment.sql" />
     <Build Include="dbo\Views\v_history.sql" />
     <Build Include="dbo\Tables\project_user_role.sql" />
+    <Build Include="dbo\Views\v_status.sql" />
     <Build Include="dbo\Views\v_visit.sql" />
     <Build Include="dbo\Views\v_closed.sql" />
   </ItemGroup>

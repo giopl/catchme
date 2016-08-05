@@ -225,6 +225,9 @@
     </Compile>
     <Compile Include="Models\ViewModel\RoleVM.cs" />
     <Compile Include="Models\ViewModel\SearchFilter.cs" />
+    <Compile Include="Models\viewStatus.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\viewTasks.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>

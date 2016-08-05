@@ -54,7 +54,7 @@ namespace CatchMe.Controllers
             ViewBag.Backlog = backlogs;
 
 
-            ViewBag.OpenTasks = db.tasks.Where(x => x.status < 9 && x.project_id == proj && x.state != 1).ToList();
+            ViewBag.OpenTasks = db.viewStatus.Where(x => x.project_id == proj ).ToList();
 
             return View(db.viewTasks.Where(x=>x.project_id == proj).ToList());
         }

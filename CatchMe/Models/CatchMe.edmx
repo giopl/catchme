@@ -40,7 +40,7 @@
           <Property Name="is_disabled" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDBSIT.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="employee">
           <Key>
             <PropertyRef Name="user_id" />
@@ -184,7 +184,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="nickname" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.v_closed' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDBSIT.dbo.v_closed' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_closed">
           <Key>
             <PropertyRef Name="user_id" />
@@ -195,7 +195,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_closed' does not have a primary ke
           <Property Name="count" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDBSIT.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_figures">
           <Key>
             <PropertyRef Name="project_id" />
@@ -208,7 +208,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_figures' does not have a primary k
           <Property Name="closed_late" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.v_history' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDBSIT.dbo.v_history' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_history">
           <Key>
             <PropertyRef Name="log_id" />
@@ -234,7 +234,31 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_history' does not have a primary k
           <Property Name="lname_new" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDBSIT.dbo.v_status' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_status">
+          <Key>
+            <PropertyRef Name="project_id" />
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="project_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="firstname" Type="nvarchar" MaxLength="60" />
+          <Property Name="lastname" Type="nvarchar" MaxLength="60" />
+          <Property Name="newtask" Type="int" />
+          <Property Name="action" Type="int" />
+          <Property Name="investigation" Type="int" />
+          <Property Name="completed" Type="int" />
+          <Property Name="onhold" Type="int" />
+          <Property Name="problem" Type="int" />
+          <Property Name="no_issue" Type="int" />
+          <Property Name="passed" Type="int" />
+          <Property Name="failed" Type="int" />
+          <Property Name="total_open" Type="int" />
+          <Property Name="closed" Type="int" />
+          <Property Name="total" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_tasks">
           <Key>
             <PropertyRef Name="project_id" />
@@ -263,7 +287,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key
           <Property Name="due_date" Type="date" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_visit">
           <Key>
             <PropertyRef Name="user_id" />
@@ -549,6 +573,26 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
     [v_history].[lname_new] AS [lname_new]
     FROM [dbo].[v_history] AS [v_history]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="v_status" EntityType="Self.v_status" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_status].[project_id] AS [project_id], 
+    [v_status].[user_id] AS [user_id], 
+    [v_status].[firstname] AS [firstname], 
+    [v_status].[lastname] AS [lastname], 
+    [v_status].[newtask] AS [newtask], 
+    [v_status].[action] AS [action], 
+    [v_status].[investigation] AS [investigation], 
+    [v_status].[completed] AS [completed], 
+    [v_status].[onhold] AS [onhold], 
+    [v_status].[problem] AS [problem], 
+    [v_status].[no_issue] AS [no_issue], 
+    [v_status].[passed] AS [passed], 
+    [v_status].[failed] AS [failed], 
+    [v_status].[total_open] AS [total_open], 
+    [v_status].[closed] AS [closed], 
+    [v_status].[total] AS [total]
+    FROM [dbo].[v_status] AS [v_status]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="v_tasks" EntityType="Self.v_tasks" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [v_tasks].[project_id] AS [project_id], 
@@ -749,6 +793,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           </AssociationSet>
           <EntitySet Name="viewCloseds" EntityType="CatchMeDBModel.viewClosed" />
           <EntitySet Name="viewVisits" EntityType="CatchMeDBModel.viewVisit" />
+          <EntitySet Name="viewStatus" EntityType="CatchMeDBModel.viewStatus" />
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -1249,6 +1294,28 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <Property Name="operation" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
           <Property Name="type" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="viewStatus">
+          <Key>
+            <PropertyRef Name="project_id" />
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="project_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="firstname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="lastname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="newtask" Type="Int32" />
+          <Property Name="action" Type="Int32" />
+          <Property Name="investigation" Type="Int32" />
+          <Property Name="completed" Type="Int32" />
+          <Property Name="onhold" Type="Int32" />
+          <Property Name="problem" Type="Int32" />
+          <Property Name="no_issue" Type="Int32" />
+          <Property Name="passed" Type="Int32" />
+          <Property Name="failed" Type="Int32" />
+          <Property Name="total_open" Type="Int32" />
+          <Property Name="closed" Type="Int32" />
+          <Property Name="total" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1526,6 +1593,28 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
                 <ScalarProperty Name="lastname" ColumnName="lastname" />
                 <ScalarProperty Name="firstname" ColumnName="firstname" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="viewStatus">
+            <EntityTypeMapping TypeName="CatchMeDBModel.viewStatus">
+              <MappingFragment StoreEntitySet="v_status">
+                <ScalarProperty Name="total" ColumnName="total" />
+                <ScalarProperty Name="closed" ColumnName="closed" />
+                <ScalarProperty Name="total_open" ColumnName="total_open" />
+                <ScalarProperty Name="failed" ColumnName="failed" />
+                <ScalarProperty Name="passed" ColumnName="passed" />
+                <ScalarProperty Name="no_issue" ColumnName="no_issue" />
+                <ScalarProperty Name="problem" ColumnName="problem" />
+                <ScalarProperty Name="onhold" ColumnName="onhold" />
+                <ScalarProperty Name="completed" ColumnName="completed" />
+                <ScalarProperty Name="investigation" ColumnName="investigation" />
+                <ScalarProperty Name="action" ColumnName="action" />
+                <ScalarProperty Name="newtask" ColumnName="newtask" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

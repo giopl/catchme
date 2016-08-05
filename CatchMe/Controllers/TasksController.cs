@@ -535,7 +535,7 @@ namespace CatchMe.Controllers
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
-                //statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
                 statuses.Add(new OptionItem { name = "Test Passed", value = 7 });
                 statuses.Add(new OptionItem { name = "Test Failed", value = 8 });
                 statuses.Add(new OptionItem { name = "Closed", value = 9 });
@@ -557,7 +557,7 @@ namespace CatchMe.Controllers
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
-                //statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
             }
 
 
@@ -569,7 +569,7 @@ namespace CatchMe.Controllers
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
                 statuses.Add(new OptionItem { name = "On Hold", value = 4 });
                 statuses.Add(new OptionItem { name = "Problem", value = 5 });
-                //statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
             }
 
 
@@ -596,7 +596,7 @@ namespace CatchMe.Controllers
             if (val == 6)
             {
                 statuses.Add(new OptionItem { name = "Re-Open", value = 1 });
-                //statuses.Add(new OptionItem { name = "No Issue", value = 6 });
+                statuses.Add(new OptionItem { name = "No Issue", value = 6 });
                 statuses.Add(new OptionItem { name = "Close Task", value = 9 });
             }
 
