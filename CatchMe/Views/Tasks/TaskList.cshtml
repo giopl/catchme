@@ -187,6 +187,7 @@ table.fixed td { overflow: hidden; }
                         <th width="14%">
                             Due On
                         </th>
+                        <td></td>
 
                         <th width="1%"></th>
                         <td></td>
@@ -220,7 +221,7 @@ table.fixed td { overflow: hidden; }
                             <td class="@(item.IsOverdue?"red":"")">
                                 @Html.DisplayFor(modelItem => item.due_date)
                             </td>
-
+                            <td>@Html.Raw(item.OpenSince)</td>
                             <td>
                                 @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
                                 <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
@@ -262,6 +263,7 @@ table.fixed td { overflow: hidden; }
                             Due On
                         </th>
 
+                        <th></th>
                         <th width="1%"></th>
                         <td></td>
                     </tr>
@@ -295,7 +297,7 @@ table.fixed td { overflow: hidden; }
                             <td>
                                 @Html.DisplayFor(modelItem => item.due_date)
                             </td>
-
+                            <td>@*@Html.Raw(item.TimeTaken)*@</td>
                             <td>
                                 @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
                                 @*<a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>*@

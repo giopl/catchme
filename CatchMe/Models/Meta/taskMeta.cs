@@ -86,49 +86,126 @@ namespace CatchMe.Models
     public partial class task
     {
 
-        public string LastUpdatedSince {
+        public string LastUpdatedSince
+        {
 
             get
             {
-                StringBuilder result = new StringBuilder();
-                if (updated_on.HasValue)
+                try
+                {
+                    if (updated_on.HasValue)
+                    {
+                        TimeSpan t = DateTime.Now - updated_on.Value;
+                        return timeDifferenceLabel(t);
+                    }
+
+                    return String.Empty;
+                }
+                catch (Exception)
                 {
 
-
-
-                    TimeSpan t = DateTime.Now - updated_on.Value;
-
-                    var seconds = t.TotalSeconds;
-                    var minutes = t.TotalMinutes;
-                    var hours = t.TotalHours;
-                    var days = t.TotalDays;
-
-
-                    if (seconds < 60.0)
-                    {
-                        result.AppendFormat("<span class='label label-danger'><b>{0}</b>s ago</label>", (int)seconds);
-                    }
-
-                    if (seconds >= 60.0 && minutes < 60)
-                    {
-                        result.AppendFormat("<span class='label label-danger'><b>{0}</b>m ago</label>", (int)minutes);
-                    }
-
-                    if (minutes >= 60.0 && hours < 24)
-                    {
-                        result.AppendFormat("<span class='label label-warning'><b>{0}</b>h ago</label>", (int)hours);
-                    }
-                    //if (hours >= 24.0 && days <= 5)
-                    //{
-                    //    result.AppendFormat("<span class='label label-primary'><b>{0}</b> day(s) ago</label>", (int)days);
-                    //}
+                    throw;
                 }
-                return result.ToString();
-
             }
-        
-                
+        }
+
+
+        public string OpenSince
+        {
+
+            get
+            {
+                try
+                {
+                    if (created_on.HasValue)
+                    {
+                        TimeSpan t = DateTime.Now - created_on.Value;
+                        return timeDifferenceLabel(t);
+                    }
+
+                    return String.Empty;
                 }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+        }
+
+        public string TimeTaken
+        {
+
+            get
+            {
+                try
+                {
+
+                
+                if (created_on.HasValue && updated_on.HasValue)
+                {
+                    TimeSpan t = updated_on.Value - created_on.Value;
+                    return timeDifferenceLabel(t);
+                }
+
+                return String.Empty;
+                }
+                catch (StackOverflowException e)
+                {
+
+                    throw;
+                }
+            }
+        }
+
+        private string timeDifferenceLabel(TimeSpan timespan)
+        {
+            try
+            {
+
+            var seconds = timespan.TotalSeconds;
+            var minutes = timespan.TotalMinutes;
+            var hours = timespan.TotalHours;
+            var days = timespan.TotalDays;
+
+            StringBuilder result = new StringBuilder();
+
+            if (seconds < 60.0)
+            {
+                result.AppendFormat("<span class='label label-danger'><b>{0}</b> sec{1}</label>", (int)seconds,seconds>1?"s":"");
+            }
+
+            if (seconds >= 60.0 && minutes < 60)
+            {
+                result.AppendFormat("<span class='label label-danger'><b>{0}</b> min{1}</label>", (int)minutes, minutes>1?"s":"");
+            }
+
+            if (minutes >= 60.0 && hours < 24)
+            {
+                result.AppendFormat("<span class='label label-warning'><b>{0}</b> hour{1}</label>", (int)hours, hours>1?"s":"");
+            }
+            if (hours >= 24.0 && days <= 5)
+            {
+                result.AppendFormat("<span class='label label-primary'><b>{0}</b> day{1}</label>", (int)days, days>1?"s":"");
+            }
+
+            if (days > 5 && days < 365)
+            {
+                result.AppendFormat("<span class='label label-default'><b>{0}</b> day{1}</label>", (int)days, days > 1 ? "s" : "");
+            }
+
+
+            return result.ToString();
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+
+        }
+
 
 
         public bool IsFilteredOn { get; set; }
