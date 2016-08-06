@@ -191,6 +191,7 @@
     <Compile Include="Models\Meta\taskMeta.cs" />
     <Compile Include="Models\Meta\userMeta.cs" />
     <Compile Include="Models\Meta\viewHistoryMeta.cs" />
+    <Compile Include="Models\Meta\viewStatusMeta.cs" />
     <Compile Include="Models\Meta\viewVisitMeta.cs" />
     <Compile Include="Models\notification.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>

@@ -88,8 +88,10 @@
                         {
                             <tr>
                                 <th>@task.firstname</th>
+                                @*
+                                    
                                 <td class="text-center">@task.newtask</td>
-                                <td class="text-center">@task.action</td>
+                                    <td class="text-center">@task.action</td>
                                 <td class="text-center">@task.investigation</td>
                                 <td class="text-center">@task.completed</td>
                                 <td class="text-center">@task.onhold</td>
@@ -98,8 +100,21 @@
                                 <td class="text-center">@task.passed</td>
                                 <td class="text-center">@task.failed</td>
                                 <th class="text-center">@task.total_open</th>
-                                <th class="text-center">@task.closed</th>
+                                <th class="text-center">@task.closed</th>*@
                                 
+
+                                <td class="text-center">@Html.Raw(task.FmtNum(task.newtask))</td>
+                                <td class="text-center">@Html.Raw(task.FmtNum(task.action))</td>
+                                <td class="text-center">@Html.Raw(task.FmtNum(task.investigation))</td>
+                                <td class="text-center">@Html.Raw(task.FmtNum(task.completed))</td>
+                                <td class="text-center">@Html.Raw(task.FmtNum(task.onhold))</td>
+                                <td class="text-center">@Html.Raw(task.FmtNum(task.problem))</td>
+                                <td class="text-center">@Html.Raw(task.FmtNum(task.no_issue))</td>
+                                <td class="text-center">@Html.Raw(task.FmtNum(task.passed))</td>
+                                <td class="text-center">@Html.Raw(task.FmtNum(task.failed))</td>
+                                <th class="text-center">@Html.Raw(task.FmtNum(task.total_open))</th>
+                                <th class="text-center">@Html.Raw(task.FmtNum(task.closed))</th>
+
 
                             </tr>
                         }

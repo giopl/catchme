@@ -5,6 +5,10 @@
 }
 
 <h2>Visits</h2>
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index")">Home</a></li>
+    <li class="active">Visits</li>
+</ol>
 
 
 <table class="table">
@@ -18,8 +22,8 @@
         <th>
             @Html.DisplayNameFor(model => model.lastlogin)
         </th>
-        <th></th>
-        <th></th>
+        <th class="text-center">Since</th>
+        <th>Action</th>
     
     </tr>
 
@@ -35,7 +39,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.lastlogin)
         </td>
-        <td>@Html.Raw(item.LastUpdatedSince)</td>
+        <td class="text-center">@Html.Raw(item.LastUpdatedSince)</td>
         <td class="text-light">@item.operation @item.type</td>
 
     </tr>
