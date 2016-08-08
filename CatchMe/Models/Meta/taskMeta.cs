@@ -158,6 +158,9 @@ namespace CatchMe.Models
             }
         }
 
+
+        public bool isInNotificationList { get; set; }
+
         private string timeDifferenceLabel(TimeSpan timespan)
         {
             try

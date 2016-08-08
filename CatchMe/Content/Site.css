@@ -251,6 +251,14 @@ width:100px;
     
 }
 
+    .nav-tabs > li.active.notifiedcolor > a, .nav-tabs > li.active.notifiedcolor > a:hover, .nav-tabs > li.active.notifiedcolor > a:focus {    
+    background-color: #337AB7;
+    color: #fff;
+    
+}
+
+
+
   /* generic styling */
   .boldme {
       font-weight:bold;

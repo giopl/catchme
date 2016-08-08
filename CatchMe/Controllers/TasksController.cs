@@ -89,6 +89,26 @@ namespace CatchMe.Controllers
             // find list of tasks for active project
             var tasks = db.tasks.Include(t => t.project).Where(p => p.project_id == active_project && p.state == 0).ToList();
 
+
+            var yesterday = DateTime.Now.AddDays(-1);
+            var myRecentNotifications = db.notifications.Where(x => x.send_to_id == UserSession.Current.UserId && x.sent_on > yesterday).Select(x=>x.task_id).ToList();
+            List<task> tasknotifs = new List<task>();
+            foreach(var n in myRecentNotifications)
+            {
+                task t = new task {task_id = n};
+                tasknotifs.Add(t);
+            }
+
+            foreach(var t in tasks)
+            {
+                if(tasknotifs.Contains(t))
+                {
+                    t.isInNotificationList = true;
+                }
+            }
+
+            
+
             //populate search filter
             var currentprojectid = UserSession.Current.CurrentProjectId;
             var users = db.users.Where(x => x.projects.Select(p => p.project_id).Contains(currentprojectid)).ToList();
@@ -872,8 +892,8 @@ namespace CatchMe.Controllers
 
 
             var listwithoutUnassignedAndCurrent = users.ToList();
-            listwithoutunassigned.Remove(new user { user_id = UserSession.Current.UserId });
-            listwithoutunassigned.Remove(new user { user_id = 0 });
+            listwithoutUnassignedAndCurrent.Remove(new user { user_id = UserSession.Current.UserId });
+            listwithoutUnassignedAndCurrent.Remove(new user { user_id = 0 });
 
 
             ViewBag.sendTo = new SelectList(listwithoutUnassignedAndCurrent, "user_id", "firstname");
@@ -1200,8 +1220,13 @@ namespace CatchMe.Controllers
                         
                         if(user.user_id == assigned_user || notify.Count() == 1 )
                         {
-                            isTo = true;
-                            task.HiUser = user.firstname;
+
+                            if(SendTo == 0)
+                            {
+                                isTo = true;
+                                task.HiUser = user.firstname;
+                            }
+                            
                         }
 
                         if (SendTo == user.user_id)
@@ -1212,10 +1237,25 @@ namespace CatchMe.Controllers
                         }
 
 
-                        recipients.Add(new EmailRecipient { RecipientEmail = user.email, RecipientUserId = user.username, RecipientName = user.fullname , isTo = isTo });
+                        recipients.Add(new EmailRecipient { RecipientEmail = user.email, RecipientId = user.user_id, RecipientUserId = user.username, RecipientName = user.fullname , isTo = isTo });
 
                     }
+
                 }
+
+
+
+                // in case no recient is explicityly chosen, set it to the UserTo (either assigned user or default user if there is only one user_
+                if (SendTo == 0)
+                {
+                    var sendtolist = recipients.Where(x => x.isTo).ToList();
+
+                    if (sendtolist.Count > 0)
+                    {
+                        SendTo = sendtolist.FirstOrDefault().RecipientId;
+                    }
+                }
+
                     Emailer mail = new Emailer();
 
 
@@ -1253,26 +1293,36 @@ namespace CatchMe.Controllers
                 
 
                     MailAddress senderAddress = new MailAddress(sender.email);
-                    mail.SenderMail = senderAddress;
+                
+                
+                        mail.SenderMail = senderAddress;
 
 
-
-                    mail.SendMail(subj, mail.Body, true);
+                        if (ConfigurationHelper.SendEmail())
+                        {
+                            mail.SendMail(subj, mail.Body, true);
+                        }
 
                 StringBuilder _recipients = new StringBuilder();
+                
 
                 foreach(var r in recipients)
                 {
                     _recipients.AppendFormat("{0};", r.RecipientName);
+                    
 
                 }
+
+
+                var _recipient_ids = string.Join(";", notify);
 
                 if(_recipients.Length > 1)
                 {
-                    _recipients.Length--;
+                    _recipients.Length--;                    
                 }
 
-                notification notif = new notification { sender_id = UserSession.Current.UserId, sender_name = UserSession.Current.Fullname, task_id = taskId, sent_on = DateTime.Now, recicipents = _recipients.ToString() };
+                notification notif = new notification { sender_id = UserSession.Current.UserId, sender_name = UserSession.Current.Fullname, task_id = taskId, sent_on = DateTime.Now, 
+                    recicipents = _recipients.ToString() , recipient_id = _recipient_ids.ToString(), send_to_id = SendTo};
 
                 db.notifications.Add(notif);
                 db.SaveChanges();

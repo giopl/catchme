@@ -40,7 +40,7 @@
           <Property Name="is_disabled" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="employee">
           <Key>
             <PropertyRef Name="user_id" />
@@ -85,6 +85,8 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.employee' does not have a primary
           <Property Name="sender_name" Type="nvarchar" MaxLength="100" />
           <Property Name="recicipents" Type="nvarchar" MaxLength="1000" />
           <Property Name="sent_on" Type="datetime" />
+          <Property Name="recipient_id" Type="nvarchar" MaxLength="500" />
+          <Property Name="send_to_id" Type="int" />
         </EntityType>
         <EntityType Name="project">
           <Key>
@@ -184,7 +186,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.employee' does not have a primary
           <Property Name="nickname" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.v_closed' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.v_closed' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_closed">
           <Key>
             <PropertyRef Name="user_id" />
@@ -195,7 +197,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_closed' does not have a primary
           <Property Name="count" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.v_figures' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_figures">
           <Key>
             <PropertyRef Name="project_id" />
@@ -208,7 +210,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_figures' does not have a primar
           <Property Name="closed_late" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.v_history' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.v_history' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_history">
           <Key>
             <PropertyRef Name="log_id" />
@@ -234,7 +236,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_history' does not have a primar
           <Property Name="lname_new" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.v_status' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.v_status' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_status">
           <Key>
             <PropertyRef Name="project_id" />
@@ -258,7 +260,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_status' does not have a primary
           <Property Name="total" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.v_tasks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_tasks">
           <Key>
             <PropertyRef Name="project_id" />
@@ -287,7 +289,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_tasks' does not have a primary 
           <Property Name="due_date" Type="date" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_visit">
           <Key>
             <PropertyRef Name="user_id" />
@@ -714,7 +716,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
             <End Role="project" EntitySet="projects" />
             <End Role="user" EntitySet="users" />
           </AssociationSet>
-          <EntitySet Name="notifications" EntityType="CatchMeDBModel.notification" />
           <EntitySet Name="comments" EntityType="CatchMeDBModel.comment" />
           <AssociationSet Name="FK_comment_user_id" Association="CatchMeDBModel.FK_comment_user_id">
             <End Role="user" EntitySet="users" />
@@ -749,10 +750,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
           <AssociationSet Name="FK_log_task_id" Association="CatchMeDBModel.FK_log_task_id">
             <End Role="task" EntitySet="tasks" />
             <End Role="log" EntitySet="logs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_notification_task_id" Association="CatchMeDBModel.FK_notification_task_id">
-            <End Role="task" EntitySet="tasks" />
-            <End Role="notification" EntitySet="notifications" />
           </AssociationSet>
           <AssociationSet Name="FK_task_project_id" Association="CatchMeDBModel.FK_task_project_id">
             <End Role="project" EntitySet="projects" />
@@ -794,6 +791,11 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
           <EntitySet Name="viewCloseds" EntityType="CatchMeDBModel.viewClosed" />
           <EntitySet Name="viewVisits" EntityType="CatchMeDBModel.viewVisit" />
           <EntitySet Name="viewStatus" EntityType="CatchMeDBModel.viewStatus" />
+          <EntitySet Name="notifications" EntityType="CatchMeDBModel.notification" />
+          <AssociationSet Name="FK_notification_task_id" Association="CatchMeDBModel.FK_notification_task_id">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="notification" EntitySet="notifications" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -889,18 +891,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
           <End Type="CatchMeDBModel.project" Role="project" Multiplicity="*" />
           <End Type="CatchMeDBModel.user" Role="user" Multiplicity="*" />
         </Association>
-        <EntityType Name="notification">
-          <Key>
-            <PropertyRef Name="notification_id" />
-          </Key>
-          <Property Name="notification_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="task_id" Type="Int32" Nullable="false" />
-          <Property Name="sender_id" Type="Int32" Nullable="false" />
-          <Property Name="sender_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="recicipents" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="sent_on" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_notification_task_id" FromRole="notification" ToRole="task" />
-        </EntityType>
         <EntityType Name="comment">
           <Key>
             <PropertyRef Name="comment_id" />
@@ -1098,7 +1088,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
           <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="task" ToRole="attachment" />
           <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="task" ToRole="comment" />
           <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_task_id" FromRole="task" ToRole="log" />
-          <NavigationProperty Name="notifications" Relationship="CatchMeDBModel.FK_notification_task_id" FromRole="task" ToRole="notification" />
           <NavigationProperty Name="project" Relationship="CatchMeDBModel.FK_task_project_id" FromRole="task" ToRole="project" />
           <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_task_assigned_user_id" FromRole="task" ToRole="user" />
           <NavigationProperty Name="task_hist" Relationship="CatchMeDBModel.FK_task_hist_task_id" FromRole="task" ToRole="taskHist" />
@@ -1106,6 +1095,7 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
           <NavigationProperty Name="user2" Relationship="CatchMeDBModel.FK_task_updated_by_user_id" FromRole="task" ToRole="user" />
           <NavigationProperty Name="user3" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="task" ToRole="user" />
           <NavigationProperty Name="task_user" Relationship="CatchMeDBModel.FK_task_user_task_id" FromRole="task" ToRole="taskUser" />
+          <NavigationProperty Name="notifications" Relationship="CatchMeDBModel.FK_notification_task_id" FromRole="task" ToRole="notification" />
         </EntityType>
         <Association Name="FK_attachment_task_id">
           <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
@@ -1139,18 +1129,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
               <PropertyRef Name="task_id" />
             </Principal>
             <Dependent Role="log">
-              <PropertyRef Name="task_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_notification_task_id">
-          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
-          <End Type="CatchMeDBModel.notification" Role="notification" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="task">
-              <PropertyRef Name="task_id" />
-            </Principal>
-            <Dependent Role="notification">
               <PropertyRef Name="task_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -1316,6 +1294,32 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
           <Property Name="closed" Type="Int32" />
           <Property Name="total" Type="Int32" />
         </EntityType>
+        <EntityType Name="notification">
+          <Key>
+            <PropertyRef Name="notification_id" />
+          </Key>
+          <Property Name="notification_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="sender_id" Type="Int32" Nullable="false" />
+          <Property Name="sender_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="recicipents" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="sent_on" Type="DateTime" Precision="3" />
+          <Property Name="recipient_id" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="send_to_id" Type="Int32" />
+          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_notification_task_id" FromRole="notification" ToRole="task" />
+        </EntityType>
+        <Association Name="FK_notification_task_id">
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
+          <End Type="CatchMeDBModel.notification" Role="notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="notification">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1396,18 +1400,6 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
               <ScalarProperty Name="project_id" ColumnName="project_id" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="notifications">
-            <EntityTypeMapping TypeName="CatchMeDBModel.notification">
-              <MappingFragment StoreEntitySet="notification">
-                <ScalarProperty Name="sent_on" ColumnName="sent_on" />
-                <ScalarProperty Name="recicipents" ColumnName="recicipents" />
-                <ScalarProperty Name="sender_name" ColumnName="sender_name" />
-                <ScalarProperty Name="sender_id" ColumnName="sender_id" />
-                <ScalarProperty Name="task_id" ColumnName="task_id" />
-                <ScalarProperty Name="notification_id" ColumnName="notification_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="comments">
             <EntityTypeMapping TypeName="CatchMeDBModel.comment">
               <MappingFragment StoreEntitySet="comment">
@@ -1615,6 +1607,20 @@ warning 6002: The table/view 'CatchMeDBSIT.dbo.v_visit' does not have a primary 
                 <ScalarProperty Name="firstname" ColumnName="firstname" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="project_id" ColumnName="project_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notifications">
+            <EntityTypeMapping TypeName="CatchMeDBModel.notification">
+              <MappingFragment StoreEntitySet="notification">
+                <ScalarProperty Name="send_to_id" ColumnName="send_to_id" />
+                <ScalarProperty Name="recipient_id" ColumnName="recipient_id" />
+                <ScalarProperty Name="sent_on" ColumnName="sent_on" />
+                <ScalarProperty Name="recicipents" ColumnName="recicipents" />
+                <ScalarProperty Name="sender_name" ColumnName="sender_name" />
+                <ScalarProperty Name="sender_id" ColumnName="sender_id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="notification_id" ColumnName="notification_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -5,9 +5,13 @@
     [sender_name]     NVARCHAR (100)  NULL,
     [recicipents]     NVARCHAR (1000) NULL,
     [sent_on]         DATETIME        DEFAULT (getdate()) NULL,
+    [recipient_id]    NVARCHAR (500)  NULL,
+    [send_to_id]      INT             NULL,
     PRIMARY KEY CLUSTERED ([notification_id] ASC),
     CONSTRAINT [FK_notification_task_id] FOREIGN KEY ([task_id]) REFERENCES [dbo].[task] ([task_id])
 );
+
+
 
 
 

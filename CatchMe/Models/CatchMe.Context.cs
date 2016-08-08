@@ -32,7 +32,6 @@ namespace CatchMe.Models
         public virtual DbSet<taskUser> taskUsers { get; set; }
         public virtual DbSet<employee> employees { get; set; }
         public virtual DbSet<user> users { get; set; }
-        public virtual DbSet<notification> notifications { get; set; }
         public virtual DbSet<comment> comments { get; set; }
         public virtual DbSet<viewTasks> viewTasks { get; set; }
         public virtual DbSet<viewFigures> viewFigures { get; set; }
@@ -45,6 +44,7 @@ namespace CatchMe.Models
         public virtual DbSet<viewClosed> viewCloseds { get; set; }
         public virtual DbSet<viewVisit> viewVisits { get; set; }
         public virtual DbSet<viewStatus> viewStatus { get; set; }
+        public virtual DbSet<notification> notifications { get; set; }
     
         public virtual ObjectResult<backlog> GetBacklog(Nullable<int> project_id)
         {

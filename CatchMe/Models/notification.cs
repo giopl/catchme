@@ -20,6 +20,8 @@ namespace CatchMe.Models
         public string sender_name { get; set; }
         public string recicipents { get; set; }
         public Nullable<System.DateTime> sent_on { get; set; }
+        public string recipient_id { get; set; }
+        public Nullable<int> send_to_id { get; set; }
     
         public virtual task task { get; set; }
     }
