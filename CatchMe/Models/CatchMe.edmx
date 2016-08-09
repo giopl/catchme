@@ -83,9 +83,9 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="task_id" Type="int" Nullable="false" />
           <Property Name="sender_id" Type="int" Nullable="false" />
           <Property Name="sender_name" Type="nvarchar" MaxLength="100" />
-          <Property Name="recicipents" Type="nvarchar" MaxLength="1000" />
+          <Property Name="recipients" Type="nvarchar" MaxLength="1000" />
           <Property Name="sent_on" Type="datetime" />
-          <Property Name="recipient_id" Type="nvarchar" MaxLength="500" />
+          <Property Name="recipients_id" Type="nvarchar" MaxLength="500" />
           <Property Name="send_to_id" Type="int" />
         </EntityType>
         <EntityType Name="project">
@@ -1302,9 +1302,9 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <Property Name="task_id" Type="Int32" Nullable="false" />
           <Property Name="sender_id" Type="Int32" Nullable="false" />
           <Property Name="sender_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="recicipents" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="recipients" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="sent_on" Type="DateTime" Precision="3" />
-          <Property Name="recipient_id" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="recipients_id" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="send_to_id" Type="Int32" />
           <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_notification_task_id" FromRole="notification" ToRole="task" />
         </EntityType>
@@ -1614,9 +1614,9 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
             <EntityTypeMapping TypeName="CatchMeDBModel.notification">
               <MappingFragment StoreEntitySet="notification">
                 <ScalarProperty Name="send_to_id" ColumnName="send_to_id" />
-                <ScalarProperty Name="recipient_id" ColumnName="recipient_id" />
+                <ScalarProperty Name="recipients_id" ColumnName="recipients_id" />
                 <ScalarProperty Name="sent_on" ColumnName="sent_on" />
-                <ScalarProperty Name="recicipents" ColumnName="recicipents" />
+                <ScalarProperty Name="recipients" ColumnName="recipients" />
                 <ScalarProperty Name="sender_name" ColumnName="sender_name" />
                 <ScalarProperty Name="sender_id" ColumnName="sender_id" />
                 <ScalarProperty Name="task_id" ColumnName="task_id" />

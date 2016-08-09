@@ -159,6 +159,15 @@ namespace CatchMe.Controllers
             {
                 var list = tasks;
  
+                // stop words
+                //a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,which,while,who,whom,why,will,with,would,yet,you,your
+
+                string[] swordarray = new string[] {
+                    "a","able","about","across","after","all","almost","also","am","among","an","and","any","are","as","at","be","because","been","but","by","can","cannot","could","dear","did","do","does","either","else","ever","every","for","from","get","got","had","has","have","he","her","hers","him","his","how","however","i","if","in","into","is","it","its","just","least","let","like","likely","may","me","might","most","must","my","neither","no","nor","not","of","off","often","on","only","or","other","our","own","rather","said","say","says","she","should","since","so","some","than","that","the","their","them","then","there","these","they","this","tis","to","too","twas","us","wants","was","we","were","what","when","where","which","while","who","whom","why","will","with","would","yet","you","your"
+                };
+                List<string> stopwords = new List<string>(swordarray);
+
+
                 var searchFilter = UserSession.Current.searchFilter;
                 var result = new List<task>();                              
 
@@ -169,17 +178,36 @@ namespace CatchMe.Controllers
                             var projectId = tasks.FirstOrDefault().project_id;
                             var comments = db.comments.Where(x => x.task.project_id == projectId);
 
-                            var commentList = comments.Where(x => x.description.ToLower().Contains(searchFilter.keywords.ToLower())).ToList();
+                            string[] keywords = searchFilter.keywords.Split(' ');
+                            List<comment> commentlist = new List<comment>();
+                            List<task> tasklist = new List<task>();
+                            foreach (var k in keywords)
+                            {
+                                if (!stopwords.Contains(k))
+                                {
+                                    var cl = comments.Where(x => x.description.ToLower().Contains(k.ToLower())).ToList();
+                                    commentlist.AddRange(cl);
+                                }
+                            }
 
-                        var tasklist = db.tasks.Where(x => x.title.ToLower().Contains(searchFilter.keywords.ToLower())).ToList();
+
+                            //var commentList = comments.Where(x => x.description.ToLower().Contains(searchFilter.keywords.ToLower())).ToList();
+
+                            foreach (var k in keywords)
+                            {
+                                if (!stopwords.Contains(k))
+                                {
+                                    var tl = db.tasks.Where(x => x.title.ToLower().Contains(k.ToLower())).ToList();
+                                    tasklist.AddRange(tl);
+                                }
+                            }
 
                         var foundTasks = new List<task>();
                         foreach(var tsk in tasklist)
                         {
                            foundTasks.Add(new task { task_id = tsk.task_id });
-
                         }
-                        foreach (var comm in commentList)
+                        foreach (var comm in commentlist)
                             {
                                 foundTasks.Add(new task { task_id = comm.task_id });
                             }
@@ -1322,7 +1350,7 @@ namespace CatchMe.Controllers
                 }
 
                 notification notif = new notification { sender_id = UserSession.Current.UserId, sender_name = UserSession.Current.Fullname, task_id = taskId, sent_on = DateTime.Now, 
-                    recicipents = _recipients.ToString() , recipient_id = _recipient_ids.ToString(), send_to_id = SendTo};
+                    recipients = _recipients.ToString() , recipients_id = _recipient_ids.ToString(), send_to_id = SendTo};
 
                 db.notifications.Add(notif);
                 db.SaveChanges();

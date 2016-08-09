@@ -39,7 +39,7 @@
         <EntityTypeShape EntityType="CatchMeDBModel.viewClosed" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="CatchMeDBModel.viewVisit" Width="1.5" PointX="13.375" PointY="3.75" />
         <EntityTypeShape EntityType="CatchMeDBModel.viewStatus" Width="1.5" PointX="15.375" PointY="0.75" />
-        <EntityTypeShape EntityType="CatchMeDBModel.notification" Width="1.5" PointX="4.625" PointY="0.625" />
+        <EntityTypeShape EntityType="CatchMeDBModel.notification" Width="1.5" PointX="10.5" PointY="0.75" />
         <AssociationConnector Association="CatchMeDBModel.FK_notification_task_id" />
         </Diagram>
     </edmx:Diagrams>
