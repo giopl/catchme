@@ -146,8 +146,9 @@
             format: 'dd/mm/yyyy',
             autoclose: true,
             clearBtn: true
+        });
 
-        })
+        jQuery.validator.methods["date"] = function (value, element) { return true; }
 
         $('.chosen-select').chosen();
 

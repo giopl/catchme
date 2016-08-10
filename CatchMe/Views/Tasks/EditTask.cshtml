@@ -563,7 +563,11 @@
                 format: 'dd/mm/yyyy',
                 autoclose: true,
                 clearBtn: true
-            })
+            });
+
+            //fix for chrome
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
+
 
             $('body').on('change', '.submitme', function () {
                 $(this).closest('form').trigger('submit');
