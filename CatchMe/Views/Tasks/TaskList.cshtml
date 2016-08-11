@@ -10,7 +10,7 @@
 
     var countopen = Model.Where(x => x.status != 9).Count();
     //var countme = Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9).Count();
-    var countme = Model.Where(x => (x.assigned_to == session.Current.UserId && x.owner != session.Current.UserId && x.status != 9 && x.status != 3 && x.status != 7) || x.owner == session.Current.UserId && (x.status == 7 || x.status == 8 || x.status == 3)).Count();
+    var countme = Model.Where(x => (x.assigned_to == session.Current.UserId && x.owner != session.Current.UserId && x.status != 9 && x.status != 3 && x.status != 7) || x.owner == session.Current.UserId && (x.status == 7 || x.status == 3)).Count();
     var countclosed = Model.Where(x => x.status == 9).Count();
     var countopenbyme = Model.Where(x => x.owner == session.Current.UserId && x.status != 9).Count();
     var countsearched= Model.Where(x => x.IsFilteredOn).Count();
@@ -129,7 +129,7 @@ table.fixed td { overflow: hidden; }
                 </thead>
 
                 <tbody>
-                    @foreach (var item in Model.Where(x => (x.assigned_to == session.Current.UserId && x.owner != session.Current.UserId && x.status != 9 && x.status != 3 && x.status != 7) || x.owner == session.Current.UserId && (x.status == 7 || x.status == 8 || x.status == 3)))
+                    @foreach (var item in Model.Where(x => (x.assigned_to == session.Current.UserId && x.owner != session.Current.UserId && x.status != 9 && x.status != 3 && x.status != 7) || x.owner == session.Current.UserId && (x.status == 7 || x.status == 3)))
                     {
                         <tr>
                             <td>
