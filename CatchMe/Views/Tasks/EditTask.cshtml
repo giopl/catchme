@@ -226,8 +226,7 @@
 
                             <hr />
                             @*     @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))*@
-                            @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post,
-    new { enctype = "multipart/form-data" }))
+                            @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post,new { enctype = "multipart/form-data" }))
                             {
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="taskId" value="@Model.task_id" />
@@ -285,8 +284,59 @@
                                 <section style="display:none">
                                     @Html.Partial("_EditComment", comment)
                                 </section>
+                                <a href="#" class="shownextsection"><small><span class="fa fa-plus"></span>&nbsp;Add Attachment</small></a>
+                                <section style="display:none">
+                                    <div class="row">
+
+                                        <hr />
+                                        @*     @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))*@
+                                        @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="taskId" value="@Model.task_id" />
+                                            <input type="hidden" name="projectId" value="@Model.project_id" />
+                                            <input type="hidden" name="comment_id" value="@comment.comment_id" />
+                                            <div class="row">
+                                                <div class="col-md-offset-1 col-md-4">
+                                                    <input type="file" name="file" />
+
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="submit" class="btn btn-info" value="Attach" />
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-offset-1 col-md-8">
+                                                    <small class="text-muted">Files accepted: excel, word, powerpoint, text, jpeg, png</small>
+                                                </div>
+                                            </div>
+
+                                        }
+                                        <hr />
+                                    </div>
+
+                                </section>
                             </section>
-                            <hr />
+    <ul>
+        @foreach (var att in comment.attachments)
+        {
+        <li>
+            <div class="col-md-12">
+                <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
+                &nbsp;
+
+                @if (session.Current.UserId == att.user_id || session.Current.IsAdmin || !is_readonly)
+                                    {
+                    <a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash"></span></a>
+                                    }
+            </div>
+        </li>
+        }
+
+    </ul>
+                            
+        <hr>
                             { cnt++;}
                         }
 

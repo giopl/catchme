@@ -47,9 +47,6 @@ namespace CatchMe.Controllers
 
             var user = db.users.Find(user_id);
 
-
-
-
             //find user's active project
             var active_project = user.active_project.HasValue?  user.active_project.Value : 0;
 
@@ -135,8 +132,6 @@ namespace CatchMe.Controllers
             users = users.OrderBy(x => x.user_id).ToList();
 
             var session = UserSession.Current.searchFilter;
-
-
 
             ViewBag.status = new SelectList(statuses, "value", "name", defaultoption);
             ViewBag.type = new SelectList(types, "value", "name", defaultoption);            
