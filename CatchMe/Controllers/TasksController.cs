@@ -300,7 +300,7 @@ namespace CatchMe.Controllers
 
 
         [HttpPost]
-        public ActionResult UploadFile(HttpPostedFileBase file, int taskid, int projectid)
+        public ActionResult UploadFile(HttpPostedFileBase file, int taskid, int projectid, int comment_id = -1)
         {
             try
             {
@@ -313,6 +313,7 @@ namespace CatchMe.Controllers
                     created_on = DateTime.Now,
                     task_id = taskid,
                     user_id = UserSession.Current.UserId,
+                  comment_id = comment_id,
                     filepath = string.Format("{0}/{1}/{2}", projectid, taskid, file.FileName)
 
                 };

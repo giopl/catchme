@@ -18,6 +18,7 @@
           <Property Name="created_on" Type="datetime" />
           <Property Name="is_disabled" Type="bit" Nullable="false" />
           <Property Name="filepath" Type="nvarchar" MaxLength="500" />
+          <Property Name="comment_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="category">
           <Key>
@@ -301,6 +302,18 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <Property Name="operation" Type="nvarchar" MaxLength="60" />
           <Property Name="type" Type="nvarchar" MaxLength="60" />
         </EntityType>
+        <Association Name="FK_attachment_comment_id">
+          <End Role="comment" Type="Self.comment" Multiplicity="1" />
+          <End Role="attachment" Type="Self.attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="comment">
+              <PropertyRef Name="comment_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="comment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_attachment_task_id">
           <End Role="task" Type="Self.task" Multiplicity="1" />
           <End Role="attachment" Type="Self.attachment" Multiplicity="*" />
@@ -629,6 +642,10 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
     [v_visit].[type] AS [type]
     FROM [dbo].[v_visit] AS [v_visit]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_attachment_comment_id" Association="Self.FK_attachment_comment_id">
+            <End Role="comment" EntitySet="comment" />
+            <End Role="attachment" EntitySet="attachment" />
+          </AssociationSet>
           <AssociationSet Name="FK_attachment_task_id" Association="Self.FK_attachment_task_id">
             <End Role="task" EntitySet="task" />
             <End Role="attachment" EntitySet="attachment" />
@@ -716,21 +733,11 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
             <End Role="project" EntitySet="projects" />
             <End Role="user" EntitySet="users" />
           </AssociationSet>
-          <EntitySet Name="comments" EntityType="CatchMeDBModel.comment" />
-          <AssociationSet Name="FK_comment_user_id" Association="CatchMeDBModel.FK_comment_user_id">
-            <End Role="user" EntitySet="users" />
-            <End Role="comment" EntitySet="comments" />
-          </AssociationSet>
           <EntitySet Name="viewTasks" EntityType="CatchMeDBModel.viewTasks" />
           <FunctionImport Name="GetBacklog" ReturnType="Collection(CatchMeDBModel.backlog)">
           <Parameter Name="project_id" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="viewFigures" EntityType="CatchMeDBModel.viewFigures" />
-          <EntitySet Name="attachments" EntityType="CatchMeDBModel.attachment" />
-          <AssociationSet Name="FK_attachment_user_id" Association="CatchMeDBModel.FK_attachment_user_id">
-            <End Role="user" EntitySet="users" />
-            <End Role="attachment" EntitySet="attachments" />
-          </AssociationSet>
           <EntitySet Name="taskHists" EntityType="CatchMeDBModel.taskHist" />
           <EntitySet Name="logs" EntityType="CatchMeDBModel.log" />
           <AssociationSet Name="FK_log_user_id" Association="CatchMeDBModel.FK_log_user_id">
@@ -739,14 +746,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           </AssociationSet>
           <EntitySet Name="viewHistories" EntityType="CatchMeDBModel.viewHistory" />
           <EntitySet Name="tasks" EntityType="CatchMeDBModel.task" />
-          <AssociationSet Name="FK_attachment_task_id" Association="CatchMeDBModel.FK_attachment_task_id">
-            <End Role="task" EntitySet="tasks" />
-            <End Role="attachment" EntitySet="attachments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_comment_task_id" Association="CatchMeDBModel.FK_comment_task_id">
-            <End Role="task" EntitySet="tasks" />
-            <End Role="comment" EntitySet="comments" />
-          </AssociationSet>
           <AssociationSet Name="FK_log_task_id" Association="CatchMeDBModel.FK_log_task_id">
             <End Role="task" EntitySet="tasks" />
             <End Role="log" EntitySet="logs" />
@@ -795,6 +794,28 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <AssociationSet Name="FK_notification_task_id" Association="CatchMeDBModel.FK_notification_task_id">
             <End Role="task" EntitySet="tasks" />
             <End Role="notification" EntitySet="notifications" />
+          </AssociationSet>
+          <EntitySet Name="comments" EntityType="CatchMeDBModel.comment" />
+          <AssociationSet Name="FK_comment_task_id" Association="CatchMeDBModel.FK_comment_task_id">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="comment" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comment_user_id" Association="CatchMeDBModel.FK_comment_user_id">
+            <End Role="user" EntitySet="users" />
+            <End Role="comment" EntitySet="comments" />
+          </AssociationSet>
+          <EntitySet Name="attachments" EntityType="CatchMeDBModel.attachment" />
+          <AssociationSet Name="FK_attachment_comment_id" Association="CatchMeDBModel.FK_attachment_comment_id">
+            <End Role="comment" EntitySet="comments" />
+            <End Role="attachment" EntitySet="attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_attachment_task_id" Association="CatchMeDBModel.FK_attachment_task_id">
+            <End Role="task" EntitySet="tasks" />
+            <End Role="attachment" EntitySet="attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_attachment_user_id" Association="CatchMeDBModel.FK_attachment_user_id">
+            <End Role="user" EntitySet="users" />
+            <End Role="attachment" EntitySet="attachments" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="category">
@@ -865,15 +886,15 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <Property Name="active_project" Type="Int32" />
           <NavigationProperty Name="task_user" Relationship="CatchMeDBModel.FK_task_user_user_id" FromRole="user" ToRole="taskUser" />
           <NavigationProperty Name="projects" Relationship="CatchMeDBModel.project_user" FromRole="user" ToRole="project" />
-          <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_user_id" FromRole="user" ToRole="comment" />
           <Property Name="nickname" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="user" ToRole="attachment" />
           <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_user_id" FromRole="user" ToRole="log" />
           <NavigationProperty Name="tasks" Relationship="CatchMeDBModel.FK_task_assigned_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="tasks1" Relationship="CatchMeDBModel.FK_task_owner_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="tasks2" Relationship="CatchMeDBModel.FK_task_updated_by_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="tasks3" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="user" ToRole="task" />
           <NavigationProperty Name="project_user_role" Relationship="CatchMeDBModel.FK_project_user_role_user_id" FromRole="user" ToRole="project_user_role" />
+          <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_user_id" FromRole="user" ToRole="comment" />
+          <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="user" ToRole="attachment" />
         </EntityType>
         <Association Name="FK_task_user_user_id">
           <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
@@ -890,32 +911,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
         <Association Name="project_user">
           <End Type="CatchMeDBModel.project" Role="project" Multiplicity="*" />
           <End Type="CatchMeDBModel.user" Role="user" Multiplicity="*" />
-        </Association>
-        <EntityType Name="comment">
-          <Key>
-            <PropertyRef Name="comment_id" />
-          </Key>
-          <Property Name="comment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="task_id" Type="Int32" Nullable="false" />
-          <Property Name="user_id" Type="Int32" Nullable="false" />
-          <Property Name="title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="created_on" Type="DateTime" Precision="3" />
-          <Property Name="is_disabled" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_comment_user_id" FromRole="comment" ToRole="user" />
-          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="comment" ToRole="task" />
-        </EntityType>
-        <Association Name="FK_comment_user_id">
-          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
-          <End Type="CatchMeDBModel.comment" Role="comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="comment">
-              <PropertyRef Name="user_id" />
-            </Dependent>
-          </ReferentialConstraint>
         </Association>
         <EntityType Name="viewTasks">
           <Key>
@@ -960,34 +955,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <Property Name="closed_ontime" Type="Int32" />
           <Property Name="closed_late" Type="Int32" />
         </EntityType>
-        <EntityType Name="attachment">
-          <Key>
-            <PropertyRef Name="attachment_id" />
-          </Key>
-          <Property Name="attachment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="task_id" Type="Int32" Nullable="false" />
-          <Property Name="user_id" Type="Int32" Nullable="false" />
-          <Property Name="filename" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="mimetype" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="content_length" Type="Int32" />
-          <Property Name="created_on" Type="DateTime" Precision="3" />
-          <Property Name="is_disabled" Type="Boolean" Nullable="false" />
-          <Property Name="filepath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="attachment" ToRole="user" />
-          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="attachment" ToRole="task" />
-        </EntityType>
-        <Association Name="FK_attachment_user_id">
-          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
-          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="user_id" />
-            </Principal>
-            <Dependent Role="attachment">
-              <PropertyRef Name="user_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="taskHist">
           <Key>
             <PropertyRef Name="task_hist_id" />
@@ -1085,8 +1052,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <Property Name="state" Type="Int32" Nullable="false" />
           <Property Name="owner" Type="Int32" Nullable="false" />
           <Property Name="updated_by" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="task" ToRole="attachment" />
-          <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="task" ToRole="comment" />
           <NavigationProperty Name="logs" Relationship="CatchMeDBModel.FK_log_task_id" FromRole="task" ToRole="log" />
           <NavigationProperty Name="project" Relationship="CatchMeDBModel.FK_task_project_id" FromRole="task" ToRole="project" />
           <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_task_assigned_user_id" FromRole="task" ToRole="user" />
@@ -1096,31 +1061,9 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <NavigationProperty Name="user3" Relationship="CatchMeDBModel.FK_task_user_id" FromRole="task" ToRole="user" />
           <NavigationProperty Name="task_user" Relationship="CatchMeDBModel.FK_task_user_task_id" FromRole="task" ToRole="taskUser" />
           <NavigationProperty Name="notifications" Relationship="CatchMeDBModel.FK_notification_task_id" FromRole="task" ToRole="notification" />
+          <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="task" ToRole="comment" />
+          <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="task" ToRole="attachment" />
         </EntityType>
-        <Association Name="FK_attachment_task_id">
-          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
-          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="task">
-              <PropertyRef Name="task_id" />
-            </Principal>
-            <Dependent Role="attachment">
-              <PropertyRef Name="task_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_comment_task_id">
-          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
-          <End Type="CatchMeDBModel.comment" Role="comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="task">
-              <PropertyRef Name="task_id" />
-            </Principal>
-            <Dependent Role="comment">
-              <PropertyRef Name="task_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_log_task_id">
           <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
           <End Type="CatchMeDBModel.log" Role="log" Multiplicity="*" />
@@ -1320,6 +1263,99 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="comment_id" />
+          </Key>
+          <Property Name="comment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="created_on" Type="DateTime" Precision="3" />
+          <Property Name="is_disabled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="comment" ToRole="task" />
+          <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_comment_user_id" FromRole="comment" ToRole="user" />
+          <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_comment_id" FromRole="comment" ToRole="attachment" />
+        </EntityType>
+        <Association Name="FK_comment_task_id">
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
+          <End Type="CatchMeDBModel.comment" Role="comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comment_user_id">
+          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="CatchMeDBModel.comment" Role="comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="attachment">
+          <Key>
+            <PropertyRef Name="attachment_id" />
+          </Key>
+          <Property Name="attachment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="filename" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="mimetype" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="content_length" Type="Int32" />
+          <Property Name="created_on" Type="DateTime" Precision="3" />
+          <Property Name="is_disabled" Type="Boolean" Nullable="false" />
+          <Property Name="filepath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="comment_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="comment" Relationship="CatchMeDBModel.FK_attachment_comment_id" FromRole="attachment" ToRole="comment" />
+          <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_attachment_task_id" FromRole="attachment" ToRole="task" />
+          <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="attachment" ToRole="user" />
+        </EntityType>
+        <Association Name="FK_attachment_comment_id">
+          <End Type="CatchMeDBModel.comment" Role="comment" Multiplicity="1" />
+          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="comment">
+              <PropertyRef Name="comment_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="comment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_attachment_task_id">
+          <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
+          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task">
+              <PropertyRef Name="task_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_attachment_user_id">
+          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="CatchMeDBModel.attachment" Role="attachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="attachment">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1400,19 +1436,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
               <ScalarProperty Name="project_id" ColumnName="project_id" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="comments">
-            <EntityTypeMapping TypeName="CatchMeDBModel.comment">
-              <MappingFragment StoreEntitySet="comment">
-                <ScalarProperty Name="is_disabled" ColumnName="is_disabled" />
-                <ScalarProperty Name="created_on" ColumnName="created_on" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="task_id" ColumnName="task_id" />
-                <ScalarProperty Name="comment_id" ColumnName="comment_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="viewTasks">
             <EntityTypeMapping TypeName="CatchMeDBModel.viewTasks">
               <MappingFragment StoreEntitySet="v_tasks">
@@ -1457,21 +1480,6 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
                 <ScalarProperty Name="open" ColumnName="open" />
                 <ScalarProperty Name="total" ColumnName="total" />
                 <ScalarProperty Name="project_id" ColumnName="project_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="attachments">
-            <EntityTypeMapping TypeName="CatchMeDBModel.attachment">
-              <MappingFragment StoreEntitySet="attachment">
-                <ScalarProperty Name="filepath" ColumnName="filepath" />
-                <ScalarProperty Name="is_disabled" ColumnName="is_disabled" />
-                <ScalarProperty Name="created_on" ColumnName="created_on" />
-                <ScalarProperty Name="content_length" ColumnName="content_length" />
-                <ScalarProperty Name="mimetype" ColumnName="mimetype" />
-                <ScalarProperty Name="filename" ColumnName="filename" />
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="task_id" ColumnName="task_id" />
-                <ScalarProperty Name="attachment_id" ColumnName="attachment_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1621,6 +1629,35 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
                 <ScalarProperty Name="sender_id" ColumnName="sender_id" />
                 <ScalarProperty Name="task_id" ColumnName="task_id" />
                 <ScalarProperty Name="notification_id" ColumnName="notification_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="comments">
+            <EntityTypeMapping TypeName="CatchMeDBModel.comment">
+              <MappingFragment StoreEntitySet="comment">
+                <ScalarProperty Name="is_disabled" ColumnName="is_disabled" />
+                <ScalarProperty Name="created_on" ColumnName="created_on" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="comment_id" ColumnName="comment_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="attachments">
+            <EntityTypeMapping TypeName="CatchMeDBModel.attachment">
+              <MappingFragment StoreEntitySet="attachment">
+                <ScalarProperty Name="comment_id" ColumnName="comment_id" />
+                <ScalarProperty Name="filepath" ColumnName="filepath" />
+                <ScalarProperty Name="is_disabled" ColumnName="is_disabled" />
+                <ScalarProperty Name="created_on" ColumnName="created_on" />
+                <ScalarProperty Name="content_length" ColumnName="content_length" />
+                <ScalarProperty Name="mimetype" ColumnName="mimetype" />
+                <ScalarProperty Name="filename" ColumnName="filename" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="attachment_id" ColumnName="attachment_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

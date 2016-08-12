@@ -14,6 +14,11 @@ namespace CatchMe.Models
     
     public partial class comment
     {
+        public comment()
+        {
+            this.attachments = new HashSet<attachment>();
+        }
+    
         public int comment_id { get; set; }
         public int task_id { get; set; }
         public int user_id { get; set; }
@@ -22,7 +27,8 @@ namespace CatchMe.Models
         public Nullable<System.DateTime> created_on { get; set; }
         public bool is_disabled { get; set; }
     
-        public virtual user user { get; set; }
         public virtual task task { get; set; }
+        public virtual user user { get; set; }
+        public virtual ICollection<attachment> attachments { get; set; }
     }
 }

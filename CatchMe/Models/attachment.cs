@@ -23,8 +23,10 @@ namespace CatchMe.Models
         public Nullable<System.DateTime> created_on { get; set; }
         public bool is_disabled { get; set; }
         public string filepath { get; set; }
+        public int comment_id { get; set; }
     
-        public virtual user user { get; set; }
+        public virtual comment comment { get; set; }
         public virtual task task { get; set; }
+        public virtual user user { get; set; }
     }
 }

@@ -75,7 +75,7 @@ namespace CatchMe.Controllers
 
                 var myProjects = founduser.projects.ToList();
 
-                log alog = new log(AppEnums.LogOperationEnum.LOGIN, AppEnums.LogTypeEnum.USER, string.Format("{0}", UserSession.Current.Username ), 100);
+                log alog = new log(AppEnums.LogOperationEnum.LOGIN, AppEnums.LogTypeEnum.USER, string.Format("{0}", UserSession.Current.Username ), -1);
                 CreateLog(alog);
 
                 UserSession.Current.MyProjects = myProjects;
