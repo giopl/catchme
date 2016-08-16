@@ -270,7 +270,7 @@ width:100px;
   .color-medium { color: #ffd800;}
   .color-high { color: #D9534F;}
   .color-immediate {color: #b200ff;}
-
+  .color-white {color:#ffffff;}
 /* overriding chosen */
 
 .chosen-container-single .chosen-single {
@@ -294,6 +294,13 @@ width:100px;
 
 
 /* miscellanesous*/
+
+.project-title {
+        font-size:30px;
+        font-weight:500;
+        line-height:1.1;
+        margin-top:10px;
+    }
 
 
 #area2 {

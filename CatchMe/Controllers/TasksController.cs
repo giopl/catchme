@@ -754,7 +754,8 @@ namespace CatchMe.Controllers
             
 
             var currentproject = db.projects.Find(currentprojectid);
-            
+
+            ViewBag.ProjectDesc = currentproject.description;
 
             
             //http://stackoverflow.com/questions/13405568/linq-unable-to-create-a-constant-value-of-type-xxx-only-primitive-types-or-enu
@@ -841,7 +842,7 @@ namespace CatchMe.Controllers
                     db.SaveChanges();
 
 
-                    comment comment = new comment
+                    comment _comment = new comment
                     {
                         task_id = task.task_id,
                         user_id = task.created_by.Value,
@@ -850,7 +851,7 @@ namespace CatchMe.Controllers
                         description = task.description
                     };
 
-                    db.comments.Add(comment);
+                    db.comments.Add(_comment);
                     db.SaveChanges();
 
 
@@ -1301,10 +1302,12 @@ namespace CatchMe.Controllers
                         
                     };
 
-                    
+                    //sender
+                    //var sender = db.users.Find(UserSession.Current.UserId);
 
                     var senderid = UserSession.Current.UserId;
                     var sender = db.users.Find(senderid);
+                    mail.AddBccRecipient(sender.email);
 
                     
 

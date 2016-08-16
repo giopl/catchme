@@ -8,12 +8,11 @@
 
     if (!string.IsNullOrWhiteSpace(session.Current.Username))
     { 
-    Model.initiator = session.Current.Firstname;
-    
+       Model.initiator = session.Current.Firstname;    
     }
+    var desc = ViewBag.ProjectDesc;
         
-        
-                }
+ }
 
         <h2><span class="fa fa-plus-circle"></span>&nbsp;Create Task</h2>
 
@@ -23,7 +22,9 @@
             @Html.AntiForgeryToken()
 
             <div class="form-horizontal">
-                <h4 class="text-primary" style="margin-left:4%">@session.Current.CurrentProject</h4>
+                <h4 class="text-primary" style="margin-left:4%">@session.Current.CurrentProject<br /><small class="text-muted">@desc</small></h4>
+                    
+                
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
