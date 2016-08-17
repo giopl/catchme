@@ -33,7 +33,8 @@ namespace CatchMe.Helpers
             No_Issue,
             Passed,
             Failed,
-            Closed
+            Closed,
+            For_Test
 
         }
 

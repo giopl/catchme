@@ -584,6 +584,10 @@ namespace CatchMe.Controllers
                 statuses.Add(new OptionItem { name = "Test Failed", value = 8 });
                 statuses.Add(new OptionItem { name = "Closed", value = 9 });
 
+                statuses.Add(new OptionItem { name = "For Test", value = 10 });
+
+
+
             }
         
 
@@ -621,6 +625,7 @@ namespace CatchMe.Controllers
             {
                 statuses.Add(new OptionItem { name = "Re-Open", value = 1 });
                 statuses.Add(new OptionItem { name = "Completed", value = 3 });
+                statuses.Add(new OptionItem { name = "For Test", value = 10 });
                 statuses.Add(new OptionItem { name = "Test Passed", value = 7 });
                 statuses.Add(new OptionItem { name = "Test Failed", value = 8 });
             }
@@ -662,8 +667,14 @@ namespace CatchMe.Controllers
                 statuses.Add(new OptionItem { name = "Re-Open", value = 1 });
                 statuses.Add(new OptionItem { name = "Closed", value = 9 });
             }
-            
-            
+
+            if (val == 10)
+            {                
+                statuses.Add(new OptionItem { name = "For Test", value = 10 });               
+                statuses.Add(new OptionItem { name = "Test Passed", value = 7 });
+                statuses.Add(new OptionItem { name = "Test Failed", value = 8 });
+            }
+             
 
             //statuses.Add(new OptionItem { name = "New", value = 0 });
             //statuses.Add(new OptionItem { name = "Action", value = 1 });

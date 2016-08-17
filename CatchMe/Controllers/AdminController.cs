@@ -556,6 +556,34 @@ namespace CatchMe.Controllers
             }
         }
 
+
+        public ActionResult Test()
+        {
+            int[,] week = new int[6,7];
+
+            //
+            var days = DateTime.DaysInMonth(DateTime.Now.Year,DateTime.Now.Month);
+            var dayName = (int) DateTime.Now.DayOfWeek;
+            int dt = 1;
+            for(int i=0; i<7; i++)
+            {
+                
+                if(i+1>=dayName)
+                {
+                    week[0, i] = dt;                    
+                    dt++;
+                }
+
+                week[1, i] = dayName + 7;
+                week[2, i] = dayName + 14;
+                week[3, i] = dayName + 21;
+
+
+
+            }
+            ViewBag.Days = week;
+            return View();
+        }
         public ActionResult RemoveUserFromProject(int project_id, int user_id, bool fromuser = false)
         {
 

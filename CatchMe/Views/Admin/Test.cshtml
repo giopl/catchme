@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Test";
+    
+    var days = (int[,]) ViewBag.Days  ;
+}
+
+<h2>Test</h2>
+
+@for(var i = 0 ;i < 6 ; i++)
+{
+    
+    for(var j = 0 ; j<7;j++ )
+    {
+       
+        <p>@i - @j  @days[i,j]</p> 
+        
+    }
+    
+}

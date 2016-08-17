@@ -61,6 +61,8 @@ namespace CatchMe.Models
                         case "passed": return "success";
                         case "problem":
                         case "failed": return "danger";
+                        case "for test": return "warning";
+
 
 
                         default:
@@ -239,7 +241,10 @@ namespace CatchMe.Models
                     {
                         return string.Format("Task changed to <span class='label label-danger'>Problem</span>");
                     }
-
+                    if (new_val.ToLower() == "for test")
+                    {
+                        return string.Format("Task changed to <span class='label label-warning'>For Test</span>");
+                    }
                 }
 
 

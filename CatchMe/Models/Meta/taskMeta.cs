@@ -315,6 +315,7 @@ namespace CatchMe.Models
                     case 7: return "trophy";
                     case 8: return "warning";
                     case 9: return "folder";
+                    case 10: return "flask";
 
                     default:
                         break;
@@ -382,6 +383,7 @@ namespace CatchMe.Models
                         case 4:
                         case 9: return "default";
                         case 1:
+                        case 10:
                         case 2: return "warning";
                         case 3: return "primary";
                         case 6:

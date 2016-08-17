@@ -61,3 +61,7 @@ INSERT [dbo].[optionset] ([optionset_id], [option_type], [code], [name]) VALUES 
 GO
 SET IDENTITY_INSERT [dbo].[optionset] OFF
 GO
+
+
+/* added afterwards */
+insert into optionset(option_type, code, name) values ('STATUS',10,'For Test')

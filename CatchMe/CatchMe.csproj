@@ -380,6 +380,7 @@
     <Content Include="Views\Shared\_searchFilter.cshtml" />
     <Content Include="Views\Admin\Impersonation.cshtml" />
     <Content Include="Views\Admin\Visits.cshtml" />
+    <Content Include="Views\Admin\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
