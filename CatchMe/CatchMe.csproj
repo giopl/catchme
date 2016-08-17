@@ -132,6 +132,7 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\informationController.cs" />
     <Compile Include="Controllers\logsController.cs" />
     <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
@@ -177,6 +178,9 @@
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\employee.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\information.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\log.cs">
@@ -381,11 +385,13 @@
     <Content Include="Views\Admin\Impersonation.cshtml" />
     <Content Include="Views\Admin\Visits.cshtml" />
     <Content Include="Views\Admin\Test.cshtml" />
+    <Content Include="Views\Tasks\ShowInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="uploads\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\information\" />
     <Folder Include="Views\logs\" />
   </ItemGroup>
   <ItemGroup>

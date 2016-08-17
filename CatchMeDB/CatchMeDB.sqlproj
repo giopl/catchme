@@ -91,6 +91,7 @@
     <Build Include="dbo\Views\v_status.sql" />
     <Build Include="dbo\Views\v_visit.sql" />
     <Build Include="dbo\Views\v_closed.sql" />
+    <Build Include="dbo\Tables\information.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Initialisation.sql" />

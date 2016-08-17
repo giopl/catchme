@@ -42,5 +42,34 @@ GO
 SET IDENTITY_INSERT  [dbo].[comment] OFF;
 
 
+
+SET IDENTITY_INSERT  [dbo].[information] ON;
+
+INSERT INTO [dbo].[information]
+           (information_id,
+		   [project_id]
+           ,[title]
+           ,[description]
+           
+           ,[created_by]
+           
+           ,[updated_by]
+           )
+     VALUES
+           (-1,-1
+           ,'system'
+           ,'system dummy record used for FKs'
+           ,0
+           ,0)
+GO
+
+
+
+
+SET IDENTITY_INSERT  [dbo].[information] OFF;
+
+GO
+
+
 --CLEANUP OF LOGS TO USE DUMMY TASK FOR LOGIN
 UPDATE LOG set task_id = -1 where operation = 'LOGIN'

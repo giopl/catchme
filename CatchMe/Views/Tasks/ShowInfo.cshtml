@@ -1,0 +1,133 @@
+﻿@model CatchMe.Models.information
+
+@{
+    ViewBag.Title = "Show Info";
+}
+
+<h2 class="text-info"><span class="fa fa-info-circle"></span>&nbsp;@Model.title</h2>
+
+<h4 class="text-primary" style="margin-left:4%">@Model.project.name<br /><small class="text-muted">@Model.project.description</small></h4>
+
+
+
+<small class="text-right">Created by @Model.user.firstname on @Model.created_on | Last updated by @Model.user1.firstname on @Model.updated_on</small>
+
+
+
+<h4 style="background:#31708F;color:#fff;padding:20px;">
+    @Html.Raw(Model.description)
+</h4>
+
+<a href="#" class="shownextsection">Edit</a>
+
+<section style="display:none">
+
+    @using (Html.BeginForm("EditInfo","Tasks", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>information</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.information_id)
+            @Html.HiddenFor(model => model.project_id)
+            @Html.HiddenFor(model => model.created_on)
+            @Html.HiddenFor(model => model.created_by)
+            @Html.HiddenFor(model => model.state)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-5">
+                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-5">
+                    @*@Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <textarea name="description" class="form-control" id="area2" style="width:450%">@Model.description</textarea>
+
+                    @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.importance, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-5">
+                    @Html.DropDownList("importance", null, new { @class = "form-control chosen-select", @style="width:100%" })
+                    @Html.ValidationMessageFor(model => model.importance, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-5">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+    </section>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/nicedit")
+
+    <script>
+
+        //bkLib.onDomLoaded(function () {
+
+        //    nicEditors.allTextAreas();
+        //    new nicEditor({
+        //          fullPanel: true
+
+        //    });//.panelInstance('area2');
+
+        //});
+
+        $(document).ready(function () {
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('.chosen-select').chosen(
+                {
+                    width:'300'
+                });
+
+
+            $('body').on('click', '.shownextsection', function () {
+
+                $(this).next('section').toggle();
+            });
+
+            
+
+            bkLib.onDomLoaded(function () {
+
+                //nicEditors.allTextAreas();
+                new nicEditor({
+                    //  fullPanel: true,
+                    buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'forecolor', 'bgcolor']
+                }).panelInstance('area2');
+                //nicEditors.findEditor('myArea2');
+            });
+
+
+            
+            $('body').on('click', '#closeAddComment', function () {
+                $('#savestatusbutton').prop('disabled', false);
+                $('#infosave').hide();
+                $(this).closest('section').hide();
+            });
+
+
+
+        });
+    </script>
+}

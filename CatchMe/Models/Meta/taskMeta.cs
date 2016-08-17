@@ -278,16 +278,29 @@ namespace CatchMe.Models
         {
 
 
+            /*
+             * 
+             * 1	Development
+                2	Change
+                3	Bug
+                4	Failure
+                5	Test
+                6	Investigation\
+             */
+
             get
             {
+
                 switch (type)
                 {
-                    case 1: return "wrench";
+                    case 1: return "laptop";
                         case 2: return "cogs";
                         case 3: return "bug";
                         case 4: return "exclamation";
-                        case 5: return "thumbs-up";
+                        case 5: return "flask";
                         case 6: return "search";
+                        case 7: return "wrench";
+                        case 8: return "info-circle";
                         
                     default:
                         break;

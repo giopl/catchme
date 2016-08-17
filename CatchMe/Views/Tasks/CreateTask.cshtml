@@ -14,7 +14,11 @@
         
  }
 
-        <h2><span class="fa fa-plus-circle"></span>&nbsp;Create Task</h2>
+        <h2 class="hidetaskitem"><span class="fa fa-plus-circle"></span>&nbsp;Create Task</h2>
+    
+        <h2 class="hideinfoitem" style="display:none"><span class="fa fa-info-circle"></span>&nbsp;Create Information item</h2>
+
+
 
 
         @using (Html.BeginForm())
@@ -37,7 +41,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group hidetaskitem">
                     @Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
 
@@ -47,7 +51,7 @@
                 </div>
 
 
-                <div class="form-group">
+                <div class="form-group hidetaskitem">
                     @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
 
@@ -61,7 +65,7 @@
                     @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
 
-                        @Html.DropDownList("type", null, new { @class = "form-control chosen-select", @required="" })
+                        @Html.DropDownList("type", null, new { @class = "form-control chosen-select typechanged", @required="" })
                         @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -84,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group hidetaskitem">
                     @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
@@ -93,7 +97,13 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="hidetaskitem">
+                        @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-2" })
+                    </div>
+                    <div class="hideinfoitem" style="display:none">
+                        <label class="control-label col-md-2">Importance</label>
+                    </div>
+
                     <div class="col-md-6">
                         @Html.DropDownList("complexity", null,  new { @class = "form-control chosen-select" })
                         @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
@@ -102,19 +112,20 @@
 
 
 
-                <div class="form-group">
+                <div class="form-group hidetaskitem">
                     @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
-                        @Html.DropDownList("priority", null, new { @class = "form-control chosen-select" } )
+                        @Html.DropDownList("priority", null, new { @class = "form-control chosen-select" })
                         @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
 
-                <div class="form-group">
+
+                <div class="form-group hidetaskitem">
                     @Html.LabelFor(model => model.due_date, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
-                        @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker" , @placeholder="dd/mm/yyyy"} })
+                        @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" } })
                         @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -158,6 +169,24 @@
             minYear: _minyear,
             maxYear: _max_year,
         });
+
+        $('body').on('change', '.typechanged', function () {
+
+            var ty = $(this).val();
+
+            if(ty == 8)
+            {
+                $('.hidetaskitem').hide();
+                $('.hideinfoitem').show();
+            } else {
+                $('.hidetaskitem').show();
+                $('.hideinfoitem').hide();
+            }
+            
+
+            
+        });
+
     });
 
         bkLib.onDomLoaded(function () {

@@ -707,7 +707,7 @@ namespace CatchMe.Controllers
         }
 
 
-        private List<OptionItem> getTypes()
+        private List<OptionItem> getTypes(bool includeinfo=false)
         {
 
             List<OptionItem> types = new List<OptionItem>();
@@ -718,6 +718,11 @@ namespace CatchMe.Controllers
             types.Add(new OptionItem { name = "Failure", value = 4 });
             types.Add(new OptionItem { name = "Test", value = 5 });
             types.Add(new OptionItem { name = "Investigation", value = 6 });
+            types.Add(new OptionItem { name = "Setup/Configuration", value = 7 });
+            if (includeinfo)
+            {
+                types.Add(new OptionItem { name = "Information", value = 8 });
+            }
             return types;
         }
 
@@ -784,7 +789,7 @@ namespace CatchMe.Controllers
             //ViewBag.status = new SelectList(getStatuses(), "value", "name");
             //ViewBag.test_status = new SelectList(getTestStatuses(), "value", "name");
             ViewBag.complexity = new SelectList(getComplexities(), "value", "name");
-            ViewBag.type= new SelectList(getTypes(), "value", "name");
+            ViewBag.type= new SelectList(getTypes(true), "value", "name");
             ViewBag.severity = new SelectList(getSeverities(), "value", "name");
             ViewBag.priority = new SelectList(getPriorities(), "value", "name");
 
@@ -830,6 +835,62 @@ namespace CatchMe.Controllers
         }
 
 
+        public ActionResult ShowInfo(int? id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return RedirectToAction("Index");
+                    //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                var info = db.information.Find(id);
+
+                ViewBag.importance = new SelectList(getComplexities(), "value", "name", info.importance);
+
+
+                if (info == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(info);
+
+                
+
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
+
+
+        // POST: information/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditInfo([Bind(Include = "information_id,project_id,title,description,importance,created_by,created_on,updated_by,updated_on,state")] information information)
+        {
+            if (ModelState.IsValid)
+            {
+                information.updated_on = DateTime.Now;
+                information.updated_by = UserSession.Current.UserId;
+
+                db.Entry(information).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("ShowInfo", new { id = information.information_id });
+            }
+            ViewBag.importance = new SelectList(getComplexities(), "value", "name", information.importance);
+            
+            return View(information);
+        }
+
+
+
         // POST: Tasks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -839,6 +900,34 @@ namespace CatchMe.Controllers
         {
             try
             {
+
+
+                if(task.type == 8 )
+                {
+
+                    information info = new information
+                    {
+                        project_id = task.project_id,
+                        title = task.title,
+                        description = task.description,
+                        importance = task.complexity,
+                        created_by = UserSession.Current.UserId,
+                        updated_by = UserSession.Current.UserId,
+                        created_on = DateTime.Now,
+                        updated_on = DateTime.Now
+                    };
+
+                    db.information.Add(info);
+                    db.SaveChanges();
+
+                    return RedirectToAction("ShowInfo", new { id = info.information_id});
+
+                }
+                else
+                {
+
+
+                
 
                 task.created_by = UserSession.Current.UserId;
                 task.owner= UserSession.Current.UserId;
@@ -871,7 +960,9 @@ namespace CatchMe.Controllers
                     CreateLog(log);
 
                     return RedirectToAction("EditTask", new  { id=task.task_id });
+
                 }
+              }
 
                 
                 ViewBag.project_id = new SelectList(db.projects, "project_id", "name", task.project_id);

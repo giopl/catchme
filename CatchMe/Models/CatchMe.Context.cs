@@ -45,6 +45,7 @@ namespace CatchMe.Models
         public virtual DbSet<notification> notifications { get; set; }
         public virtual DbSet<comment> comments { get; set; }
         public virtual DbSet<attachment> attachments { get; set; }
+        public virtual DbSet<information> information { get; set; }
     
         public virtual ObjectResult<backlog> GetBacklog(Nullable<int> project_id)
         {

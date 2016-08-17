@@ -62,6 +62,21 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="is_active" Type="char" MaxLength="1" />
           <Property Name="team" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="information">
+          <Key>
+            <PropertyRef Name="information_id" />
+          </Key>
+          <Property Name="information_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="int" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="500" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="importance" Type="int" />
+          <Property Name="created_by" Type="int" />
+          <Property Name="created_on" Type="datetime" />
+          <Property Name="updated_by" Type="int" Nullable="false" />
+          <Property Name="updated_on" Type="datetime" />
+          <Property Name="state" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="log">
           <Key>
             <PropertyRef Name="log_id" />
@@ -362,6 +377,42 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_information_project_id">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="information" Type="Self.information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="information">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_information_updated_by_user_id">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="information" Type="Self.information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="information">
+              <PropertyRef Name="updated_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_information_user_id">
+          <End Role="user" Type="Self.user" Multiplicity="0..1" />
+          <End Role="information" Type="Self.information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="information">
+              <PropertyRef Name="created_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_log_task_id">
           <End Role="task" Type="Self.task" Multiplicity="1" />
           <End Role="log" Type="Self.log" Multiplicity="*" />
@@ -525,6 +576,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <EntitySet Name="attachment" EntityType="Self.attachment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="comment" EntityType="Self.comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="information" EntityType="Self.information" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="log" EntityType="Self.log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="notification" EntityType="Self.notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
@@ -661,6 +713,18 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <AssociationSet Name="FK_comment_user_id" Association="Self.FK_comment_user_id">
             <End Role="user" EntitySet="user" />
             <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_information_project_id" Association="Self.FK_information_project_id">
+            <End Role="project" EntitySet="project" />
+            <End Role="information" EntitySet="information" />
+          </AssociationSet>
+          <AssociationSet Name="FK_information_updated_by_user_id" Association="Self.FK_information_updated_by_user_id">
+            <End Role="user" EntitySet="user" />
+            <End Role="information" EntitySet="information" />
+          </AssociationSet>
+          <AssociationSet Name="FK_information_user_id" Association="Self.FK_information_user_id">
+            <End Role="user" EntitySet="user" />
+            <End Role="information" EntitySet="information" />
           </AssociationSet>
           <AssociationSet Name="FK_log_task_id" Association="Self.FK_log_task_id">
             <End Role="task" EntitySet="task" />
@@ -817,6 +881,19 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
             <End Role="user" EntitySet="users" />
             <End Role="attachment" EntitySet="attachments" />
           </AssociationSet>
+          <EntitySet Name="information" EntityType="CatchMeDBModel.information" />
+          <AssociationSet Name="FK_information_project_id" Association="CatchMeDBModel.FK_information_project_id">
+            <End Role="project" EntitySet="projects" />
+            <End Role="information" EntitySet="information" />
+          </AssociationSet>
+          <AssociationSet Name="FK_information_updated_by_user_id" Association="CatchMeDBModel.FK_information_updated_by_user_id">
+            <End Role="user" EntitySet="users" />
+            <End Role="information" EntitySet="information" />
+          </AssociationSet>
+          <AssociationSet Name="FK_information_user_id" Association="CatchMeDBModel.FK_information_user_id">
+            <End Role="user" EntitySet="users" />
+            <End Role="information" EntitySet="information" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -837,6 +914,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <NavigationProperty Name="users" Relationship="CatchMeDBModel.project_user" FromRole="project" ToRole="user" />
           <NavigationProperty Name="tasks" Relationship="CatchMeDBModel.FK_task_project_id" FromRole="project" ToRole="task" />
           <NavigationProperty Name="project_user_role" Relationship="CatchMeDBModel.FK_project_user_role_project_id" FromRole="project" ToRole="project_user_role" />
+          <NavigationProperty Name="information" Relationship="CatchMeDBModel.FK_information_project_id" FromRole="project" ToRole="information" />
           </EntityType>
         <EntityType Name="taskUser">
           <Key>
@@ -895,6 +973,8 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <NavigationProperty Name="project_user_role" Relationship="CatchMeDBModel.FK_project_user_role_user_id" FromRole="user" ToRole="project_user_role" />
           <NavigationProperty Name="comments" Relationship="CatchMeDBModel.FK_comment_user_id" FromRole="user" ToRole="comment" />
           <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_user_id" FromRole="user" ToRole="attachment" />
+          <NavigationProperty Name="information" Relationship="CatchMeDBModel.FK_information_updated_by_user_id" FromRole="user" ToRole="information" />
+          <NavigationProperty Name="information1" Relationship="CatchMeDBModel.FK_information_user_id" FromRole="user" ToRole="information" />
         </EntityType>
         <Association Name="FK_task_user_user_id">
           <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
@@ -1356,6 +1436,60 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="information">
+          <Key>
+            <PropertyRef Name="information_id" />
+          </Key>
+          <Property Name="information_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="importance" Type="Int32" />
+          <Property Name="created_by" Type="Int32" />
+          <Property Name="created_on" Type="DateTime" Precision="3" />
+          <Property Name="updated_by" Type="Int32" Nullable="false" />
+          <Property Name="updated_on" Type="DateTime" Precision="3" />
+          <Property Name="state" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="project" Relationship="CatchMeDBModel.FK_information_project_id" FromRole="information" ToRole="project" />
+          <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_information_updated_by_user_id" FromRole="information" ToRole="user" />
+          <NavigationProperty Name="user1" Relationship="CatchMeDBModel.FK_information_user_id" FromRole="information" ToRole="user" />
+        </EntityType>
+        <Association Name="FK_information_project_id">
+          <End Type="CatchMeDBModel.project" Role="project" Multiplicity="1" />
+          <End Type="CatchMeDBModel.information" Role="information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="information">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_information_updated_by_user_id">
+          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="CatchMeDBModel.information" Role="information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="information">
+              <PropertyRef Name="updated_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_information_user_id">
+          <End Type="CatchMeDBModel.user" Role="user" Multiplicity="0..1" />
+          <End Type="CatchMeDBModel.information" Role="information" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="information">
+              <PropertyRef Name="created_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1658,6 +1792,22 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="task_id" ColumnName="task_id" />
                 <ScalarProperty Name="attachment_id" ColumnName="attachment_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="information">
+            <EntityTypeMapping TypeName="CatchMeDBModel.information">
+              <MappingFragment StoreEntitySet="information">
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="updated_on" ColumnName="updated_on" />
+                <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+                <ScalarProperty Name="created_on" ColumnName="created_on" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="importance" ColumnName="importance" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="information_id" ColumnName="information_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
