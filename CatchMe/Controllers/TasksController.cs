@@ -939,7 +939,7 @@ namespace CatchMe.Controllers
 
             var statuslist = getStatuses(task.status.Value);
             
-            if(task.user1.user_id != UserSession.Current.UserId && task.status.Value != 9) 
+            if(task.user1.user_id != UserSession.Current.UserId && task.status.Value != 9 && task.status.Value != 10 ) 
             {
                                 
 
