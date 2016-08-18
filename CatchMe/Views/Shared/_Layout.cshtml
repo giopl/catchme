@@ -28,7 +28,21 @@
                     <li><a href="@Url.Action("Index","Tasks")" title="Home"><span class="fa fa-15x fa-home"></span> </a></li>
                     <li><a href="@Url.Action("CreateTask","Tasks")" title="create task"><span class="fa fa-15x fa-plus"></span> </a></li>
                    
-                    <li><a href="@Url.Action("Index","Stats")" title="Admin"><span class="fa fa-15x fa-line-chart"></span> </a></li>
+                    <li><a href="@Url.Action("Index","Stats")" title="Stats"><span class="fa fa-15x fa-line-chart"></span> </a></li>
+                    <li><a href="#" title="Advanced Search"><span class="fa fa-15x fa-search-plus opensearch"></span> </a></li>
+                    <li class="showadvancedsearch" style="display:none">                         
+
+                        @using (Html.BeginForm("SetSearchFilter","Tasks",FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                                                <div class="input-group" style="margin-top:10px;">
+                                                    <input type="text" class="form-control" style="background:#ddd" name="keywords" placeholder="Advanced Search">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary" type="submit"><span class="fa fa-search"></span></button>
+                                                    </span>
+                                                </div><!-- /input-group -->
+                        }
+                    </li>
 
                 </ul>                
                 <p class="nav navbar-text navbar-right">
@@ -64,6 +78,17 @@
     @RenderSection("scripts1", required: false)
     @RenderSection("scripts", required: false)
 
+    <script>
+        $(document).ready(function () {
+
+            $('body').on('click', '.opensearch', function () {
+
+                $('.showadvancedsearch').toggle();
+
+            });
+
+        });
+    </script>
 
 </body>
 </html>

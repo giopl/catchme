@@ -38,6 +38,7 @@ namespace CatchMe
                       "~/Scripts/plugins/readmore.js",
                       "~/Scripts/plugins/moment.js",
                       "~/Scripts/sweetalert.js",
+                      //"~/Scripts/plugins/highlight.js",
                       "~/Scripts/respond.js"
 
                       ));

@@ -122,7 +122,8 @@ namespace CatchMe.Helpers
             COMPLEXITY,
             DATE,
             OWNER,
-            ASSIGNEE
+            ASSIGNEE,
+            INFO
 
         }
 

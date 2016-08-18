@@ -1,7 +1,15 @@
 ﻿@model CatchMe.Models.information
+@using session = CatchMe.Helpers.UserSession
+@using appenums = CatchMe.Helpers.AppEnums
+
 
 @{
     ViewBag.Title = "Show Info";
+    
+    
+    var color  = Model.importance == 1 ? "#5BC0DE" : (Model.importance == 2? "#ffd800": ( Model.importance == 3 ? "#D9534F": "#b200ff" )  );
+    
+          
 }
 
 <h2 class="text-info"><span class="fa fa-info-circle"></span>&nbsp;@Model.title</h2>
@@ -10,45 +18,108 @@
 
 
 
-<small class="text-right">Created by @Model.user.firstname on @Model.created_on | Last updated by @Model.user1.firstname on @Model.updated_on</small>
+    <div class="text-right" style="margin-top:-50px;"><small class="text-muted">Created by @Model.user.firstname on @Model.created_on <br /> Last updated by @Model.user1.firstname on @Model.updated_on</small></div>
 
 
 
-<h4 style="background:#31708F;color:#fff;padding:20px;">
-    @Html.Raw(Model.description)
-</h4>
+<a href="#" style="margin-left:4%" class="shownextsection"><small>&nbsp;<span class="fa fa-plus"></span> attachment</small></a>
+<section style="display:none">
+    <div class="row">
+
+        <hr />
+        @*     @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))*@
+        @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="taskId" value="-1" />
+            <input type="hidden" name="projectId" value="@Model.project_id" />
+            <input type="hidden" name="comment_id" value="-1" />
+            <input type="hidden" name="information_id" value="@Model.information_id" />
+            <div class="row">
+                <div class="col-md-offset-1 col-md-4">
+                    <input type="file" required name="file" />
+
+                </div>
+                <div class="col-md-4">
+                    <input type="submit" class="btn btn-info" value="Attach" />
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-1 col-md-8">
+                    <small class="text-muted">Files accepted: excel, word, powerpoint, text, jpeg, png</small>
+                </div>
+            </div>
+
+        }
+        <hr />
+    </div>
+
+</section>
+        
+@if(Model.attachments.Count >0)
+{    
+@:&nbsp;|&nbsp;<a href="#" class="shownextsection"><small><span class="fa fa-paperclip"></span> Attachments(@Model.attachments.Count) </small></a>
+}
+<section style="display:none">
+    <hr />
+    @foreach (var att in Model.attachments)
+    {
+        <div style="margin-left:4%">
+        
+                <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
+                &nbsp;@if (session.Current.UserId == att.user_id || session.Current.IsAdmin)
+                {
+                    <a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = -1, information_id = Model.information_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash"></span></a>
+                }
+
+        </div>
+        
+
+    }
+    <hr />
+</section>
+
+
+
+<hr>
+
+<br />
+<div style="background:#EEE;color:#555;padding:20px;border-left:20px solid @color;font-size:1.4em">
+  @Html.Raw(Model.description)
+</div>
 
 <a href="#" class="shownextsection">Edit</a>
 
 <section style="display:none">
 
-    @using (Html.BeginForm("EditInfo","Tasks", FormMethod.Post))
+    @using (Html.BeginForm("EditInfo", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
-            <h4>information</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.information_id)
-            @Html.HiddenFor(model => model.project_id)
-            @Html.HiddenFor(model => model.created_on)
-            @Html.HiddenFor(model => model.created_by)
-            @Html.HiddenFor(model => model.state)
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-5">
-                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-                </div>
+        <h4>information</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.information_id)
+        @Html.HiddenFor(model => model.project_id)
+        @Html.HiddenFor(model => model.created_on)
+        @Html.HiddenFor(model => model.created_by)
+        @Html.HiddenFor(model => model.state)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
             </div>
+        </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-5">
-                    @*@Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })*@
-                    <textarea name="description" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment"></textarea>
+        <div class="form-group">
+            @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @*@Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })*@
+                <textarea name="description" id="area2" cols="20" rows="2" style="width:550px;height:200px" placeholder="comment">@Model.description</textarea>
 
                     @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
                 </div>
@@ -56,22 +127,22 @@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.importance, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-5">
-                    @Html.DropDownList("importance", null, new { @class = "form-control chosen-select", @style="width:100%" })
+                <div class="col-md-6">
+                    @Html.DropDownList("importance", null, new { @class = "chosen-select" })
                     @Html.ValidationMessageFor(model => model.importance, "", new { @class = "text-danger" })
                 </div>
             </div>
 
-            
+
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-5">
                     <input type="submit" value="Save" class="btn btn-default" />
                 </div>
             </div>
-        </div>
-    }
 
-    </section>
+    }
+</section>
+
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
@@ -81,23 +152,13 @@
 
     <script>
 
-        //bkLib.onDomLoaded(function () {
-
-        //    nicEditors.allTextAreas();
-        //    new nicEditor({
-        //          fullPanel: true
-
-        //    });//.panelInstance('area2');
-
-        //});
-
         $(document).ready(function () {
 
             $('[data-toggle="tooltip"]').tooltip();
 
             $('.chosen-select').chosen(
                 {
-                    width:'300'
+                    width:'20%'
                 });
 
 

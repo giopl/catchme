@@ -293,7 +293,7 @@ namespace CatchMe.Models
 
                 switch (type)
                 {
-                    case 1: return "laptop";
+                    case 1: return "terminal";
                         case 2: return "cogs";
                         case 3: return "bug";
                         case 4: return "exclamation";

@@ -78,6 +78,11 @@ namespace CatchMe.Models
                     {
                         result.AppendFormat("<span class='label label-danger'><b>{0}</b> day(s) ago</label>", (int)days);
                     }
+                    if (days > 5)
+                    {
+                        result.AppendFormat("<span class='label label-default'><b>{0}</b> day(s) ago</label>", (int)days);
+                    }
+
                 }
                 return result.ToString();
 

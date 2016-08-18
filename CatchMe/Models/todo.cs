@@ -12,27 +12,15 @@ namespace CatchMe.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class information
+    public partial class todo
     {
-        public information()
-        {
-            this.attachments = new HashSet<attachment>();
-        }
-    
-        public int information_id { get; set; }
-        public int project_id { get; set; }
-        public string title { get; set; }
+        public int todo_id { get; set; }
+        public int user_id { get; set; }
+        public int title { get; set; }
         public string description { get; set; }
-        public Nullable<int> importance { get; set; }
-        public Nullable<int> created_by { get; set; }
         public Nullable<System.DateTime> created_on { get; set; }
-        public int updated_by { get; set; }
         public Nullable<System.DateTime> updated_on { get; set; }
-        public int state { get; set; }
-    
-        public virtual ICollection<attachment> attachments { get; set; }
-        public virtual project project { get; set; }
-        public virtual user user { get; set; }
-        public virtual user user1 { get; set; }
+        public Nullable<int> status { get; set; }
+        public Nullable<int> priority { get; set; }
     }
 }

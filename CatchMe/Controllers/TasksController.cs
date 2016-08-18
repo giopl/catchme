@@ -28,6 +28,13 @@ namespace CatchMe.Controllers
         }
 
 
+        public ActionResult ClearFilter()
+        {
+            UserSession.Current.searchFilter.keywords = string.Empty;
+            return RedirectToAction("SetSearchFilter");
+        }
+
+
         public ActionResult SetSearchFilter(SearchFilter searchFilter)
         {
             UserSession.Current.searchFilter = searchFilter;
@@ -295,10 +302,17 @@ namespace CatchMe.Controllers
 
 
         [HttpPost]
-        public ActionResult UploadFile(HttpPostedFileBase file, int taskid, int projectid, int comment_id = -1)
+        public ActionResult UploadFile(HttpPostedFileBase file, int taskid, int projectid, int comment_id = -1, int information_id = -1)
         {
             try
             {
+
+                var _filepath = string.Format("{0}/{1}/{2}", projectid, taskid, file.FileName);
+
+                if(information_id > 0)
+                {
+                    _filepath = string.Format("{0}/information/{1}/{2}", projectid, information_id, file.FileName);
+                }
 
                 attachment attachment = new attachment
                 {
@@ -309,11 +323,13 @@ namespace CatchMe.Controllers
                     task_id = taskid,
                     user_id = UserSession.Current.UserId,
                   comment_id = comment_id,
-                    filepath = string.Format("{0}/{1}/{2}", projectid, taskid, file.FileName)
+                    information_id = information_id,
+                    filepath = _filepath
+
 
                 };
 
-                if(SaveResourceToDisk(file,taskid))
+                if(SaveResourceToDisk(file,taskid,information_id))
                 {
 
                     try
@@ -321,11 +337,24 @@ namespace CatchMe.Controllers
                     db.attachments.Add(attachment);
                     db.SaveChanges();
 
-                        log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.ATTACHMENT, file.FileName, taskid);
-                        CreateLog(log);
 
-                        updateTask(taskid);
+                        if(information_id > 0)
+                        {
+                            log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.ATTACHMENT, string.Format("{0} for info id {1} ",file.FileName, information_id), taskid);
+                            CreateLog(log);
 
+                            //updateTask(taskid);
+
+                        }
+                        else
+                        {
+                            log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.ATTACHMENT, file.FileName, taskid);
+                            CreateLog(log);
+
+                            updateTask(taskid);
+
+                        }
+                        
 
                     }
                     catch (DbEntityValidationException ex)
@@ -348,6 +377,11 @@ namespace CatchMe.Controllers
 
             }
 
+                if (information_id > 0)
+                {
+                    return RedirectToAction("ShowInfo", new { id = information_id });
+                
+                }
                 
                 return RedirectToAction("EditTask", new { id = taskid });
             }
@@ -375,7 +409,7 @@ namespace CatchMe.Controllers
 
         }
 
-        public ActionResult DeleteAttachment(int id, int taskid)
+        public ActionResult DeleteAttachment(int id, int taskid, int information_id = -1)
         {
             try
             {
@@ -394,6 +428,13 @@ namespace CatchMe.Controllers
 
 
                 }
+
+                if (information_id > 0)
+                {
+                    return RedirectToAction("ShowInfo", new { id = information_id});
+                
+                }
+
                 return RedirectToAction("EditTask", new { id = taskid });
             }
             catch (Exception e)
@@ -427,7 +468,7 @@ namespace CatchMe.Controllers
             }
         }
 
-        private bool SaveResourceToDisk(HttpPostedFileBase mainFile, int taskid)
+        private bool SaveResourceToDisk(HttpPostedFileBase mainFile, int taskid, int informationid =-1)
         {
             try
             {
@@ -444,6 +485,13 @@ namespace CatchMe.Controllers
 
                     log.Info("Saving resource to disk - Resource file found");
                     var projectid = db.tasks.Find(taskid).project_id;
+
+                    //if item is info derive project id from information instead
+                    if(informationid > 0)
+                    {
+                        projectid = db.information.Find(informationid).project_id;
+                    }
+
                     var serverpathprod = Helpers.ConfigurationHelper.GetServerPathProd();
                     var IsProd = Helpers.ConfigurationHelper.IsProd();
 
@@ -456,9 +504,14 @@ namespace CatchMe.Controllers
                     imageExt = System.IO.Path.GetExtension(mainFile.FileName);
                     imageName = System.IO.Path.GetFileName(mainFile.FileName);
 
+                    string dirPath = System.Web.HttpContext.Current.Server.MapPath("~") + "/uploads/" + string.Format("{0}/", projectid) + string.Format("{0}/", taskid);
 
-
-                    string dirPath = System.Web.HttpContext.Current.Server.MapPath("~") + "/uploads/" + string.Format("{0}/",projectid) + string.Format("{0}/", taskid) ;
+                    if(informationid > 0)
+                    {
+                         dirPath = System.Web.HttpContext.Current.Server.MapPath("~") + "/uploads/" + string.Format("{0}/information/", projectid) + string.Format("{0}/", informationid);
+                    }
+                    
+                    
 
                     if (IsProd)
                     {
@@ -919,6 +972,10 @@ namespace CatchMe.Controllers
 
                     db.information.Add(info);
                     db.SaveChanges();
+
+
+                    log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.INFO, string.Format("Info Item {0}-{1} created for project {2}",info.information_id, info.project_id), -1);
+                    CreateLog(log);
 
                     return RedirectToAction("ShowInfo", new { id = info.information_id});
 

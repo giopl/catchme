@@ -260,6 +260,18 @@ width:100px;
     
 }
 
+       .nav-tabs > li.active.infocolor > a, .nav-tabs > li.active.infocolor > a:hover, .nav-tabs > li.active.infocolor > a:focus {    
+    background-color: #333;
+    color: #fff;
+    
+}
+
+  .nav-tabs > li.active.searchedcolor > a, .nav-tabs > li.active.searchedcolor > a:hover, .nav-tabs > li.active.searchedcolor > a:focus {    
+    background-color: #b200ff;
+    color: #fff;
+    
+}
+
 
 
   /* generic styling */

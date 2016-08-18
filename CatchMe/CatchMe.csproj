@@ -188,6 +188,7 @@
     </Compile>
     <Compile Include="Models\Meta\attachmentMeta.cs" />
     <Compile Include="Models\Meta\commentMeta.cs" />
+    <Compile Include="Models\Meta\informationMeta.cs" />
     <Compile Include="Models\Meta\logMeta.cs" />
     <Compile Include="Models\Meta\notificationMeta.cs" />
     <Compile Include="Models\Meta\projectMeta.cs" />
@@ -215,6 +216,9 @@
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\taskUser.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\todo.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\user.cs">
@@ -324,6 +328,7 @@
     <Content Include="Scripts\plugins\combodate.js" />
     <Content Include="Scripts\plugins\DataTables.js" />
     <Content Include="Scripts\plugins\datatables.min.js" />
+    <Content Include="Scripts\plugins\highlight.js" />
     <Content Include="Scripts\plugins\list.js" />
     <Content Include="Scripts\plugins\moment.js" />
     <Content Include="Scripts\plugins\nicEdit.js" />

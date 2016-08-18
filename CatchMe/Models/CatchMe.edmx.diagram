@@ -42,10 +42,12 @@
         <AssociationConnector Association="CatchMeDBModel.FK_attachment_comment_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_attachment_task_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_attachment_user_id" />
-        <EntityTypeShape EntityType="CatchMeDBModel.information" Width="1.5" PointX="12.25" PointY="12.75" />
+        <EntityTypeShape EntityType="CatchMeDBModel.information" Width="1.5" PointX="12.25" PointY="12.625" />
+        <AssociationConnector Association="CatchMeDBModel.FK_attachment_information_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_information_project_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_information_updated_by_user_id" />
         <AssociationConnector Association="CatchMeDBModel.FK_information_user_id" />
+        <EntityTypeShape EntityType="CatchMeDBModel.todo" Width="1.5" PointX="3.375" PointY="0.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
