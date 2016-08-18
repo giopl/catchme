@@ -557,14 +557,30 @@ namespace CatchMe.Controllers
         }
 
 
-        public ActionResult Test()
+        public ActionResult Test( DateTime? dat )
         {
             int[,] week = new int[6,7];
 
+            var date = dat.HasValue ? dat.Value : DateTime.Now;
+           
+
             //
-            var days = DateTime.DaysInMonth(DateTime.Now.Year,DateTime.Now.Month);
-            var dayName = (int) DateTime.Now.DayOfWeek;
+            var days = DateTime.DaysInMonth(date.Year,date.Month);
+            var firstdayofmonth = new DateTime(date.Year, date.Month, 1);
+            var dayName = (int)firstdayofmonth.DayOfWeek == 0 ? 7 : (int)firstdayofmonth.DayOfWeek;
+
+            //            1   1
+            //2   0
+            //3 - 1
+            //4 - 2
+            //5 - 3
+            //6 - 4
+            //7 - 5
+
+            int[] starting = new int[] {0, 1, 0, -1, -2, -3, -4, -5 };
+
             int dt = 1;
+            int dn = starting[dayName];
             for(int i=0; i<7; i++)
             {
                 
@@ -572,14 +588,22 @@ namespace CatchMe.Controllers
                 {
                     week[0, i] = dt;                    
                     dt++;
+                } else
+                {
+                    week[0, i] = dn;
+                    dn++; 
                 }
 
-                week[1, i] = dayName + i + 1;
-                week[2, i] = dayName + 7 + i + 1;
-                week[3, i] = dayName + 14 + i + 1;
+                week[1, i] = week[0, i] + 7 ;
+                week[2, i] = week[1, i] + 7;
+                week[3, i] = week[2, i] + 7;
 
-                if (dayName + 21 + i + 1 <= days)
-                week[4, i] = dayName + 21 + i + 1;
+                if (week[3, i] + 7 <= days )
+                week[4, i] = week[3, i] + 7;
+
+
+                if (week[4, i] + 7 <= days && week[4, i] != 0)
+                    week[5, i] = week[4, i] + 7;
 
 
 

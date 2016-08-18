@@ -25,7 +25,8 @@
             @for (var j = 0; j < 7; j++)
             {
             <td>
-                <p> @days[i, j]</p>
+                <p> @(days[i, j] > 0 ? days[i, j].ToString() : "")</p>
+                @*<p> @days[i, j]</p>*@
 
             </td>
 
