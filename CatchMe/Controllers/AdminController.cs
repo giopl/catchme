@@ -574,9 +574,12 @@ namespace CatchMe.Controllers
                     dt++;
                 }
 
-                week[1, i] = dayName + 7;
-                week[2, i] = dayName + 14;
-                week[3, i] = dayName + 21;
+                week[1, i] = dayName + i + 1;
+                week[2, i] = dayName + 7 + i + 1;
+                week[3, i] = dayName + 14 + i + 1;
+
+                if (dayName + 21 + i + 1 <= days)
+                week[4, i] = dayName + 21 + i + 1;
 
 
 

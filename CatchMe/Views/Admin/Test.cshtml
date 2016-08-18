@@ -7,14 +7,30 @@
 
 <h2>Test</h2>
 
-@for(var i = 0 ;i < 6 ; i++)
-{
+<table class="table table-bordered">
+    <tr>
+        <th>M</th>
+        <th>T</th>
+        <th>W</th>
+        <th>T</th>
+        <th>F</th>
+        <th>S</th>
+        <th>S</th>
+    </tr>
+
     
-    for(var j = 0 ; j<7;j++ )
+    @for (var i = 0; i < 6; i++)
     {
-       
-        <p>@i - @j  @days[i,j]</p> 
-        
+        <tr>
+            @for (var j = 0; j < 7; j++)
+            {
+            <td>
+                <p> @days[i, j]</p>
+
+            </td>
+
+            }
+        </tr>
+
     }
-    
-}
+</table>

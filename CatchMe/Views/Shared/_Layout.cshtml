@@ -29,19 +29,20 @@
                     <li><a href="@Url.Action("CreateTask","Tasks")" title="create task"><span class="fa fa-15x fa-plus"></span> </a></li>
                    
                     <li><a href="@Url.Action("Index","Stats")" title="Stats"><span class="fa fa-15x fa-line-chart"></span> </a></li>
-                    <li><a href="#" title="Advanced Search"><span class="fa fa-15x fa-search-plus opensearch"></span> </a></li>
+                    <li class="opensearch"><a href="#"><span class="fa fa-15x fa-search-plus"></span></a></li>
                     <li class="showadvancedsearch" style="display:none">                         
-
-                        @using (Html.BeginForm("SetSearchFilter","Tasks",FormMethod.Post))
+                        
+                        @using (Html.BeginForm("SetSearchFilter", "Tasks", FormMethod.Post, new { @class = "navbar-form navbar-left navbar-input-group" }))
                         {
                             @Html.AntiForgeryToken()
-                                                <div class="input-group" style="margin-top:10px;">
-                                                    <input type="text" class="form-control" style="background:#ddd" name="keywords" placeholder="Advanced Search">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" style="background:#ddd;width:300px;" name="keywords" placeholder="Advanced Search enter keywords">
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-primary" type="submit"><span class="fa fa-search"></span></button>
                                                     </span>
                                                 </div><!-- /input-group -->
                         }
+                        
                     </li>
 
                 </ul>                
