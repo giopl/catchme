@@ -51,7 +51,7 @@
                 @if (session.Current.IsAdmin)
                 {
                     <a href="@Url.Action("Index","Admin")" title="Admin"><span class="fa fa-15x fa-wrench"></span></a>@:&nbsp;
-                <a href="@Url.Action("Test","Admin")" title="Admin"><span class="fa fa-15x fa-circle-thin"></span></a>@:&nbsp;
+                @*<a href="@Url.Action("Test","Admin")" title="Admin"><span class="fa fa-15x fa-circle-thin"></span></a>@:&nbsp;*@
                 }
                     Hello, @session.Current.Firstname! 
 

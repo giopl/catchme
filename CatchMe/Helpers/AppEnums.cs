@@ -105,7 +105,8 @@ namespace CatchMe.Helpers
             DELETE,
             UPDATE,
             RECOVER,
-            LOGIN
+            LOGIN,
+            SEARCH
         }
 
         public enum LogTypeEnum
@@ -123,7 +124,8 @@ namespace CatchMe.Helpers
             DATE,
             OWNER,
             ASSIGNEE,
-            INFO
+            INFO,
+            PROJECT
 
         }
 

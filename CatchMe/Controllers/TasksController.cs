@@ -38,6 +38,12 @@ namespace CatchMe.Controllers
         public ActionResult SetSearchFilter(SearchFilter searchFilter)
         {
             UserSession.Current.searchFilter = searchFilter;
+
+
+            log log = new log(AppEnums.LogOperationEnum.SEARCH, AppEnums.LogTypeEnum.PROJECT, string.Format("Searching project [{0}] for keyword [{1}]", UserSession.Current.CurrentProject, searchFilter.keywords), -1);
+            CreateLog(log);
+
+
             return RedirectToAction("TaskList");
         }
 
@@ -868,7 +874,7 @@ namespace CatchMe.Controllers
                         db.comments.Add(comment);
                         db.SaveChanges();
 
-                        log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.COMMENT, string.Format(" Comment Added: {0}-{1}", comment.comment_id, comment.title), comment.task_id);
+                        log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.COMMENT, string.Format("Comment Added: {0}-{1}", comment.comment_id, comment.title), comment.task_id);
                         CreateLog(log);
 
                         //update task last edited on
@@ -1168,7 +1174,7 @@ namespace CatchMe.Controllers
                 //status 
                 if (oldtask.status != newtask.status)
                 {
-                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.STATUS, string.Format(" {0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.STATUS.ToString(),true) ), oldtask.StatusDesc, newtask.StatusDesc, newtask.task_id);
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.STATUS, string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.STATUS.ToString(),true) ), oldtask.StatusDesc, newtask.StatusDesc, newtask.task_id);
                     CreateLog(log);
                 }
 
@@ -1177,7 +1183,7 @@ namespace CatchMe.Controllers
                 if (oldtask.assigned_to!= newtask.assigned_to)
                 {
                     log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.ASSIGNEE,
-                        string.Format(" {0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.ASSIGNEE.ToString(), true))
+                        string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.ASSIGNEE.ToString(), true))
                         , oldtask.assigned_to.ToString(), newtask.assigned_to.ToString(), newtask.task_id);
                     CreateLog(log);
                 }
@@ -1188,7 +1194,7 @@ namespace CatchMe.Controllers
                 if (!oldtask.title.Equals(newtask.title))
                 {
                     log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.TITLE,
-                        string.Format(" {0} changed by", Utils.EnumToString(AppEnums.LogTypeEnum.TITLE.ToString(), true)), 
+                        string.Format("{0} changed by", Utils.EnumToString(AppEnums.LogTypeEnum.TITLE.ToString(), true)), 
                         oldtask.title, newtask.title, newtask.task_id);
                     CreateLog(log);
                 }
@@ -1197,7 +1203,7 @@ namespace CatchMe.Controllers
                 if (oldtask.type!=newtask.type)
                 {
                     log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.TYPE,
-                        string.Format(" {0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.TYPE.ToString(), true)),
+                        string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.TYPE.ToString(), true)),
                          oldtask.TypeDesc, newtask.TypeDesc, newtask.task_id);
                     CreateLog(log);
                 }
@@ -1206,7 +1212,7 @@ namespace CatchMe.Controllers
                 if (oldtask.severity != newtask.severity)
                 {
                     log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.SEVERITY,
-                        string.Format(" {0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.SEVERITY.ToString(), true)),
+                        string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.SEVERITY.ToString(), true)),
                          oldtask.SeverityDesc, newtask.SeverityDesc, newtask.task_id);
                     CreateLog(log);
                 }
@@ -1215,7 +1221,7 @@ namespace CatchMe.Controllers
                 if (oldtask.priority != newtask.priority)
                 {
                     log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.PRIORITY,
-                        string.Format(" {0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.PRIORITY.ToString(), true)), 
+                        string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.PRIORITY.ToString(), true)), 
                         oldtask.PriorityDesc, newtask.PriorityDesc, newtask.task_id);
                     CreateLog(log);
                 }
@@ -1225,7 +1231,7 @@ namespace CatchMe.Controllers
                 if (oldtask.complexity != newtask.complexity)
                 {
                     log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.COMPLEXITY,
-                        string.Format(" {0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.COMPLEXITY.ToString(), true)),
+                        string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.COMPLEXITY.ToString(), true)),
                          oldtask.ComplexityDesc, newtask.ComplexityDesc, newtask.task_id);
                     CreateLog(log);
                 }
@@ -1234,7 +1240,7 @@ namespace CatchMe.Controllers
                 if (oldtask.due_date!= newtask.due_date)
                 {
                     log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.DATE,
-                        string.Format(" {0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.DATE.ToString(), true)),
+                        string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.DATE.ToString(), true)),
                         oldtask.due_date.HasValue? oldtask.due_date.Value.ToString("dd-MM-yyyy"): string.Empty,
                         newtask.due_date.HasValue ? newtask.due_date.Value.ToString("dd-MM-yyyy") : string.Empty
                         , newtask.task_id);
@@ -1246,7 +1252,7 @@ namespace CatchMe.Controllers
                 if (oldtask.owner != newtask.owner)
                 {
                     log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.OWNER,
-                        string.Format(" {0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.OWNER.ToString(), true)),
+                        string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.OWNER.ToString(), true)),
                          oldtask.owner.ToString(), newtask.owner.ToString(), newtask.task_id);
                     CreateLog(log);
                 }
@@ -1295,7 +1301,7 @@ namespace CatchMe.Controllers
                 db.SaveChanges();
 
 
-                log log = new log(AppEnums.LogOperationEnum.DELETE, AppEnums.LogTypeEnum.TASK, string.Format(" Task deleted by user {0}", UserSession.Current.Username), id);
+                log log = new log(AppEnums.LogOperationEnum.DELETE, AppEnums.LogTypeEnum.TASK, string.Format("Task deleted by user {0}", UserSession.Current.Username), id);
                 CreateLog(log);
 
             }
@@ -1540,7 +1546,7 @@ namespace CatchMe.Controllers
                     db.Entry(comment).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.COMMENT, string.Format(" Comment Edited: {0}-{1}",comment.comment_id, comment.title), comment.task_id);
+                    log log = new log(AppEnums.LogOperationEnum.UPDATE, AppEnums.LogTypeEnum.COMMENT, string.Format("Comment Edited: {0}-{1}",comment.comment_id, comment.title), comment.task_id);
                     CreateLog(log);
 
                     updateTask(comment.task_id);
