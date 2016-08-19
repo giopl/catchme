@@ -303,6 +303,7 @@
     <Content Include="notes\chosen_v1.6.1.zip" />
     <Content Include="notes\catchme version 1.zip" />
     <Content Include="notes\CatchMeDB20160819.zip" />
+    <Content Include="notes\SignalRChat.zip" />
     <None Include="Properties\PublishProfiles\dwh-appsdev %28Debug%29.pubxml" />
     <None Include="Properties\PublishProfiles\TestSite %28dwh-appsdev%29.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
