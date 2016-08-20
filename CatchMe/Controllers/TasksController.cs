@@ -27,6 +27,10 @@ namespace CatchMe.Controllers
             return RedirectToAction("TaskList");
         }
 
+        public ActionResult Chat()
+        {
+            return View();
+        }
 
         public ActionResult ClearFilter()
         {

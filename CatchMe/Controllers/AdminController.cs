@@ -32,6 +32,8 @@ namespace CatchMe.Controllers
         }
 
 
+
+
         public ActionResult Home()
         {
             return View();
@@ -105,6 +107,9 @@ namespace CatchMe.Controllers
         {
             try
             {
+                var connectedUsers = ChatHub.MyUsers;
+
+                ViewBag.ConnectedUsers = connectedUsers;
                 var visits = db.viewVisits.ToList();
                 return View(visits);
             }

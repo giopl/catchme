@@ -29,10 +29,15 @@ namespace CatchMe.Helpers
             MyProjects = null;
             ImpersonatedUser = string.Empty;
             SearchFilter searchFilter = new SearchFilter();
+            Browser = string.Empty;
+            
         }
 
+        public static int count { get; set; }
 
         public SearchFilter searchFilter { get; set; }
+
+        public string Browser { get; set; }
 
         public static UserSession Current
         {
@@ -48,7 +53,7 @@ namespace CatchMe.Helpers
                     }
                     return session;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
 
                     throw;

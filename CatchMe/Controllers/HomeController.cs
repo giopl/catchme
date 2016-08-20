@@ -1,9 +1,12 @@
 ﻿using CatchMe.Helpers;
 using CatchMe.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace CatchMe.Controllers
@@ -75,7 +78,16 @@ namespace CatchMe.Controllers
 
                 var myProjects = founduser.projects.ToList();
 
-                log alog = new log(AppEnums.LogOperationEnum.LOGIN, AppEnums.LogTypeEnum.USER, string.Format("{0}", UserSession.Current.Username ), -1);
+                //find browser
+                var userAgent = HttpContext.Request.UserAgent;
+                var userBrowser = new HttpBrowserCapabilities { Capabilities = new Hashtable { { string.Empty, userAgent } } };
+                var factory = new BrowserCapabilitiesFactory();
+                factory.ConfigureBrowserCapabilities(new NameValueCollection(), userBrowser);
+
+                var Browser = string.Format("{0} {1}", userBrowser.Browser, userBrowser.Version);
+                UserSession.Current.Browser = Browser;
+
+                log alog = new log(AppEnums.LogOperationEnum.LOGIN, AppEnums.LogTypeEnum.USER, string.Format("{0} {1}", UserSession.Current.Username, UserSession.Current.Browser ), -1);
                 CreateLog(alog);
 
                 UserSession.Current.MyProjects = myProjects;

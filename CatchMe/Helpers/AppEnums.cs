@@ -58,7 +58,7 @@ namespace CatchMe.Helpers
             Low,
             Medium,
             High,
-            Immediate
+            Top
         }
 
 

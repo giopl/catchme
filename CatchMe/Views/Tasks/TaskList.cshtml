@@ -4,8 +4,8 @@
 @using appenums = CatchMe.Helpers.AppEnums
 
 @{
-    
-    
+    session.count++;
+
     ViewBag.Title = "Catch Me";
 
     var countopen = Model.Where(x => x.status != 9).Count();
@@ -31,17 +31,21 @@
     {
         countinfos = Model.FirstOrDefault().project.information.Count ;
         infoitems = Model.FirstOrDefault().project.information.ToList();
-        
+
     }
-    
-    
-    
+
+
+
 }
 <style>
 .highlight {
     background-color: yellow;
-}    
+}   
+
 </style>
+
+
+<a href="#" class="notify">show notification @session.count</a>
 
 <div>
     <div class="pull-left">
@@ -130,19 +134,11 @@ table.fixed td { overflow: hidden; }
             <table class="table table-striped" id="tableme" style="width:100%">
                 <thead>
                     <tr>
-                        <th width="5%">
-                            Id
-                        </th>
-                        <td></td>
-
-                        <td width="45%">
-                            Title
-                        </td>
-
-                        <th width="20%">
-                            Assigned
-                        </th>
-                        <td></td>
+                        <th width="5%">Id</th>
+                        <th></th>
+                        <th width="45%">Title</th>
+                        <th>Assigned</th>
+                        <th>Owner</th>
                         <th width="10%">
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
@@ -151,7 +147,7 @@ table.fixed td { overflow: hidden; }
                         </th>
 
                         
-                        <td></td>
+                        <td><span class="fa fa-paperclip"></span></td>
                     </tr>
                 </thead>
 
@@ -161,10 +157,10 @@ table.fixed td { overflow: hidden; }
                     @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9))
                     {
                         <tr>
-                            <td>
+                            <td style="width:20px">
                                 <span class="text-muted fa-15x">@item.task_id</span>
                             </td>
-                            <td>
+                            <td style="width:20px">
                                 <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
                             </td>
                             <td class="">
@@ -172,22 +168,17 @@ table.fixed td { overflow: hidden; }
                                     <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
                                 </div>
 
-                            </td>
-                            <td>
-                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                @assignee
-                            </td>
-                            <td><span class="color-white">@item.priority</span></td>
-                            <td>
+                            </td> 
+                            <td>@item.user.firstname</td>
+                            <td>@item.user1.firstname</td>
+                            
+                            <td data-order="@item.priority">
                                 <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
                             </td>
                             <td class="@(item.IsOverdue?"red":"")">
-
                                 @Html.DisplayFor(modelItem => item.due_date)
                             </td>
-
-                          
-                            <td>
+                            <td data-order="@(item.HasAttachment?1:0)">
                                 <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
                             </td>
                         </tr>
@@ -202,23 +193,17 @@ table.fixed td { overflow: hidden; }
             <div class="gap"></div>
 
 
-            <table class="table" id="tableopen" style="width:100%">
+            <table class="table table-responsive table-condensed table-striped" id="tableopen" data-column-defs='[{"sortable": false, "targets": [1,8]}]' style="width:100%">
                 
                 <thead>
                     <tr>
-                        <th width="5%">
+                        <th width="20px">
                             Id
                         </th>
-                        <td></td>
-
-                        <td width="45%">
-                            Desc
-                            </td>
-
-                        <th width="20%">
-                            Assigned
-                            </th>
-                        <th width="10%">
+                        <td width="20px"></td>
+                        <th width="45%">Title</th>
+                        <th>Assigned</th>
+                        <th>
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
                         <th width="14%">
@@ -226,8 +211,8 @@ table.fixed td { overflow: hidden; }
                         </th>
                         <td></td>
 
-                        <th width="1%"></th>
-                        <td></td>
+                        <th><span class="fa fa-paperclip"></span></th>
+                        <td><span class="fa fa-trash"></span></td>
                     </tr>
                 </thead>
 
@@ -235,14 +220,14 @@ table.fixed td { overflow: hidden; }
                     @foreach (var item in Model.Where(x => x.status != 9))
                     {
                         <tr>
-                            <td>
-                                <span class="text-muted fa-15x">@item.task_id</span>
+                            <td data-order="@item.task_id">
+                                <span class="text-muted fa-15x">@item.task_id</span>&nbsp;
                             </td>
-                            <td>
-                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
-                            </td>
+                            <td data-order="@item.status">
+                            <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
 
-                            <td >
+                            </td>
+                            <td>
                                 <div class="readmore">                                  
                                     <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
                                 </div>
@@ -252,21 +237,20 @@ table.fixed td { overflow: hidden; }
                                 @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
                                 @assignee
                             </td>
-                            <td>
+                            <td data-order="@item.priority">
                                 <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
                             </td>
                             <td class="@(item.IsOverdue?"red":"")">
                                 @Html.DisplayFor(modelItem => item.due_date)
                             </td>
                             <td>@Html.Raw(item.OpenSince)</td>
-                            <td>
-                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
-                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
-
-                            </td>
-                            <td>
+                            <td data-order="@(item.HasAttachment?1:0)">
                                 <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
                             </td>
+                            <td>
+                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+                            </td>
+
                         </tr>
                     }
                 </tbody>
@@ -276,31 +260,22 @@ table.fixed td { overflow: hidden; }
       
         <div role="tabpanel" class="tab-pane" id="closed">
             <div class="gap"></div>
-            <table class="table" id="tableclose" style="width:100%">
+            <table class="table table-responsive table-condensed table-striped" id="tableclose" style="width:100%">
 
                 <thead>
                     <tr>
                         <th width="5%">
                             Id
                         </th>
-                        <td></td>
-
-                        <td width="45%">
-                            Title
-                        </td>
-                        <td>
-                        <th>Opened</th>
-                        <th width="20%">
-                            Assigned
-                        </th>
-                        
-                        <th width="14%">
-                            Due On
-                        </th>
-
                         <th></th>
-                        <th width="1%"></th>
-                        <td></td>
+                        <th></th>
+                        <th width="45%">Title</th>
+                        <th>Owner</th>
+                        <th>Opened</th>
+                        <th>Closed</th>
+                        <th>Days</th>
+
+                        <th><span class="fa fa-paperclip"></span></th>
                     </tr>
                 </thead>
 
@@ -315,30 +290,20 @@ table.fixed td { overflow: hidden; }
                                 <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
                             </td>
 
+                            <td data-order="@item.priority"><span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp;</td>
                             <td>
                                 <div class="readmore">
                                     <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
                                 </div>
 
                             </td>
-                            <td><span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp;</td>
                             
                             <td>@item.user1.firstname</td>
-                            <td>
-                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                @assignee
-                            </td>
+                            <td>@item.created_on.Value.ToString("dd-MMM-yy")</td>
+                            <td>@item.updated_on.Value.ToString("dd-MMM-yy")</td>
+                            <td>@Html.Raw(item.TimeTaken)</td>
                             
-                            <td>
-                                @Html.DisplayFor(modelItem => item.due_date)
-                            </td>
-                            <td>@*@Html.Raw(item.TimeTaken)*@</td>
-                            <td>
-                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
-                                @*<a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>*@
-
-                            </td>
-                            <td>
+                            <td data-order="@(item.HasAttachment?1:0)">
                                 <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
                             </td>
                         </tr>
@@ -352,7 +317,7 @@ table.fixed td { overflow: hidden; }
             <div class="gap"></div>
 
 
-            <table class="table" id="tableopenbyme" style="width:100%">
+            <table class="table table-condensed table-responsive table-striped" id="tableopenbyme" style="width:100%">
 
                 <thead>
                     <tr>
@@ -375,8 +340,8 @@ table.fixed td { overflow: hidden; }
                             Due On
                         </th>
 
-                        <th width="1%"></th>
-                        <td></td>
+                        <th><span class="fa fa-paperclip"></span></th>
+                        <td><span class="fa fa-trash-o"></span></td>
                     </tr>
                 </thead>
 
@@ -401,7 +366,7 @@ table.fixed td { overflow: hidden; }
                                 @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
                                 @assignee
                             </td>
-                            <td>
+                            <td data-order="@item.priority">
                                 <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
                             </td>
                             <td class="@(item.IsOverdue?"red":"")">
@@ -428,7 +393,7 @@ table.fixed td { overflow: hidden; }
             <div class="gap"></div>
 
 
-            <table class="table" id="tablerecent" style="width:100%">
+            <table class="table  table-condensed table-responsive table-striped" id="tablerecent" style="width:100%">
 
                 <thead>
                     <tr>
@@ -514,7 +479,7 @@ table.fixed td { overflow: hidden; }
             }
             
             <div id="searchtext">
-                <table class="table" id="tablesearched" style="width:100%">
+                <table class="table  table-condensed table-responsive table-striped" id="tablesearched" style="width:100%">
 
                     <thead>
                         <tr>
@@ -737,6 +702,77 @@ table.fixed td { overflow: hidden; }
 
     <script>
         $(document).ready(function () {
+            var welcome = 'welcome back ' + '@session.Current.Firstname' + '!';
+            @if(session.count==1)
+            {
+                @: $.notify(welcome, "success");
+
+            }
+           
+
+            $.notify.addStyle('happyblue', {
+                html: "<div>☺<span data-notify-text/>☺</div>",
+                classes: {
+                    base: {
+                        "white-space": "nowrap",
+                        "background-color": "lightblue",
+                        "padding": "5px",
+                    },
+                    gradientblue: {
+                    
+                       "background-color": "#3c8dbc !important",
+                       "background-color": "-webkit-gradient(linear, left bottom, left top, color-stop(0, #3c8dbc), color-stop(1, #67a8ce)) !important",
+                       "background-color": "-ms-linear-gradient(bottom, #3c8dbc, #67a8ce) !important",
+                       "background-color": "-moz-linear-gradient(center bottom, #3c8dbc 0%, #67a8ce 100%) !important",
+                       "background-color": "-o-linear-gradient(#67a8ce, #3c8dbc) !important",
+                       "filter": "progid:DXImageTransform.Microsoft.gradient(startColorstr='#67a8ce', endColorstr='#3c8dbc', GradientType=0) !important",
+                        "color": "#fff",
+            
+
+                    },
+                    superblue: {
+                        "color": "white",
+                        "background-color": "blue"
+                    }
+                }
+            });
+
+            $('body').on('click', '.notify', function () {
+        
+                $.notify(
+                'Are you looking for Facebook UI features, \this post will explain you how to create a Facebook style notifications popup using Jquery, HTML and CSS, you will understand how CSS elements will helps to improve better web design.\n This is the most needed feature for social networking web projects to minimize and enrich the UX elements.',
+                
+
+                {
+                    
+                    className:'gradientblue',
+                    // whether to hide the notification on click
+                    clickToHide: false,
+                    // whether to auto-hide the notification
+                    autoHide: false,
+                    // if autoHide, hide after milliseconds
+                    autoHideDelay: 5000,
+                    // show the arrow pointing at the element
+                    arrowShow: true,
+                    // arrow size in pixels
+                    arrowSize: 5,
+                    position: "bottom-right",
+                    clickToHide: true,
+                    className:'info',
+                    // show animation
+                    showAnimation: 'slideDown',
+                    // show animation duration
+                    showDuration: 400,
+                    // hide animation
+                    hideAnimation: 'slideUp',
+                    // hide animation duration
+                    hideDuration: 200,
+                    gap:0
+                }
+
+                );
+            })
+            
 
 
             //$('td').highlight('MTP');

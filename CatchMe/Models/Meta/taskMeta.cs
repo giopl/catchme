@@ -175,26 +175,26 @@ namespace CatchMe.Models
 
             if (seconds < 60.0)
             {
-                result.AppendFormat("<span class='label label-danger'><b>{0}</b> sec{1}</label>", (int)seconds,seconds>1?"s":"");
+                result.AppendFormat("<span class='label label-danger'><b>{0}</b> sec{1}</span>", (int)seconds,seconds>1?"s":"");
             }
 
             if (seconds >= 60.0 && minutes < 60)
             {
-                result.AppendFormat("<span class='label label-danger'><b>{0}</b> min{1}</label>", (int)minutes, minutes>1?"s":"");
+                result.AppendFormat("<span class='label label-danger'><b>{0}</b> min{1}</span>", (int)minutes, minutes>1?"s":"");
             }
 
             if (minutes >= 60.0 && hours < 24)
             {
-                result.AppendFormat("<span class='label label-warning'><b>{0}</b> hour{1}</label>", (int)hours, hours>1?"s":"");
+                result.AppendFormat("<span class='label label-warning'><b>{0}</b> hour{1}</span>", (int)hours, hours>1?"s":"");
             }
             if (hours >= 24.0 && days <= 5)
             {
-                result.AppendFormat("<span class='label label-primary'><b>{0}</b> day{1}</label>", (int)days, days>1?"s":"");
+                result.AppendFormat("<span class='label label-primary'><b>{0}</b> day{1}</span>", (int)days, days>1?"s":"");
             }
 
             if (days > 5 && days < 365)
             {
-                result.AppendFormat("<span class='label label-default'><b>{0}</b> day{1}</label>", (int)days, days > 1 ? "s" : "");
+                result.AppendFormat("<span class='label label-default'><b>{0}</b> day{1}</span>", (int)days, days > 1 ? "s" : "");
             }
 
 

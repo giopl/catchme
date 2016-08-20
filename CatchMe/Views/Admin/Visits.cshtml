@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Visits";
+    var connectedUsers = ViewBag.ConnectedUsers as System.Collections.Concurrent.ConcurrentDictionary<string, CatchMe.ChatHub.MyUserType>;
 }
 
 <h2>Visits</h2>
@@ -10,6 +11,12 @@
     <li class="active">Visits</li>
 </ol>
 
+<ul>
+    @foreach(var u in connectedUsers)
+    {
+        <li>@u.Key,  @u.Value.name </li>
+    }
+</ul>
 
 <table class="table">
     <tr>

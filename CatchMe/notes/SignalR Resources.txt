@@ -1,0 +1,15 @@
+﻿
+ASP.NET SignalR Hubs API Guide - Server (C#)
+http://www.asp.net/signalr/overview/guide-to-the-api/hubs-api-guide-server
+
+Pushing Data: Integrating with ASP.NET SignalR Hubs
+http://henriquat.re/server-integration/signalr/integrateWithSignalRHubs.html
+
+Mapping SignalR Users to Connections
+http://www.asp.net/signalr/overview/guide-to-the-api/mapping-users-to-connections
+
+Get the number of users that are online using SignalR 
+http://deanhume.com/home/blogpost/get-the-number-of-users-that-are-online-using-signalr/1095
+
+Tracking Online Users with SignalR
+https://www.simple-talk.com/dotnet/asp-net/tracking-online-users-with-signalr/

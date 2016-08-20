@@ -1,9 +1,12 @@
 ﻿using CatchMe.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace CatchMe.Controllers
@@ -41,6 +44,17 @@ namespace CatchMe.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext ctx)
         {
+        
+            //find user browser
+            var userAgent = HttpContext.Request.UserAgent;
+            var userBrowser = new HttpBrowserCapabilities { Capabilities = new Hashtable { { string.Empty, userAgent } } };
+            var factory = new BrowserCapabilitiesFactory();
+            factory.ConfigureBrowserCapabilities(new NameValueCollection(), userBrowser);
+
+            var Browser = string.Format("{0} {1}", userBrowser.Browser, userBrowser.Version);
+            
+
+
             base.OnActionExecuting(ctx);
             //check if session is valid
             if (!Helpers.UserSession.Current.IsValid)
@@ -58,6 +72,20 @@ namespace CatchMe.Controllers
                     ctx.Result = RedirectToAction("AjaxSessionExpired", "Home");
                 }
             }
+
+            //createCookie
+            string cookievalue;
+            if (Request.Cookies["catchMeCookie"] != null)
+            {
+                cookievalue = Request.Cookies["catchMeCookie"].ToString();
+            }
+            else
+            {
+                Response.Cookies["CM"].Value = string.Format("{0} {1}",Helpers.UserSession.Current.Username, Browser);
+                Response.Cookies["CM"].Expires = DateTime.Now.AddMinutes(20); // add expiry time
+            }
+
+
         }
 
         /// <summary>
