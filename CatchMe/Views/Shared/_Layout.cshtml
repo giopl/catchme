@@ -109,10 +109,14 @@
                 // Add the message to the page.
                 //$('#message').append('<li><strong>' + htmlEncode(name)+ '</strong>: ' + htmlEncode(message) + '</li>');
                 var existingmsg = $('#message').val();
-                alert(existingmsg + "=" + message);
+                //alert(message);
+                if (name == "Admin")
+                {
+                    notifyfunc(message);
+                }
                 if (message != existingmsg)
                 {
-                    $.notify(message, "info");
+                    //$.notify(message, "info");
                 }
 
                 $('#message').html('<strong>' + message + '</strong>');
@@ -134,6 +138,40 @@
             });
         });
         
+        function notifyfunc(message)
+        {
+
+            $.notify(message,{
+
+                //className: 'gradientblue',
+                // whether to hide the notification on click
+                clickToHide: true,
+                // whether to auto-hide the notification
+                autoHide: true,
+                // if autoHide, hide after milliseconds
+                autoHideDelay: 10000,
+                // show the arrow pointing at the element
+                arrowShow: true,
+                // arrow size in pixels
+                arrowSize: 5,
+                position: "bottom-right",
+                clickToHide: true,
+                className: 'info2',
+                // show animation
+                showAnimation: 'slideDown',
+                // show animation duration
+                showDuration: 400,
+                // hide animation
+                hideAnimation: 'slideUp',
+                // hide animation duration
+                hideDuration: 200,
+                gap: 0
+            }
+
+            );
+
+        }
+
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();
             return encodedValue;

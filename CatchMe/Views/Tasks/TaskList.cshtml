@@ -46,6 +46,7 @@
 
 
 <a href="#" class="notify">show notification @session.count</a>
+<a href="#" class="sendtestnotif">show notification @session.count</a>
 
 <div>
     <div class="pull-left">
@@ -727,8 +728,6 @@ table.fixed td { overflow: hidden; }
                        "background-color": "-o-linear-gradient(#67a8ce, #3c8dbc) !important",
                        "filter": "progid:DXImageTransform.Microsoft.gradient(startColorstr='#67a8ce', endColorstr='#3c8dbc', GradientType=0) !important",
                         "color": "#fff",
-            
-
                     },
                     superblue: {
                         "color": "white",
@@ -738,13 +737,9 @@ table.fixed td { overflow: hidden; }
             });
 
             $('body').on('click', '.notify', function () {
-        
                 $.notify(
                 'Are you looking for Facebook UI features, \this post will explain you how to create a Facebook style notifications popup using Jquery, HTML and CSS, you will understand how CSS elements will helps to improve better web design.\n This is the most needed feature for social networking web projects to minimize and enrich the UX elements.',
-                
-
                 {
-                    
                     className:'gradientblue',
                     // whether to hide the notification on click
                     clickToHide: false,
@@ -822,7 +817,19 @@ table.fixed td { overflow: hidden; }
             $('[data-toggle="tooltip"]').tooltip();
 
 
+            $('body').on('click', '.sendtestnotif', function () {
 
+                $.ajax({
+                    type: 'GET',
+                    url: '/Tasks/SendTestNotif',
+                  //  data: { id: mlaId },
+                    cache: false,
+                    success: function (result) {
+
+                    }
+                });
+
+            });
 
 
             //$('.readmore').readmore({
@@ -840,7 +847,7 @@ table.fixed td { overflow: hidden; }
                 format: 'dd/mm/yyyy',
                 autoclose: true,
                 clearBtn: true
-            })
+            });
 
 
 

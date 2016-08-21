@@ -1190,6 +1190,10 @@ namespace CatchMe.Controllers
                         string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.ASSIGNEE.ToString(), true))
                         , oldtask.assigned_to.ToString(), newtask.assigned_to.ToString(), newtask.task_id);
                     CreateLog(log);
+                    var recipient = db.users.Find(newtask.assigned_to);
+                        
+                        var message = string.Format("Hi {0}, you have been assigned a new task: {1}", recipient.firstname, newtask.title);
+                    SendTestNotif(recipient.username,message);
                 }
 
 
@@ -1363,6 +1367,22 @@ namespace CatchMe.Controllers
         }
 
 
+        public void SendTestNotif(string recipient="", string message="")
+        {
+            try
+            {
+             
+                ChatHub hub = new ChatHub();
+                hub.SendNotification(recipient,message);
+
+                //SendNotification(string fromFirstname, string touser, string toFirstname, string tasktitle)
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -1372,7 +1392,7 @@ namespace CatchMe.Controllers
             try
             {
                 
-
+                
                 List<EmailRecipient> recipients = new List<EmailRecipient>();
                 var task = db.tasks.Find(taskId);
 

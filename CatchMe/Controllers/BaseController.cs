@@ -81,7 +81,7 @@ namespace CatchMe.Controllers
             }
             else
             {
-                Response.Cookies["CM"].Value = string.Format("{0} {1}",Helpers.UserSession.Current.Username, Browser);
+                Response.Cookies["CM"].Value = string.Format("{0}|{1}",Helpers.UserSession.Current.Username, Browser);
                 Response.Cookies["CM"].Expires = DateTime.Now.AddMinutes(20); // add expiry time
             }
 
