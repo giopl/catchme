@@ -26,9 +26,9 @@ namespace CatchMe.Models
         public int comment_id { get; set; }
         public int information_id { get; set; }
     
-        public virtual comment comment { get; set; }
         public virtual task task { get; set; }
         public virtual user user { get; set; }
         public virtual information information { get; set; }
+        public virtual comment comment { get; set; }
     }
 }

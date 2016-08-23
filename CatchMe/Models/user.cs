@@ -24,10 +24,11 @@ namespace CatchMe.Models
             this.tasks2 = new HashSet<task>();
             this.tasks3 = new HashSet<task>();
             this.project_user_role = new HashSet<projectUserRole>();
-            this.comments = new HashSet<comment>();
             this.attachments = new HashSet<attachment>();
             this.information = new HashSet<information>();
             this.information1 = new HashSet<information>();
+            this.comments = new HashSet<comment>();
+            this.comments1 = new HashSet<comment>();
         }
     
         public int user_id { get; set; }
@@ -51,9 +52,10 @@ namespace CatchMe.Models
         public virtual ICollection<task> tasks2 { get; set; }
         public virtual ICollection<task> tasks3 { get; set; }
         public virtual ICollection<projectUserRole> project_user_role { get; set; }
-        public virtual ICollection<comment> comments { get; set; }
         public virtual ICollection<attachment> attachments { get; set; }
         public virtual ICollection<information> information { get; set; }
         public virtual ICollection<information> information1 { get; set; }
+        public virtual ICollection<comment> comments { get; set; }
+        public virtual ICollection<comment> comments1 { get; set; }
     }
 }

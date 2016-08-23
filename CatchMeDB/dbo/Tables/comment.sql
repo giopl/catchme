@@ -6,10 +6,17 @@
     [description] NVARCHAR (MAX) NULL,
     [created_on]  DATETIME       DEFAULT (getdate()) NULL,
     [is_disabled] BIT            DEFAULT ((0)) NOT NULL,
+    [updated_on]  DATETIME       DEFAULT (getdate()) NOT NULL,
+    [updated_by]  INT            DEFAULT ((0)) NOT NULL,
     PRIMARY KEY CLUSTERED ([comment_id] ASC),
     CONSTRAINT [FK_comment_task_id] FOREIGN KEY ([task_id]) REFERENCES [dbo].[task] ([task_id]),
+    CONSTRAINT [FK_comment_updated_by] FOREIGN KEY ([updated_by]) REFERENCES [dbo].[user] ([user_id]),
     CONSTRAINT [FK_comment_user_id] FOREIGN KEY ([user_id]) REFERENCES [dbo].[user] ([user_id])
 );
+
+
+
+
 
 
 

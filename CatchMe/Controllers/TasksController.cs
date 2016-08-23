@@ -1026,6 +1026,15 @@ namespace CatchMe.Controllers
                     log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.TASK, "Task created", task.task_id);
                     CreateLog(log);
 
+                    if(task.assigned_to>0)
+                    {
+                        var assignee = db.users.Find(task.assigned_to);
+                        var message = string.Format("Hi {0}, you have been assigned a new task from {1}: \"{2}\"", assignee.firstname, UserSession.Current.Firstname, task.title);
+                        SendMessage(assignee.username, message, "assigned");
+                    
+                    }
+
+
                     return RedirectToAction("EditTask", new  { id=task.task_id });
 
                 }
@@ -1572,6 +1581,10 @@ namespace CatchMe.Controllers
 
                 if (ModelState.IsValid)
                 {
+
+                    comment.updated_by = UserSession.Current.UserId;
+                    comment.updated_on = DateTime.Now;
+                        
                     db.Entry(comment).State = EntityState.Modified;
                     db.SaveChanges();
 

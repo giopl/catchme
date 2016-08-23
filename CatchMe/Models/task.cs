@@ -20,8 +20,8 @@ namespace CatchMe.Models
             this.task_hist = new HashSet<taskHist>();
             this.task_user = new HashSet<taskUser>();
             this.notifications = new HashSet<notification>();
-            this.comments = new HashSet<comment>();
             this.attachments = new HashSet<attachment>();
+            this.comments = new HashSet<comment>();
         }
     
         public int task_id { get; set; }
@@ -52,7 +52,7 @@ namespace CatchMe.Models
         public virtual user user3 { get; set; }
         public virtual ICollection<taskUser> task_user { get; set; }
         public virtual ICollection<notification> notifications { get; set; }
-        public virtual ICollection<comment> comments { get; set; }
         public virtual ICollection<attachment> attachments { get; set; }
+        public virtual ICollection<comment> comments { get; set; }
     }
 }

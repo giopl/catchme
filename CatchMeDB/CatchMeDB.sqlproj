@@ -100,5 +100,6 @@
     <None Include="adding_option_sets.sql" />
     <None Include="adding create task in log.sql" />
     <None Include="project_user_role.sql" />
+    <None Include="comment_update.sql" />
   </ItemGroup>
 </Project>
