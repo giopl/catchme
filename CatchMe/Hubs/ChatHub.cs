@@ -18,7 +18,7 @@ namespace CatchMe
         /// <param name="touser"></param>
         /// <param name="toFirstname"></param>
         /// <param name="tasktitle"></param>
-        public void SendNotification(string recipient, string message)
+        public void SendNotification(string recipient, string message, string type)
         {
             var context = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
             var connectionIds = MyUsers.Where(x => x.Value.username == recipient).ToList();
@@ -26,7 +26,7 @@ namespace CatchMe
             if(connectionIds.Count > 0)
             {
                 foreach(var connectionId in connectionIds)
-                context.Clients.Client(connectionId.Key).addNewMessageToPage("Admin", message);
+                context.Clients.Client(connectionId.Key).addNewMessageToPage(type, message);
             }
             else
             {

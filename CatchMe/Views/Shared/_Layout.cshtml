@@ -107,13 +107,13 @@
                 //$('#message').append('<li><strong>' + htmlEncode(name)+ '</strong>: ' + htmlEncode(message) + '</li>');
                 var existingmsg = $('#message').val();
                 //alert(message);
-                if (name == "Admin")
+                if (name == "assigned")
                 {
-                    notifyfunc(message);
+                    notifyfunc(message,"warn2");
                 }
-                if (message != existingmsg)
+                if (name == "notified")
                 {
-                    //$.notify(message, "info");
+                    notifyfunc(message, "info2");
                 }
 
                 $('#message').html('<span class="text-muted"><span class="fa fa-plug"></span> ' + message + '</span>');
@@ -135,7 +135,7 @@
             });
         });
         
-        function notifyfunc(message)
+        function notifyfunc(message,classname)
         {
 
             $.notify(message,{
@@ -146,14 +146,14 @@
                 // whether to auto-hide the notification
                 autoHide: true,
                 // if autoHide, hide after milliseconds
-                autoHideDelay: 10000,
+                autoHideDelay: 20000,
                 // show the arrow pointing at the element
                 arrowShow: true,
                 // arrow size in pixels
                 arrowSize: 5,
                 position: "bottom-right",
                 clickToHide: true,
-                className: 'info2',
+                className: classname,
                 // show animation
                 showAnimation: 'slideDown',
                 // show animation duration

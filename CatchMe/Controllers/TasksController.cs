@@ -1090,7 +1090,7 @@ namespace CatchMe.Controllers
             listwithoutUnassignedAndCurrent.Remove(new user { user_id = 0 });
 
 
-            ViewBag.sendTo = new SelectList(listwithoutUnassignedAndCurrent, "user_id", "firstname");
+            ViewBag.sendTo = new SelectList(listwithoutunassigned, "user_id", "firstname");
 
 
             ViewBag.owner = new SelectList(listwithoutunassigned, "user_id", "firstname", task.owner);
@@ -1192,8 +1192,8 @@ namespace CatchMe.Controllers
                     CreateLog(log);
                     var recipient = db.users.Find(newtask.assigned_to);
                         
-                        var message = string.Format("Hi {0}, you have been assigned a new task: {1}", recipient.firstname, newtask.title);
-                    SendTestNotif(recipient.username,message);
+                        var message = string.Format("Hi {0}, you have been assigned a new task from {1}: \"{2}\"", recipient.firstname, UserSession.Current.Firstname, newtask.title);
+                    SendMessage(recipient.username,message,"assigned");
                 }
 
 
@@ -1367,13 +1367,13 @@ namespace CatchMe.Controllers
         }
 
 
-        public void SendTestNotif(string recipient="", string message="")
+        public void SendMessage(string recipient="", string message="", string type="")
         {
             try
             {
              
                 ChatHub hub = new ChatHub();
-                hub.SendNotification(recipient,message);
+                hub.SendNotification(recipient,message,type);
 
                 //SendNotification(string fromFirstname, string touser, string toFirstname, string tasktitle)
             }
@@ -1482,6 +1482,11 @@ namespace CatchMe.Controllers
                         {
 
                         mail.AddRecipient(item.RecipientEmail);
+
+                        var message = String.Format("Hi {0}, you received a notification from {1}, \"{2}\" ", task.HiUser, UserSession.Current.Firstname, task.title);
+
+                        SendMessage(item.RecipientUserId, message, "notified");
+
                         }
                         else
                         {
