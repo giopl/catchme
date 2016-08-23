@@ -11,10 +11,11 @@
     <li class="active">Visits</li>
 </ol>
 
+<h4>There are currently <b>@connectedUsers.Count</b> connected users.</h4>
 <ul>
-    @foreach(var u in connectedUsers)
+    @foreach(var u in connectedUsers.OrderByDescending(x=>x.Value.connectionTime))
     {
-        <li>@u.Key,  @u.Value.name </li>
+        <li> <b>@u.Value.username</b> connected on @u.Value.browser since @u.Value.connectionTime.ToString("dd MMM yyyy HH:mm") (@u.Key)  </li>
     }
 </ul>
 

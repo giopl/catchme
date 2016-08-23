@@ -51,7 +51,7 @@
                 @if (session.Current.IsAdmin)
                 {
                     <a href="@Url.Action("Index","Admin")" title="Admin"><span class="fa fa-15x fa-wrench"></span></a>@:&nbsp;
-                <a href="@Url.Action("Chat","Tasks")" title="Admin"><span class="fa fa-15x fa-circle-thin"></span></a>@:&nbsp;
+                
                 }
                     Hello, @session.Current.Firstname! 
 
@@ -67,13 +67,10 @@
     <div class="container body-content">
         @RenderBody()
 
-        <div class="container">
-            <div id="message"></div>
-            @*<input type="text" id="message" />
-            <input type="button" id="sendmessage" value="Send" />
-            <input type="hidden" id="displayname" />
-            <ul id="discussion"></ul>*@
-        </div>
+     
+            <div id="message"><span class="fa fa-plug"></span></div>            
+        
+
         <input type="hidden" id="who" value="@(session.Current.Username+" "+session.Current.Browser)" />
         <hr />
         <footer>
@@ -119,7 +116,7 @@
                     //$.notify(message, "info");
                 }
 
-                $('#message').html('<strong>' + message + '</strong>');
+                $('#message').html('<span class="text-muted"><span class="fa fa-plug"></span> ' + message + '</span>');
             };
             // Get the user name and store it to prepend to messages.
             // $('#displayname').val(prompt('Enter your name:', ''));

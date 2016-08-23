@@ -41,12 +41,15 @@
 .highlight {
     background-color: yellow;
 }   
+.title-col {
+    min-width:33%;
+}
 
 </style>
 
 
-<a href="#" class="notify">show notification @session.count</a>
-<a href="#" class="sendtestnotif">show notification @session.count</a>
+@*<a href="#" class="notify">show notification @session.count</a>
+<a href="#" class="sendtestnotif">show notification @session.count</a>*@
 
 <div>
     <div class="pull-left">
@@ -202,7 +205,7 @@ table.fixed td { overflow: hidden; }
                             Id
                         </th>
                         <td width="20px"></td>
-                        <th width="45%">Title</th>
+                        <th class="title-col">Title</th>
                         <th>Assigned</th>
                         <th>
                             @Html.DisplayNameFor(model => model.priority)
@@ -270,7 +273,7 @@ table.fixed td { overflow: hidden; }
                         </th>
                         <th></th>
                         <th></th>
-                        <th width="45%">Title</th>
+                        <th class="title-col">Title</th>
                         <th>Owner</th>
                         <th>Opened</th>
                         <th>Closed</th>
@@ -318,7 +321,7 @@ table.fixed td { overflow: hidden; }
             <div class="gap"></div>
 
 
-            <table class="table table-condensed table-responsive table-striped" id="tableopenbyme" style="width:100%">
+            <table class="table table-condensed table-responsive table-striped" data-column-defs='[{"sortable": false, "targets": [7]}]' id="tableopenbyme" style="width:100%">
 
                 <thead>
                     <tr>
@@ -327,7 +330,7 @@ table.fixed td { overflow: hidden; }
                         </th>
                         <td></td>
 
-                        <td width="45%">
+                        <td class="title-col">
                             Title
                         </td>
 
@@ -341,13 +344,13 @@ table.fixed td { overflow: hidden; }
                             Due On
                         </th>
 
-                        <th><span class="fa fa-paperclip"></span></th>
-                        <td><span class="fa fa-trash-o"></span></td>
+                        <th style="width:30px;"><span class="fa fa-paperclip"></span></th>
+                        <td style="width:30px;"><span class="fa fa-trash-o"></span></td>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach (var item in Model.Where(x => x.owner == session.Current.UserId && x.status != 9  ))
+                    @foreach (var item in Model.Where(x => x.owner == session.Current.UserId && x.status != 9))
                     {
                         <tr>
                             <td>
@@ -374,18 +377,20 @@ table.fixed td { overflow: hidden; }
                                 @Html.DisplayFor(modelItem => item.due_date)
                             </td>
 
-                            <td>
-                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
-                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
+                            <td data-order="@(item.HasAttachment?1:0)">
+                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
                             </td>
                             <td>
-                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+
+                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+
 
         </div>
 

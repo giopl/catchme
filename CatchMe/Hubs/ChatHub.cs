@@ -21,15 +21,16 @@ namespace CatchMe
         public void SendNotification(string recipient, string message)
         {
             var context = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
-            var connectionId = MyUsers.Where(x => x.Value.name == "GIO|Chrome 52.0").FirstOrDefault();
+            var connectionIds = MyUsers.Where(x => x.Value.username == recipient).ToList();
 
-            if(connectionId.Key!=null)
+            if(connectionIds.Count > 0)
             {
+                foreach(var connectionId in connectionIds)
                 context.Clients.Client(connectionId.Key).addNewMessageToPage("Admin", message);
             }
             else
             {
-            context.Clients.All.addNewMessageToPage("Admin", "this is a test message from the ihub");
+                //context.Clients.All.addNewMessageToPage("Admin", "this is a test message from the ihub");
 
             }
 
@@ -40,8 +41,9 @@ namespace CatchMe
         {
             // Call the addNewMessageToPage method to update clients.
 
-            
-            Clients.All.addNewMessageToPage(name, string.Format("{0} users are connected", MyUsers.Count()));
+
+            var _message = MyUsers.Count() == 1 ? "1 user is currently connected" : string.Format("{0} users are currently connected", MyUsers.Count());
+            Clients.All.addNewMessageToPage(name, _message);
             var x = Context.ConnectionId;
             //Clients.Client("lea").addNewMessageToPage(name, message);
         }
@@ -52,19 +54,40 @@ namespace CatchMe
         public override Task OnConnected()
         {
             string cookievalue = string.Empty;
-            string username = string.Empty;
+            string _username = string.Empty;
+            string _browser = string.Empty;
             if (Context.Request.Cookies["CM"] != null)
             {
                 cookievalue = Context.Request.Cookies["CM"].Value;
 
                 var data = cookievalue.Split('|');
-                username = data[0];
+                _username = data[0];
+                _browser = data[1];
             }
 
-
-            MyUsers.TryAdd(Context.ConnectionId, new MyUserType() { name = cookievalue, username = username  ,ConnectionId = Context.ConnectionId });
+            MyUsers.TryAdd(Context.ConnectionId, new MyUserType() { name = cookievalue, username = _username  ,ConnectionId = Context.ConnectionId, connectionTime = DateTime.Now, browser = _browser });
             return base.OnConnected();
         }
+
+        public override Task OnReconnected()
+        {
+               string cookievalue = string.Empty;
+            string _username = string.Empty;
+            string _browser = string.Empty;
+            if (Context.Request.Cookies["CM"] != null)
+            {
+                cookievalue = Context.Request.Cookies["CM"].Value;
+
+                var data = cookievalue.Split('|');
+                _username = data[0];
+                _browser = data[1];
+            }
+
+            MyUsers.TryAdd(Context.ConnectionId, new MyUserType() { name = cookievalue, username = _username  ,ConnectionId = Context.ConnectionId, connectionTime = DateTime.Now, browser = _browser });
+
+            return base.OnReconnected();
+        }
+
 
         public override Task OnDisconnected(bool stopCalled)
         {
@@ -83,6 +106,8 @@ namespace CatchMe
 
             public string username { get; set; }
             public string browser { get; set; }
+
+            public DateTime connectionTime { get; set; }
 
         }
 
