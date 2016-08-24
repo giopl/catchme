@@ -119,7 +119,7 @@
             @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-6">
                 @*@Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })*@
-                <textarea name="description" id="area2" cols="20" rows="2" style="width:550px;height:200px" placeholder="comment">@Model.description</textarea>
+                <textarea name="description" class="tinymce" cols="20" rows="2" style="width:550px;height:200px" placeholder="comment">@Model.description</textarea>
 
                     @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
                 </div>
@@ -148,7 +148,12 @@
     </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/nicedit")
+    @*@Scripts.Render("~/bundles/nicedit")*@
+
+
+<script src="@Url.Content("~/Scripts/plugins/tinymce/tinymce.min.js")"></script>
+
+
 
     <script>
 
@@ -160,6 +165,13 @@
                 {
                     width:'20%'
                 });
+
+            tinymce.init({
+                selector: '.tinymce',
+                plugins: "textcolor table code advlist emoticons charmap hr image link",
+                toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
+            });
+
 
 
             $('body').on('click', '.shownextsection', function () {

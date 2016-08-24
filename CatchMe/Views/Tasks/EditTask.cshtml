@@ -274,7 +274,7 @@
                             <a href="javascript:void(0);" class="shownextsection toggleshowhide">@(cnt<3?"(hide)":"[more]")</a>
                             <section class="allcomments" style="display:@(cnt<3?"block":"none")">
                                 <h4 style="word-break:break-all">
-                                    <span style="word-wrap:break-word">
+                                    <span class="commentcontent" style="word-wrap:break-word">
                                        
                                         @if(!string.IsNullOrWhiteSpace(comment.description))
                                         {
@@ -283,7 +283,7 @@
                                         }
                                     </span>
                                 </h4>
-
+                                
                                 @if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
                                 {
                                 <a href="javascript:void(0);" class="shownextsection"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>
@@ -292,7 +292,7 @@
                                 <section style="display:none">
                                     @Html.Partial("_EditComment", comment)
                                 </section>
-                                <a href="#" class="shownextsection"><small>|&nbsp;Add <span class="fa fa-paperclip"></span></small></a>
+                                <a href="#" class="shownextsection"><small>|&nbsp;Add <span class="fa fa-paperclip"></span> </small></a>
                                 <section style="display:none">
                                     <div class="row">
 
@@ -577,8 +577,21 @@
 </div>
 
 
+<!-- Large modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
 
+@section Modals {
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div id="contentmodalcomment">
+                
 
+            </div>
+        </div>
+    </div>
+</div>
+ }
 
 
 @section Scripts {
@@ -607,6 +620,15 @@
         //});
 
         $(document).ready(function () {
+
+
+            //$('body').on('click', '.showmodalcomment', function () {
+
+            //    var x = $(this).parent().find('h4').text();
+
+            //    $('#contentmodalcomment').val(x);
+            //    //alert(x);
+            //});
 
             $('[data-toggle="tooltip"]').tooltip();
 
