@@ -79,7 +79,7 @@
                                 <input type="reset" class="btn btn-link" id="closeAddComment" value="close" />
                             </label>
                             <div class="col-md-10">
-                                <textarea name="description" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment"></textarea>
+                                <textarea name="description" class="tinymce" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment"></textarea>
                             </div>
                         </div>
 
@@ -257,7 +257,7 @@
                         <br /><br />
                 
             @{ var cnt = 0;}
-                        @foreach (var comment in Model.comments.OrderByDescending(x => x.updated_on))
+                        @foreach (var comment in Model.comments.OrderByDescending(x => x.created_on))
                         {
 
                             <div class="task-title"><span style="font-size:.5em; padding:5px;margin-bottom:10px;" class="alert alert-info">C.@comment.comment_id</span> @(string.IsNullOrWhiteSpace(comment.title) ? "No Title.." : comment.title) - </div>
@@ -583,19 +583,28 @@
 
 @section Scripts {
 @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/nicedit")
+    @*@Scripts.Render("~/bundles/nicedit")*@
+
+    
+<script src="@Url.Content("~/Scripts/plugins/tinymce/tinymce.min.js")"></script>
 
     <script>
 
-        bkLib.onDomLoaded(function () {
-
-            nicEditors.allTextAreas();
-            new nicEditor({
-                  fullPanel: true  
-                  
-            });//.panelInstance('area2');
-            
+        tinymce.init({
+            selector: '.tinymce',
+            plugins: "textcolor table code advlist emoticons charmap hr image link",
+            toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
         });
+
+        //bkLib.onDomLoaded(function () {
+
+        //    nicEditors.allTextAreas();
+        //    new nicEditor({
+        //          fullPanel: true  
+                  
+        //    });//.panelInstance('area2');
+            
+        //});
 
         $(document).ready(function () {
 

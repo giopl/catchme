@@ -869,12 +869,16 @@ namespace CatchMe.Controllers
             {
                 comment.user_id = UserSession.Current.UserId;
                 comment.created_on = DateTime.Now;
+                comment.updated_on = DateTime.Now;
+                comment.updated_by = 0; 
 
                 if (!string.IsNullOrWhiteSpace(comment.description) || !string.IsNullOrWhiteSpace(comment.title))
                 { 
                 
                     if (ModelState.IsValid)
                     {
+                        
+                        
                         db.comments.Add(comment);
                         db.SaveChanges();
 
@@ -890,7 +894,7 @@ namespace CatchMe.Controllers
                 return RedirectToAction("EditTask", new { id = comment.task_id });
                     
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 
                 throw;
@@ -984,7 +988,7 @@ namespace CatchMe.Controllers
                     db.SaveChanges();
 
 
-                    log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.INFO, string.Format("Info Item {0}-{1} created for project {2}",info.information_id, info.project_id), -1);
+                    log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.INFO, string.Format("Info Item {0}-{1} created for project {2}",info.information_id, info.title, info.project_id), -1);
                     CreateLog(log);
 
                     return RedirectToAction("ShowInfo", new { id = info.information_id});
@@ -1015,6 +1019,8 @@ namespace CatchMe.Controllers
                         user_id = task.created_by.Value,
                         title = task.title,
                         created_on = task.created_on,
+                        updated_on = task.created_on.Value,
+                        updated_by = 0,
                         description = task.description
                     };
 

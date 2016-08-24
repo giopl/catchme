@@ -83,7 +83,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
-                        @Html.TextAreaFor(model => model.description, new { @class = "form-control" ,@id="area2" } )
+                        @Html.TextAreaFor(model => model.description, new { @class = "tinymce"  } )
                         @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -147,7 +147,8 @@
 
         @section Scripts {
             @Scripts.Render("~/bundles/jqueryval")
-@Scripts.Render("~/bundles/nicedit")
+    @*@Scripts.Render("~/bundles/nicedit")*@
+<script src="@Url.Content("~/Scripts/plugins/tinymce/tinymce.min.js")"></script>
 <script>
 
     $(document).ready(function () {
@@ -159,6 +160,14 @@
             autoclose: true,
             clearBtn: true
         });
+
+        
+        tinymce.init({
+            selector: '.tinymce',
+            plugins: "textcolor table code advlist emoticons charmap hr image link",
+            toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
+        });
+
 
         jQuery.validator.methods["date"] = function (value, element) { return true; }
 
@@ -189,15 +198,19 @@
 
     });
 
-        bkLib.onDomLoaded(function () {
+            
 
-            //nicEditors.allTextAreas();
-            new nicEditor({
-                //  fullPanel: true,
-                buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'forecolor', 'bgcolor']
-            }).panelInstance('area2');
-            //nicEditors.findEditor('myArea2');
-        });
+    
+
+        //bkLib.onDomLoaded(function () {
+
+        //    //nicEditors.allTextAreas();
+        //    new nicEditor({
+        //        //  fullPanel: true,
+        //        buttonList: ['fontSize', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat', 'indent', 'outdent', 'hr', 'forecolor', 'bgcolor']
+        //    }).panelInstance('area2');
+        //    //nicEditors.findEditor('myArea2');
+        //});
             </script>
 
 

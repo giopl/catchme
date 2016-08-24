@@ -32,7 +32,7 @@
             @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @*@Html.TextAreaFor(model => model.description, new { @class = "form-control", @id="area2" } )*@
-                <textarea name="description" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment">@Model.description</textarea>
+                <textarea class="tinymce" name="description" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment">@Model.description</textarea>
 
                 @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
             </div>

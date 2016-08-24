@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<h2>Index</h2>
+
+
+    <h1>TinyMCE Quick Start Guide</h1>
+    <form method="post">
+        <textarea class="mytextarea">Hello, World!</textarea>
+    </form>
+
+
+<textarea class="normal">Hello, World!</textarea>
+
+
+
+@section Scripts {
+
+<script src="@Url.Content("~/Scripts/plugins/tinymce/tinymce.min.js")"></script> 
+
+<script>
+    tinymce.init({
+        selector: '.mytextarea',
+        plugins: "textcolor table code advlist emoticons charmap hr image link",
+        toolbar: "bold italic underline forecolor backcolor table strikethrough superscript subscript code emoticons bullist numlist charmap image link"
+    });
+</script>
+
+
+
+
+
+}
