@@ -117,9 +117,9 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
+            <div class="col-md-12">
                 @*@Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })*@
-                <textarea name="description" class="tinymce" cols="20" rows="2" style="width:550px;height:200px" placeholder="comment">@Model.description</textarea>
+                <textarea name="description" class="tinymce" cols="20" rows="2"  placeholder="comment">@Model.description</textarea>
 
                     @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
                 </div>

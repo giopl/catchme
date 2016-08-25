@@ -283,15 +283,17 @@
                                         }
                                     </span>
                                 </h4>
-                                
+                                <a href="#" data-toggle="modal" data-target="#myModal"><small>show</small></a>
                                 @if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
                                 {
                                 <a href="javascript:void(0);" class="shownextsection"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>
+                                        @*<a href="#" data-toggle="modal" data-target="#editCommentModal">edit modal</a>*@
                                 }
-
+                                
                                 <section style="display:none">
                                     @Html.Partial("_EditComment", comment)
                                 </section>
+                                
                                 <a href="#" class="shownextsection"><small>|&nbsp;Add <span class="fa fa-paperclip"></span> </small></a>
                                 <section style="display:none">
                                     <div class="row">
@@ -326,7 +328,7 @@
 
                                 </section>
                             </section>
-    <ul>
+            <ul>
         @foreach (var att in comment.attachments)
         {
         <li>
@@ -578,15 +580,42 @@
 
 
 <!-- Large modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Large modal</button>
 
 @section Modals {
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div id="contentmodalcomment">
-                
+<!-- Modal -->
 
+<div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Comment</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_EditComment", new CatchMe.Models.comment())
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -609,26 +638,19 @@
             toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
         });
 
-        //bkLib.onDomLoaded(function () {
-
-        //    nicEditors.allTextAreas();
-        //    new nicEditor({
-        //          fullPanel: true  
-                  
-        //    });//.panelInstance('area2');
-            
-        //});
-
+        
         $(document).ready(function () {
 
 
-            //$('body').on('click', '.showmodalcomment', function () {
+            $('#myModal').on('show.bs.modal', function (e) {
+                var x = $(this).parent().find('h4').text();
 
-            //    var x = $(this).parent().find('h4').text();
+                alert(x);
+                $('#modal-content').html(x);
 
-            //    $('#contentmodalcomment').val(x);
-            //    //alert(x);
-            //});
+            })
+
+
 
             $('[data-toggle="tooltip"]').tooltip();
 
