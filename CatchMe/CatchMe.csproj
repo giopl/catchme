@@ -332,6 +332,7 @@
     <Content Include="notes\SignalR Resources.txt" />
     <Content Include="notes\SignalRChat.zip" />
     <Content Include="notes\prez.zip" />
+    <Content Include="notes\CatchMeDB%2820160826%29.zip" />
     <None Include="Properties\PublishProfiles\dwh-appsdev %28Debug%29.pubxml" />
     <None Include="Properties\PublishProfiles\local %28www%29.pubxml" />
     <None Include="Properties\PublishProfiles\TestSite %28dwh-appsdev%29.pubxml" />
