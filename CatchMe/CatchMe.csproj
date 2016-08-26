@@ -419,6 +419,8 @@
     <Content Include="Scripts\plugins\tinymce\plugins\noneditable\plugin.min.js" />
     <Content Include="Scripts\plugins\tinymce\plugins\pagebreak\plugin.min.js" />
     <Content Include="Scripts\plugins\tinymce\plugins\paste\plugin.min.js" />
+    <Content Include="Scripts\plugins\tinymce\plugins\placeholder\plugin.js" />
+    <Content Include="Scripts\plugins\tinymce\plugins\placeholder\plugin.min.js" />
     <Content Include="Scripts\plugins\tinymce\plugins\preview\plugin.min.js" />
     <Content Include="Scripts\plugins\tinymce\plugins\print\plugin.min.js" />
     <Content Include="Scripts\plugins\tinymce\plugins\save\plugin.min.js" />

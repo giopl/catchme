@@ -41,8 +41,12 @@
                 }
                 else
                 {
-                    <a href="#" class="showsection" data-sectionnum=".section1"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>@:&nbsp;|&nbsp;
+                    @*<a href="#" class="showsection" data-sectionnum=".section1"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>@:&nbsp;|&nbsp;*@
+            <a href="#" class="" data-toggle="modal" data-target="#addCommentModal"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>@:&nbsp;|&nbsp;
 
+                    
+                    
+                    
                 }
 
                 <a href="#" class="showsection" data-sectionnum=".section2"><span class="fa fa-envelope"></span>&nbsp;Notify </a>&nbsp;|&nbsp;
@@ -51,7 +55,8 @@
                 <a href="javascript:void(0);" class="expandall" title="show all"><span class="fa fa-expand"></span></a>
                 <a href="javascript:void(0);" class="collapseall" title="collapse all"><span class="fa fa-compress"></span></a>
                 <br />
-                <section style="display:none" class="section1">
+
+                @*<section style="display:none" class="section1">
 
                     @using (Html.BeginForm("CreateComment", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
                     {
@@ -86,7 +91,7 @@
                     </div>
                     }
 
-                </section>
+                </section>*@
 
                 <section style="display:none" class="section2">
                     <h4><span class="fa fa-envelope"></span> &nbsp;Notifications</h4>
@@ -283,7 +288,7 @@
                                         }
                                     </span>
                                 </h4>
-                                <a href="#" data-toggle="modal" data-target="#myModal"><small>show</small></a>
+                                @*<a href="#" data-toggle="modal" data-target="#myModal"><small>show</small></a>*@
                                 @if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
                                 {
                                 <a href="javascript:void(0);" class="shownextsection"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>
@@ -580,25 +585,58 @@
 
 
 <!-- Large modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Large modal</button>
+@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Large modal</button>*@
 
 @section Modals {
 <!-- Modal -->
 
-<div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <style>
+        .modal-dialog
+        {
+            width:900px;
+        }
+    </style>
+
+<div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Edit Comment</h4>
+                <h4 class="modal-title" id="myModalLabel"><span class="fa fa-comment"></span> &nbsp;Add Comments</h4>
             </div>
+@using (Html.BeginForm("CreateComment", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
+{
             <div class="modal-body">
-                @Html.Partial("_EditComment", new CatchMe.Models.comment())
+                
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        
+                        
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <input type="hidden" name="task_id" value="@Model.task_id" />
+
+                        <div class="form-group">                            
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" name="title" placeholder="add your title here" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                                                        
+                            <div class="col-md-12">
+                                <textarea name="description" class="tinymce" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="add your description here"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+ 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
+}
         </div>
     </div>
 </div>
@@ -634,7 +672,7 @@
 
         tinymce.init({
             selector: '.tinymce',
-            plugins: "textcolor table code advlist emoticons charmap hr image link",
+            plugins: "textcolor table code advlist emoticons charmap hr image link placeholder",
             toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
         });
 
