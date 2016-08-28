@@ -569,6 +569,7 @@
     <Content Include="Scripts\plugins\tinymce\themes\inlite\src\test\.eslintrc" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Tasks\_ShowComment.cshtml" />
+    <Content Include="Views\Tasks\_EditCommentModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

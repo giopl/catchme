@@ -15,52 +15,52 @@
 }
 
 <br />
-        <div class="row">
-            <div class="col-md-8">
+<div class="row">
+    <div class="col-md-8">
 
-                <div class="task-title2">
-                    <div class="taskid">
-                        <span class="label label-@(Model.StatusDescLabel)" style="padding:0.25em"><span class="fa fa-@(Model.statusIcon) fa-fw"></span>@Model.task_id</span>
-                    </div>
-                    <div class="taskname truncate" data-toggle="tooltip" data-placement="right" title="@Model.title">
-                        @Model.title
-                    </div>
+        <div class="task-title2">
+            <div class="taskid">
+                <span class="label label-@(Model.StatusDescLabel)" style="padding:0.25em"><span class="fa fa-@(Model.statusIcon) fa-fw"></span>@Model.task_id</span>
+            </div>
+            <div class="taskname truncate" data-toggle="tooltip" data-placement="right" title="@Model.title">
+                @Model.title
+            </div>
 
-                </div>
-                <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
 
-                @*<h2 class="tasktitle"><span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span> @Model.title </h2>*@
+        @*<h2 class="tasktitle"><span class="label label-@(Model.StatusDescLabel)">#@Model.task_id</span> @Model.title </h2>*@
 
-                <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.firstname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") last updated on <strong>@Model.updated_on.Value.ToString("dd MMM yyyy HH:mm")</strong> by @Model.user2.firstname</h5>
+        <h5 class="text-muted">@session.Current.CurrentProject - created by @Model.user1.firstname on @Model.created_on.Value.ToString("dd MMM yyyy HH:mm") last updated on <strong>@Model.updated_on.Value.ToString("dd MMM yyyy HH:mm")</strong> by @Model.user2.firstname</h5>
 
 
-                @if (is_readonly)
-                {
-                    <span class="text-muted"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</span>@:&nbsp;|&nbsp;
+        @if (is_readonly)
+        {
+            <span class="text-muted"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</span>@:&nbsp;|&nbsp;
 
-                }
-                else
-                {
-                    @*<a href="#" class="showsection" data-sectionnum=".section1"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>@:&nbsp;|&nbsp;*@
+        }
+        else
+        {
+            @*<a href="#" class="showsection" data-sectionnum=".section1"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>@:&nbsp;|&nbsp;*@
             <a href="#" class="" data-toggle="modal" data-target="#addCommentModal"><span class="fa fa-plus-circle"></span>&nbsp;Add Comment</a>@:&nbsp;|&nbsp;
 
-                    
-                    
-                    
-                }
 
-                <a href="#" class="showsection" data-sectionnum=".section2"><span class="fa fa-envelope"></span>&nbsp;Notify </a>&nbsp;|&nbsp;
-                <a href="#" class="showsection" data-sectionnum=".section3"><span class="fa fa-history"></span>&nbsp;History (@Model.History.Count)</a>&nbsp;|&nbsp;
-                <a href="#" class="showsection" data-sectionnum=".section4"><span class="fa fa-paperclip"></span>&nbsp;<span class="@(Model.attachments.Count>0?"boldme":"")"> Attachments (@Model.attachments.Count)</span></a>&nbsp;|&nbsp;
-                <a href="javascript:void(0);" class="expandall" title="show all"><span class="fa fa-expand"></span></a>
-                <a href="javascript:void(0);" class="collapseall" title="collapse all"><span class="fa fa-compress"></span></a>
-                <br />
 
-                
-                <section style="display:none" class="section2">
-                    <h4><span class="fa fa-envelope"></span> &nbsp;Notifications</h4>
-                    <hr />
-                    @using (Html.BeginForm("NotifyUsers", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
+
+        }
+
+        <a href="#" class="showsection" data-sectionnum=".section2"><span class="fa fa-envelope"></span>&nbsp;Notify </a>&nbsp;|&nbsp;
+        <a href="#" class="showsection" data-sectionnum=".section3"><span class="fa fa-history"></span>&nbsp;History (@Model.History.Count)</a>&nbsp;|&nbsp;
+        <a href="#" class="showsection" data-sectionnum=".section4"><span class="fa fa-paperclip"></span>&nbsp;<span class="@(Model.attachments.Count>0?"boldme":"")"> Attachments (@Model.attachments.Count)</span></a>&nbsp;|&nbsp;
+        <a href="javascript:void(0);" class="expandall" title="show all"><span class="fa fa-expand"></span></a>
+        <a href="javascript:void(0);" class="collapseall" title="collapse all"><span class="fa fa-compress"></span></a>
+        <br />
+
+
+        <section style="display:none" class="section2">
+            <h4><span class="fa fa-envelope"></span> &nbsp;Notifications</h4>
+            <hr />
+            @using (Html.BeginForm("NotifyUsers", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
                     {
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="taskId" value="@Model.task_id" />
@@ -71,24 +71,24 @@
 
                         foreach (var u in users.Where(u=>u.user_id !=0).ToList())
                             {
-                                <input type="checkbox" class="notification" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
+                    <input type="checkbox" class="notification" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
                             }
 
                         if (session.Current.UserId == Model.assigned_to)
                         {
-                            <br />
-                                <br />
-                                @:Main Recipient(To): @Html.DropDownList("sendTo", null, new { @class = "form-control chosen-select-sendto" , @style="width:100px;" })
-                                <br /><small class="text-muted">Emails are sent <b>To</b> assignees, choose someone else if you don't want it to be sent to you</small>
-                                
+                    <br />
+                    <br />
+                    @:Main Recipient(To): @Html.DropDownList("sendTo", null, new { @class = "form-control chosen-select-sendto" , @style="width:100px;" })
+                    <br /><small class="text-muted">Emails are sent <b>To</b> assignees, choose someone else if you don't want it to be sent to you</small>
+
                             }
 
                     <input type="submit" class="btn btn-info" value="Notify" />
 
                     }
-                    <hr />
+            <hr />
 
-                    @if (Model.notifications.Count > 0)
+            @if (Model.notifications.Count > 0)
                     {
 
                     <table class="table table-striped">
@@ -100,33 +100,33 @@
 
                         @foreach (var notif in Model.notifications)
                             {
-                            <tr>
-                                <td>
-                                    @notif.sent_on.Value.ToString("dd/MM/yy HH:mm")
-                                </td>
-                                <td>
-                                    @notif.sender_name
-                                </td>
-                                <td>
-                                    @notif.recipients
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @notif.sent_on.Value.ToString("dd/MM/yy HH:mm")
+                            </td>
+                            <td>
+                                @notif.sender_name
+                            </td>
+                            <td>
+                                @notif.recipients
+                            </td>
+                        </tr>
                             }
                     </table>
 
                     }
 
-                </section>
+        </section>
 
-                <section style="display:none" class="section3">
-                    <h4><span class="fa fa-history"></span> &nbsp;Task History (@Model.History.Count)</h4>
-                    <div class="row">
-                        @{
+        <section style="display:none" class="section3">
+            <h4><span class="fa fa-history"></span> &nbsp;Task History (@Model.History.Count)</h4>
+            <div class="row">
+                @{
                             var lastTask =  Model.History.Where(x => x.StatusChange == 1).OrderBy(x => x.logtime).LastOrDefault();
-                        }
+                }
 
-                        @*@foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))*@
-                        @foreach(var hist in Model.History.Where(x=>x.StatusChange == 1).OrderBy(x=>x.logtime))
+                @*@foreach (var hist in Model.task_hist.OrderBy(x => x.created_on))*@
+                @foreach(var hist in Model.History.Where(x=>x.StatusChange == 1).OrderBy(x=>x.logtime))
                         {
 
                         <div class="col-md-2 text-center">
@@ -135,25 +135,25 @@
                         </div>
                                 if(hist!=lastTask)
                                 {
-                                    <div class="col-md-1"><span class="fa fa-2x fa-long-arrow-right"></span></div>
+                        <div class="col-md-1"><span class="fa fa-2x fa-long-arrow-right"></span></div>
 
                                 }
 
-                            
+
                         }
 
-                    </div>
+            </div>
 
-                    <br />
-                    <table class="table table-striped">
-                        <tr>
-                            <th>date</th>
-                            <th>who</th>
-                            <th><span class="fa fa-info"></span></th>
-                            <th>description</th>
-                            <td></td>
-                        </tr>
-                        @foreach (var hist in Model.History)
+            <br />
+            <table class="table table-striped">
+                <tr>
+                    <th>date</th>
+                    <th>who</th>
+                    <th><span class="fa fa-info"></span></th>
+                    <th>description</th>
+                    <td></td>
+                </tr>
+                @foreach (var hist in Model.History)
                         {
                         <tr>
                             <td>
@@ -167,43 +167,396 @@
                         </tr>
                         }
 
-                    </table>
+            </table>
 
-                </section>
+        </section>
 
-                <section style="display:none" class="section4">
-                    <h4><span class="fa fa-paperclip"></span> &nbsp;Attachments (@Model.attachments.Count)</h4>
-                    <div class="row">
-                        @foreach (var att in Model.attachments)
+        <section style="display:none" class="section4">
+            <h4><span class="fa fa-paperclip"></span> &nbsp;Attachments (@Model.attachments.Count)</h4> <a href="#" data-toggle="modal" data-target="#uploadAttachmentModal"><small><span class="fa fa-plus"></span>&nbsp;New Attachment</small></a>
+            <div class="row">
+                @foreach (var att in Model.attachments)
+                {
+                    <div class="col-md-12">
+                        <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
+                        &nbsp;
+
+                        @if (session.Current.UserId == att.user_id || session.Current.IsAdmin || !is_readonly)
                         {
-                            <div class="col-md-12">
-                                <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
-                                &nbsp;
-
-                                @if (session.Current.UserId == att.user_id || session.Current.IsAdmin || !is_readonly)
-                                {
-                                    <a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash"></span></a>
-                                }
-                            </div>
+                            <a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash"></span></a>
                         }
-
                     </div>
-                    <br />
-                    <a href="#" class="shownextsection"><small><span class="fa fa-plus"></span>&nbsp;New Attachment</small></a>
-                        <section style="display:none">
-                    <div class="row">
+                }
 
-                            <hr />
-                            @*     @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))*@
-                            @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post,new { enctype = "multipart/form-data" }))
+            </div>
+            <br />
+            @*<a href="#" class="shownextsection"><small><span class="fa fa-plus"></span>&nbsp;New Attachment</small></a>*@
+            
+            
+        </section>
+
+        <br /><br />
+
+        @{ var cnt = 0;}
+
+
+
+        @foreach (var comment in Model.comments.OrderByDescending(x => x.created_on))
+        {
+
+            <div class="task-title"><span style="font-size:.5em; padding:5px;margin-bottom:10px;" class="alert alert-info">C.@comment.comment_id</span> @(string.IsNullOrWhiteSpace(comment.title) ? "No Title.." : comment.title) - </div>
+
+            if (comment.updated_by > 0)
+            {
+                <small>@comment.user.fullname on @comment.updated_on.ToString("dd MMM yyyy HH:mm")</small>
+            }
+            else
+            {
+                <small>@comment.user1.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
+            }
+
+            if (comment.attachments.Count > 0)
+            {
+                <a href="javascript:void(0);" class="shownextsection"><span class="fa fa-paperclip"></span> (@comment.attachments.Count)</a>
+            }
+
+            <section style="display:none">
+                @foreach (var att in comment.attachments)
+                {
+                <div class="col-md-12">
+                    <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
+                    @if (session.Current.UserId == att.user_id || session.Current.IsAdmin || !is_readonly)
+                    {
+                        <a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash"></span></a>
+                    }
+                </div>
+                }
+            </section>
+
+            <a href="javascript:void(0);" class="shownextsection toggleshowhide">@(cnt < 3 ? "(hide)" : "[more]")</a>
+                            <section class="allcomments" style="display:@(cnt<3?"block":"none")">
+                                <h4 style="word-break:break-all">
+                                    <span class="commentcontent-@comment.comment_id" style="word-wrap:break-word">
+                                        @if (!string.IsNullOrWhiteSpace(comment.description))
+                                        {
+                                            @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
+
+                                        }
+                                    </span>
+                                </h4>
+                                @if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
+                                {
+                                    <a href="javascript:void(0);" class="showcommentmodal" data-commentid="@comment.comment_id"><span class="fa fa-external-link"></span><small>&nbsp;Show</small></a>
+                                    @:&nbsp;|&nbsp;<a href="javascript:void(0);" class="shownextsection hidecomment" data-commentid="@comment.comment_id"><span class="fa fa-edit"></span>&nbsp;edit</a>
+                                }
+
+                                <section style="display:none">
+                                    @Html.Partial("_EditComment", comment)
+                                </section>
+
+                                &nbsp;|&nbsp;<a href="javascript:void(0);" class="uploadAttachementForComment" data-toggle="modal" data-target="#uploadAttachmentModal" data-commentid="@comment.comment_id" ><small>Add <span class="fa fa-paperclip"></span> </small></a>
+                                <section style="display:none">
+                                    <div class="row">
+
+                                        <hr />
+                                        @*     @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))*@
+                                        @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        {
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="taskId" value="@Model.task_id" />
+                                        <input type="hidden" name="projectId" value="@Model.project_id" />
+                                        <input type="hidden" name="comment_id" value="@comment.comment_id" />
+                                        <div class="row">
+                                            <div class="col-md-offset-1 col-md-4">
+                                                <input type="file" required name="file" />
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="submit" class="btn btn-info" value="Attach" />
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-offset-1 col-md-8">
+                                                <small class="text-muted">Files accepted: excel, word, powerpoint, text, jpeg, png</small>
+                                            </div>
+                                        </div>
+
+                                        }
+                                        <hr />
+                                    </div>
+
+                                </section>
+                            </section>
+                            
+
+
+
+                            
+
+                            <hr>
+            { cnt++; }
+        }
+
+
+
+    </div> <!-- fisrt col -->
+
+
+
+    <div class="col-md-4">
+        <h4 class="text-right"><span class="text-muted">Assigned to: </span><span class="label label-@(notassigned?"default":"info")"><span class="fa fa-user"></span>&nbsp; @assignee</span></h4>
+
+        @using (Html.BeginForm())
+                        {
+            @Html.AntiForgeryToken()
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.task_id)
+            @Html.HiddenFor(model => model.project_id)
+            @Html.HiddenFor(model => model.created_on)
+            @Html.HiddenFor(model => model.created_by)
+            @Html.HiddenFor(model => model.description)
+
+            <div class="form-group pad20">
+                @*@Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-4" })*@
+                <div class="col-md-4">
+                    <label for="status" class="control-label">Status <span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
+
+                </div>
+
+                <div class="col-md-8">
+
+                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select submitme" })
+                    @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
+                    <span class="text-light"><small>&nbsp;<span class="fa fa-info-circle"></span> Only <b>Owner</b> can close task</small></span>
+                </div>
+            </div>
+
+            <div class="form-group pad20">
+                @*@Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-4" })*@
+                <div class="col-md-4">
+                    <label for="assigned_to" class="control-label">Assigned&nbsp;<span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
+                </div>
+                <div class="col-md-8">
+
+                    @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select submitme" })
+                    @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group pad20">
+                @Html.LabelFor(model => model.owner, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @if (is_readonly)
+                                    {
+                                    <input type="text" class="form-control" readonly value="@Model.user2.fullname" />
+                                    @Html.HiddenFor(model => model.owner)
+                                    }
+                                    else
+                                    {
+                                    @Html.DropDownList("owner", null, new { @class = "form-control chosen-select" })
+
+                                    }
+                    @Html.ValidationMessageFor(model => model.owner, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group  pad20">
+                @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+
+                    @if (is_readonly)
+                                    {
+                                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+                                    }
+                                    else
+                                    {
+                                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+
+                                    }
+                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group pad20">
+                @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+
+                    @if (is_readonly)
+                                    {
+
+                                    <input type="text" class="form-control" readonly value="@Model.TypeDesc" />
+                                    @Html.HiddenFor(model => model.type)
+
+                                    }
+                                    else
+                                    {
+                                    @Html.DropDownList("type", null, new { @class = "form-control chosen-select" })
+
+                                    }
+                    @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group  pad20">
+                @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @if (is_readonly)
+                                    {
+                                    @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
+
+                                    }
+                                    else
+                                    {
+                                    @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
+
+                                    }
+                    @Html.ValidationMessageFor(model => model.initiator, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group pad20">
+                @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @if (is_readonly)
+                                    {
+                                    <input type="text" class="form-control" readonly value="@Model.PriorityDesc" />
+                                    @Html.HiddenFor(model => model.priority)
+                                    }
+                                    else
+                                    {
+                                    @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control chosen-select" })
+                                    }
+
+
+                    @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group pad20">
+                @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+
+                    @if (is_readonly)
+                                    {
+
+                                    <input type="text" class="form-control" readonly value="@Model.ComplexityDesc" />
+                                    @Html.HiddenFor(model => model.complexity)
+
+
+                                    }
+                                    else
+                                    {
+                                    @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control chosen-select" })
+
+                                    }
+
+
+                    @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group pad20">
+
+                <div class="col-md-4">
+                    <label for="due_date" class="control-label">Due Date <span style="color:#31B0D5;font-size:1.2em" class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="If date is lost, click on RESET"></span></label>
+
+                </div>
+                <div class="col-md-8">
+                    @if (is_readonly)
+                                    {
+
+
+                                        if(Model.due_date.HasValue)
+                                        {
+                                    <input type="text" value="@Model.due_date.Value.ToString("dd/MM/yyyy")" readonly="readonly" class="form-control" />
+
+                                        }
+                                        else
+                                        {
+                                    <input type="text" value="" readonly="readonly" class="form-control" />
+                                        }
+
+                                    @Html.HiddenFor(model => model.due_date)
+                                    }
+                                    else
+                                    {
+                                    @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" } })
+
+                                    }
+                    @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+
+                            if (!is_readonly)
                             {
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="taskId" value="@Model.task_id" />
-                                <input type="hidden" name="projectId" value="@Model.project_id" />
-                                <div class="row">
-                                    <div class="col-md-offset-1 col-md-4" >
-                                        <input type="file" required name="file" />
 
+            <div class="form-group pad20">
+                <div class="col-md-offset-4 col-md-8 text-center">
+
+                    <input type="submit" id="savestatusbutton" value="Save" class="btn btn-info" />
+                    <input type="reset" value="Reset" class="btn btn-default" />
+                </div>
+            </div>
+
+                            }
+
+
+            <div class="form-group pad20" id="infosave" style="display:none">
+                <div class="col-md-offset-4 col-md-8 text-center">
+
+                    <small class="text-muted"><span class="fa fa-warning"></span> &nbsp;close or save the comment to enable save button</small>
+                </div>
+            </div>
+
+                        }
+    </div><!-- second col-->
+
+</div> <!--end row-->
+
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+<!-- Large modal -->
+@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Large modal</button>*@
+
+@section Modals {
+    <!-- Modal -->
+
+    <style>
+        .modal-dialog {
+            width: 900px;
+        }
+    </style>
+
+    <div class="modal fade" id="uploadAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><span class="fa fa-paperclip"></span> &nbsp;Upload Attachment</h4>
+            </div>
+@using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+            <div class="modal-body">
+                <hr />
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="taskId" value="@Model.task_id" />
+                                <input type="hidden" name="projectId" value="@Model.project_id" />
+                                <input type="hidden" name="comment_id" value="0" id="attachment_comment_id" />
+                                
+                                <div class="row">
+                                    <div class="col-md-offset-1 col-md-4">
+                                        <input type="file" required name="file" />
                                     </div>
                                     <div class="col-md-4">
                                         <input type="submit" class="btn btn-info" value="Attach" />
@@ -216,590 +569,261 @@
                                     </div>
                                 </div>
 
-                            }
-                            <hr />
-                    </div>
-
-                </section>
-                    </section>
-
-                        <br /><br />
-                
-            @{ var cnt = 0;}
-            
-            
-
-                        @foreach (var comment in Model.comments.OrderByDescending(x => x.created_on))
-                        {
-
-                            <div class="task-title"><span style="font-size:.5em; padding:5px;margin-bottom:10px;" class="alert alert-info">C.@comment.comment_id</span> @(string.IsNullOrWhiteSpace(comment.title) ? "No Title.." : comment.title) - </div>
-
-                            if (comment.updated_by > 0)
-                            {
-                                <small>@comment.user.fullname on @comment.updated_on.ToString("dd MMM yyyy HH:mm")</small>
-                            }
-                            else
-                            {
-                                <small>@comment.user1.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
-                            }
-
-                            <a href="javascript:void(0);" class="shownextsection toggleshowhide">@(cnt<3?"(hide)":"[more]")</a>
-                            <section class="allcomments" style="display:@(cnt<3?"block":"none")">
-                                <h4 style="word-break:break-all">
-                                    <span class="commentcontent" style="word-wrap:break-word">
-                                       
-                                        @if(!string.IsNullOrWhiteSpace(comment.description))
-                                        {
-                                        @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
-                                            
-                                        }
-                                    </span>
-                                </h4>
-                                @*<a href="#" data-toggle="modal" data-target="#myModal"><small>show</small></a>*@
-                                @if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
-                                {
-                                    @*<a href="javascript:void(0);" class="shownextsection showcommentmodal" data-commentid="@comment.comment_id"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>*@
-                                    <a href="javascript:void(0);" class="showcommentmodal" data-commentid="@comment.comment_id"><span class="fa fa-search-plus"></span><small>&nbsp;Show</small></a>
-                                    @:&nbsp;|&nbsp;<a href="javascript:void(0);" class="editcommentmodal" data-commentid="@comment.comment_id"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>
-                                        @*<a href="#" data-toggle="modal" data-target="#editCommentModal">edit modal</a>*@
-                                }
-                                
-                                <section style="display:none">
-                                    @Html.Partial("_EditComment", comment)
-                                </section>
-                                
-                                <a href="#" class="shownextsection"><small>|&nbsp;Add <span class="fa fa-paperclip"></span> </small></a>
-                                <section style="display:none">
-                                    <div class="row">
-
-                                        <hr />
-                                        @*     @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))*@
-                                        @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                                        {
-                                            @Html.AntiForgeryToken()
-                                            <input type="hidden" name="taskId" value="@Model.task_id" />
-                                            <input type="hidden" name="projectId" value="@Model.project_id" />
-                                            <input type="hidden" name="comment_id" value="@comment.comment_id" />
-                                            <div class="row">
-                                                <div class="col-md-offset-1 col-md-4">
-                                                    <input type="file" required name="file" />
-
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <input type="submit" class="btn btn-info" value="Attach" />
-
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-offset-1 col-md-8">
-                                                    <small class="text-muted">Files accepted: excel, word, powerpoint, text, jpeg, png</small>
-                                                </div>
-                                            </div>
-
-                                        }
-                                        <hr />
-                                    </div>
-
-                                </section>
-                            </section>
-            <ul>
-                
-        @foreach (var att in comment.attachments)
-        {
-        <li>
-            <div class="col-md-12">
-                <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
-                &nbsp;
-
-                @if (session.Current.UserId == att.user_id || session.Current.IsAdmin || !is_readonly)
-                                    {
-                    <a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash"></span></a>
-                                    }
-            </div>
-        </li>
-        }
-
-    </ul>
-                            
-        <hr>
-                            { cnt++;}
-                        }
-
-
-
-                    </div> <!-- fisrt col -->
-
-
-
-                    <div class="col-md-4">
-                        <h4 class="text-right"><span class="text-muted">Assigned to: </span><span class="label label-@(notassigned?"default":"info")"><span class="fa fa-user"></span>&nbsp; @assignee</span></h4>
-
-                        @using (Html.BeginForm())
-                        {
-                            @Html.AntiForgeryToken()
-                            <hr />
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            @Html.HiddenFor(model => model.task_id)
-                            @Html.HiddenFor(model => model.project_id)
-                            @Html.HiddenFor(model => model.created_on)
-                            @Html.HiddenFor(model => model.created_by)
-                            @Html.HiddenFor(model => model.description)
-
-                            <div class="form-group pad20">
-                                @*@Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-4" })*@
-                                <div class="col-md-4">
-                                    <label for="status" class="control-label">Status <span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
-
-                                </div>
-
-                                <div class="col-md-8">
-
-                                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select submitme" })
-                                    @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
-                                    <span class="text-light"><small>&nbsp;<span class="fa fa-info-circle"></span> Only <b>Owner</b> can close task</small></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group pad20">
-                                @*@Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-4" })*@
-                                <div class="col-md-4">
-                                    <label for="assigned_to" class="control-label">Assigned&nbsp;<span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
-                                    </div>
-                                    <div class="col-md-8">
-
-                                        @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select submitme" })
-                                        @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                            <div class="form-group pad20">
-                                @Html.LabelFor(model => model.owner, htmlAttributes: new { @class = "control-label col-md-4" })
-                                <div class="col-md-8">
-                                    @if (is_readonly)
-                                    {
-                                        <input type="text" class="form-control" readonly value="@Model.user2.fullname" />                                        
-                                        @Html.HiddenFor(model => model.owner)
-                                    }
-                                    else
-                                    {
-                                        @Html.DropDownList("owner", null, new { @class = "form-control chosen-select" })
-
-                                    }
-                                    @Html.ValidationMessageFor(model => model.owner, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-
-                            <div class="form-group  pad20">
-                                @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-4" })
-                                <div class="col-md-8">
-
-                                    @if (is_readonly)
-                                    {
-                                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })                                        
-                                    }
-                                    else
-                                    {
-                                        @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-
-                                    }
-                                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group pad20">
-                                @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label col-md-4" })
-                                <div class="col-md-8">
-
-                                    @if (is_readonly)
-                                    {
-                                        
-                                        <input type="text" class="form-control" readonly value="@Model.TypeDesc" />
-                                        @Html.HiddenFor(model => model.type)
-
-                                    }
-                                    else
-                                    {
-                                        @Html.DropDownList("type", null, new { @class = "form-control chosen-select" })
-
-                                    }
-                                    @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-
-                            <div class="form-group  pad20">
-                                @Html.LabelFor(model => model.initiator, htmlAttributes: new { @class = "control-label col-md-4" })
-                                <div class="col-md-8">
-                                    @if (is_readonly)
-                                    {
-                                        @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control", @readonly = "" } })
-
-                                    }
-                                    else
-                                    {
-                                        @Html.EditorFor(model => model.initiator, new { htmlAttributes = new { @class = "form-control" } })
-
-                                    }
-                                    @Html.ValidationMessageFor(model => model.initiator, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group pad20">
-                                @Html.LabelFor(model => model.priority, htmlAttributes: new { @class = "control-label col-md-4" })
-                                <div class="col-md-8">
-                                    @if (is_readonly)
-                                    {
-                                        <input type="text" class="form-control" readonly value="@Model.PriorityDesc" />
-                                        @Html.HiddenFor(model => model.priority)
-                                    }
-                                    else
-                                    {
-                                        @Html.DropDownList("priority", null, htmlAttributes: new { @class = "form-control chosen-select" })
-                                    }
-
-
-                                    @Html.ValidationMessageFor(model => model.priority, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-
-                            <div class="form-group pad20">
-                                @Html.LabelFor(model => model.complexity, htmlAttributes: new { @class = "control-label col-md-4" })
-                                <div class="col-md-8">
-
-                                    @if (is_readonly)
-                                    {
-                                        
-                                        <input type="text" class="form-control" readonly value="@Model.ComplexityDesc" />
-                                        @Html.HiddenFor(model => model.complexity)
-
-
-                                    }
-                                    else
-                                    {
-                                        @Html.DropDownList("complexity", null, htmlAttributes: new { @class = "form-control chosen-select" })
-
-                                    }
-
-
-                                    @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group pad20">
-                                
-                                <div class="col-md-4">
-                                    <label for="due_date" class="control-label">Due Date <span style="color:#31B0D5;font-size:1.2em" class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="If date is lost, click on RESET"></span></label>
-                                    
-                                </div>
-                                <div class="col-md-8">
-                                    @if (is_readonly)
-                                    {
-                                        
-                                        
-                                        if(Model.due_date.HasValue)
-                                        {
-                                        <input type="text" value="@Model.due_date.Value.ToString("dd/MM/yyyy")" readonly="readonly" class="form-control" />
-
-                                        }
-                                        else
-                                        {
-                                            <input type="text" value="" readonly="readonly" class="form-control" />
-                                        }
-
-                                        @Html.HiddenFor(model => model.due_date)
-                                    }
-                                    else
-                                    {
-                                    @Html.EditorFor(model => model.due_date, new { htmlAttributes = new { @class = "form-control datepicker", @placeholder = "dd/mm/yyyy" } })
-
-                                    }
-                                    @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
-                                    
-                                </div>
-                            </div>
-
-
-                            if (!is_readonly)
-                            {
-
-                                <div class="form-group pad20">
-                                    <div class="col-md-offset-4 col-md-8 text-center">
-
-                                        <input type="submit" id="savestatusbutton" value="Save" class="btn btn-info" />
-                                        <input type="reset" value="Reset" class="btn btn-default" />
-                                    </div>
-                                </div>
-
-                            }
-
-
-                            <div class="form-group pad20" id="infosave" style="display:none">
-                                <div class="col-md-offset-4 col-md-8 text-center">
-
-                                    <small class="text-muted"><span class="fa fa-warning"></span> &nbsp;close or save the comment to enable save button</small>
-                                </div>
-                            </div>
-
-                        }
-                    </div><!-- second col-->
-
-            </div> <!--end row-->
-
-        
-
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-
-<!-- Large modal -->
-@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Large modal</button>*@
-
-@section Modals {
-<!-- Modal -->
-
-    <style>
-        .modal-dialog
-        {
-            width:900px;
-        }
-    </style>
-
-<!-- add comment modal -->
-<div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel"><span class="fa fa-comment"></span> &nbsp;Add Comments</h4>
-            </div>
-@using (Html.BeginForm("CreateComment", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
-{
-            <div class="modal-body">
-                
-                    @Html.AntiForgeryToken()
-
-                    <div class="form-horizontal">
-                        
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                        <input type="hidden" name="task_id" value="@Model.task_id" />
-
-                        <div class="form-group">                            
-                            <div class="col-md-12">
-                                <input type="text" class="form-control" name="title" placeholder="add your title here" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                                                        
-                            <div class="col-md-12">
-                                <textarea name="description" class="tinymce" cols="20" rows="2" placeholder="add your description here"></textarea>
-                            </div>
-                        </div>
-
-                    </div>
  
+                <hr />
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-info">Save changes</button>
             </div>
 }
         </div>
     </div>
 </div>
 
-<!-- edit comment modal -->
-<div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
-<!-- show comment modal -->
-<div class="modal fade" id="showCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
+                    <!-- add comment modal -->
+                    <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel"><span class="fa fa-comment"></span> &nbsp;Add Comments</h4>
+                                </div>
+                                @using (Html.BeginForm("CreateComment", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
+                                {
+                                    <div class="modal-body">
 
- }
+                                        @Html.AntiForgeryToken()
 
+                                        <div class="form-horizontal">
 
-@section Scripts {
-@Scripts.Render("~/bundles/jqueryval")
-    @*@Scripts.Render("~/bundles/nicedit")*@
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    
-<script src="@Url.Content("~/Scripts/plugins/tinymce/tinymce.min.js")"></script>
+                                            <input type="hidden" name="task_id" value="@Model.task_id" />
 
-    <script>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <input type="text" class="form-control" name="title" placeholder="add your title here" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
 
-        tinymce.init({
-            selector: '.tinymce',
-            plugins: "textcolor table code advlist emoticons charmap hr image link placeholder",
-            toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
-        });
+                                                <div class="col-md-12">
+                                                    <textarea name="description" class="tinymce" cols="20" rows="2" placeholder="add your description here"></textarea>
+                                                </div>
+                                            </div>
 
+                                        </div>
 
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
 
-        
-        $(document).ready(function () {
+                    <!-- edit comment modal -->
+                    <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
+                    <!-- show comment modal -->
+                    <div class="modal fade" id="showCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
 
-            $('#editCommentModal').on('hide.bs.modal', function (e) {
-                alert('removing editor');
-                tinyMCE.execCommand('mceRemoveEditor', false, 'tinymceid');
-            });
-
-
-            tinyMCE.execCommand('mceAddEditor', false, 'tinymceid');
-
-
-            $('body').on('click', '.showcommentmodal', function () {
-                var commentid = $(this).data('commentid');
-                
-                ShowComment(commentid);
-            });
-
-
-            $('body').on('click', '.editcommentmodal', function () {
-                var commentid = $(this).data('commentid');
-
-                EditComment(commentid);
-            });
-
-            function ShowComment(commentId) {
-                $.ajax({
-                    url: getVirtualDir() + "tasks/ShowModalComment",
-                    data: { commentid: commentId },
-                    success: function (data) {
-                        $('#showCommentModal').html(data);
-                        $('#showCommentModal').modal('show');
-                        
-
-                    }
-                });
-            }
-
-            function EditComment(commentId) {
-                $.ajax({
-                    url: getVirtualDir() + "tasks/ShowEditComment",
-                    data: {commentid : commentId },
-                    success: function (data) {
-                        $('#editCommentModal').html(data);
-                        
-                        tinyMCE.execCommand('mceAddEditor', false, '.tinymceid');
-                        $('#editCommentModal').modal('show');
-
-                    }
-                });
             }
 
 
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $('.chosen-select').chosen();
-
-            $('.chosen-select-sendto').chosen(
-                {
-                    width:'150px'
-                });
-
-            //var _minyear = new Date().getFullYear();
-            //var _max_year = _minyear + 1;
-
-            $('body').on('click', '.shownextsection', function () {
-
-                $(this).next('section').toggle();
-            });
-
-            $('.datepicker').datepicker({
-                startDate: '0',
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                clearBtn: true
-            });
-
-            //fix for chrome
-            jQuery.validator.methods["date"] = function (value, element) { return true; }
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+                @*@Scripts.Render("~/bundles/nicedit")*@
 
 
-            $('body').on('change', '.submitme', function () {
-                $(this).closest('form').trigger('submit');
-            });
+                <script src="@Url.Content("~/Scripts/plugins/tinymce/tinymce.min.js")"></script>
+
+                <script>
+
+                    tinymce.init({
+                        selector: '.tinymce',
+                        plugins: "textcolor table code advlist emoticons charmap hr image link placeholder",
+                        toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
+                    });
 
 
 
-            $('body').on('click', '.showsection', function () {
-                var section = $(this).data("sectionnum");
-                $(section).toggle();
 
-                $('#savestatusbutton').prop('disabled', false);
-                $('#infosave').hide();
+                    $(document).ready(function () {
 
-                if (section == '.section1')
-                {
+                        $('body').on('click', '.uploadAttachementForComment', function() {                         
+                            var commentid = $(this).data('commentid');
+                            $('#attachment_comment_id').val(commentid);
+                        });
 
-                    if ($(section).is(":visible"))
-                    {
-                        $('#savestatusbutton').prop('disabled', true);
-                        $('#infosave').show();
-                        //alert('visible');
+                        $('#uploadAttachmentModal').on('shown.bs.modal', function (e) {
+                        });
+
+
+                        $('body').on('click', '.hidecomment', function () {
+                            var commentid = $(this).data('commentid');
+                            $('.commentcontent-' + commentid).hide();
+                        });
+
+
+                        $('body').on('click', '.closeeditcomment', function () {
+                            var commentid = $(this).data('commentid');
+                            $('.commentcontent-' + commentid).show();
+                            $(this).closest('section').hide();
+                        });
+
+
+                        $('body').on('click', '.showcommentmodal', function () {
+                            var commentid = $(this).data('commentid');
+                            ShowComment(commentid);
+                        });
+
+
+                        $('body').on('click', '.editcommentmodal', function () {
+                            var commentid = $(this).data('commentid');
+
+                            EditComment(commentid);
+                        });
+
+                        function ShowComment(commentId) {
+                            $.ajax({
+                                url: getVirtualDir() + "tasks/ShowModalComment",
+                                data: { commentid: commentId },
+                                success: function (data) {
+                                    $('#showCommentModal').html(data);
+                                    $('#showCommentModal').modal('show');
+
+
+                                }
+                            });
+                        }
+
+                        function EditComment(commentId) {
+                            $.ajax({
+                                url: getVirtualDir() + "tasks/ShowEditComment",
+                                data: { commentid: commentId },
+                                success: function (data) {
+                                    $('#editCommentModal').html(data);
+
+                                    tinyMCE.execCommand('mceAddEditor', false, '.tinymceid');
+                                    $('#editCommentModal').modal('show');
+
+                                }
+                            });
+                        }
+
+
+                        $('[data-toggle="tooltip"]').tooltip();
+
+                        $('.chosen-select').chosen();
+
+                        $('.chosen-select-sendto').chosen(
+                            {
+                                width: '150px'
+                            });
+
+                        //var _minyear = new Date().getFullYear();
+                        //var _max_year = _minyear + 1;
+
+                        $('body').on('click', '.shownextsection', function () {
+
+                            $(this).next('section').toggle();
+                        });
+
+                        $('.datepicker').datepicker({
+                            startDate: '0',
+                            format: 'dd/mm/yyyy',
+                            autoclose: true,
+                            clearBtn: true
+                        });
+
+                        //fix for chrome
+                        jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+                        $('body').on('change', '.submitme', function () {
+                            $(this).closest('form').trigger('submit');
+                        });
+
+
+
+                        $('body').on('click', '.showsection', function () {
+                            var section = $(this).data("sectionnum");
+                            $(section).toggle();
+
+                            $('#savestatusbutton').prop('disabled', false);
+                            $('#infosave').hide();
+
+                            if (section == '.section1') {
+
+                                if ($(section).is(":visible")) {
+                                    $('#savestatusbutton').prop('disabled', true);
+                                    $('#infosave').show();
+                                    //alert('visible');
+                                }
+                            }
+
+                            //$(this).next('section'+'.'+x).toggle();
+                        });
+
+                        $('body').on('change', '#checkall', function () {
+                            if ($(this).prop('checked')) {
+                                $('.notification').prop('checked', true);
+                            } else {
+                                $('.notification').prop('checked', false);
+                            }
+
+                        });
+
+
+                        $('body').on('click', '.collapseall', function () {
+                            $('.toggleshowhide').text('(more)');
+                            $('.allcomments').hide();
+                        });
+
+
+
+                        $('body').on('click', '.expandall', function () {
+                            $('.toggleshowhide').text('(hide)');
+                            $('.allcomments').show();
+                        });
+
+
+                        $('body').on('click', '.toggleshowhide', function () {
+                            if ($(this).html() == '[more]') {
+                                $(this).text('(hide)');
+                            } else {
+                                $(this).text('[more]');
+                            }
+                        });
+
+                        //$('.combodate').combodate({
+
+                        //    minYear: _minyear,
+                        //    maxYear: _max_year,
+                        //});
+
+
+                        //$('body').on('click', '#closeAddComment', function () {
+                        //    $('#savestatusbutton').prop('disabled', false);
+                        //    $('#infosave').hide();
+                        //    $(this).closest('section').hide();
+                        //});
+
+
+                    });
+
+                    function initialise() {
+                        tinymce.init({
+                            selector: '.tinymce',
+                            plugins: "textcolor table code advlist emoticons charmap hr image link placeholder",
+                            toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
+                        });
+
                     }
-                }
 
-                //$(this).next('section'+'.'+x).toggle();
-            });
-
-            $('body').on('change', '#checkall', function () {
-                if ($(this).prop('checked')) {
-                    $('.notification').prop('checked', true);
-                } else {
-                    $('.notification').prop('checked', false);
-                }
-
-            });
-
-            
-            $('body').on('click', '.collapseall', function () {
-                $('.toggleshowhide').text('(more)');
-                $('.allcomments').hide();
-            });
-
-
-
-            $('body').on('click', '.expandall', function () {
-                $('.toggleshowhide').text('(hide)');
-                $('.allcomments').show();
-            });
-
-
-            $('body').on('click', '.toggleshowhide', function () {
-                if($(this).html()=='[more]')
-                {
-                    $(this).text('(hide)');
-                } else {
-                    $(this).text('[more]');
-                }
-            });
-
-            //$('.combodate').combodate({
-    
-            //    minYear: _minyear,
-            //    maxYear: _max_year,
-            //});
-       
-
-            //$('body').on('click', '#closeAddComment', function () {
-            //    $('#savestatusbutton').prop('disabled', false);
-            //    $('#infosave').hide();
-            //    $(this).closest('section').hide();
-            //});
-
-
-        });
-
-        function initialise() {
-            tinymce.init({
-                selector: '.tinymce',
-                plugins: "textcolor table code advlist emoticons charmap hr image link placeholder",
-                toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
-            });
-
-        }
-
-    </script>
-}
+                </script>
+            }
