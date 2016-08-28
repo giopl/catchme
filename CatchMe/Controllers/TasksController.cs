@@ -1579,6 +1579,53 @@ namespace CatchMe.Controllers
         }
 
 
+
+
+        public ActionResult ShowModalComment(int commentid)
+        {
+            try
+            {
+
+                var comment = db.comments.Find(commentid);
+
+                var form = RenderRazorViewToString(this.ControllerContext, "_ShowComment", comment);
+
+                ContentResult response = new ContentResult();
+                response.Content = form;
+                return response;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+
+        public ActionResult ShowEditComment(int commentid)
+        {
+            try
+            {
+
+                var comment = db.comments.Find(commentid);
+
+                var form = RenderRazorViewToString(this.ControllerContext, "_editComment", comment);
+
+                ContentResult response = new ContentResult();
+                response.Content = form;
+                return response;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
         [HttpPost]
         public ActionResult EditComment(comment comment)
         {

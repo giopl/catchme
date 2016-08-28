@@ -56,43 +56,7 @@
                 <a href="javascript:void(0);" class="collapseall" title="collapse all"><span class="fa fa-compress"></span></a>
                 <br />
 
-                @*<section style="display:none" class="section1">
-
-                    @using (Html.BeginForm("CreateComment", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
-                    {
-                    @Html.AntiForgeryToken()
-
-                    <div class="form-horizontal">
-                        <h4><span class="fa fa-comment"></span> &nbsp;Comments</h4>
-                        <hr />
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                        <input type="hidden" name="task_id" value="@Model.task_id" />
-
-                        <div class="form-group">
-                            <label class="col-md-2">Title</label>
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" name="title" placeholder="Title (optional)" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2">
-                                Description
-                                <br /><br />
-                                <input type="submit" class="btn btn-info" value="save" />
-                                <br />
-                                <input type="reset" class="btn btn-link" id="closeAddComment" value="close" />
-                            </label>
-                            <div class="col-md-10">
-                                <textarea name="description" class="tinymce" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="comment"></textarea>
-                            </div>
-                        </div>
-
-                    </div>
-                    }
-
-                </section>*@
-
+                
                 <section style="display:none" class="section2">
                     <h4><span class="fa fa-envelope"></span> &nbsp;Notifications</h4>
                     <hr />
@@ -262,6 +226,9 @@
                         <br /><br />
                 
             @{ var cnt = 0;}
+            
+            
+
                         @foreach (var comment in Model.comments.OrderByDescending(x => x.created_on))
                         {
 
@@ -291,7 +258,9 @@
                                 @*<a href="#" data-toggle="modal" data-target="#myModal"><small>show</small></a>*@
                                 @if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
                                 {
-                                <a href="javascript:void(0);" class="shownextsection"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>
+                                    @*<a href="javascript:void(0);" class="shownextsection showcommentmodal" data-commentid="@comment.comment_id"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>*@
+                                    <a href="javascript:void(0);" class="showcommentmodal" data-commentid="@comment.comment_id"><span class="fa fa-search-plus"></span><small>&nbsp;Show</small></a>
+                                    @:&nbsp;|&nbsp;<a href="javascript:void(0);" class="editcommentmodal" data-commentid="@comment.comment_id"><span class="fa fa-edit"></span><small>&nbsp;Edit</small></a>
                                         @*<a href="#" data-toggle="modal" data-target="#editCommentModal">edit modal</a>*@
                                 }
                                 
@@ -334,6 +303,7 @@
                                 </section>
                             </section>
             <ul>
+                
         @foreach (var att in comment.attachments)
         {
         <li>
@@ -597,6 +567,7 @@
         }
     </style>
 
+<!-- add comment modal -->
 <div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -612,7 +583,6 @@
 
                     <div class="form-horizontal">
                         
-                        
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                         <input type="hidden" name="task_id" value="@Model.task_id" />
@@ -625,7 +595,7 @@
                         <div class="form-group">
                                                         
                             <div class="col-md-12">
-                                <textarea name="description" class="tinymce" id="area2" cols="20" rows="2" style="width:620px;height:200px" placeholder="add your description here"></textarea>
+                                <textarea name="description" class="tinymce" cols="20" rows="2" placeholder="add your description here"></textarea>
                             </div>
                         </div>
 
@@ -641,23 +611,11 @@
     </div>
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body">
-                <div id="modal-content"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- edit comment modal -->
+<div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
+<!-- show comment modal -->
+<div class="modal fade" id="showCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
+
  }
 
 
@@ -676,18 +634,59 @@
             toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
         });
 
+
+
         
         $(document).ready(function () {
 
+            $('#editCommentModal').on('hide.bs.modal', function (e) {
+                alert('removing editor');
+                tinyMCE.execCommand('mceRemoveEditor', false, 'tinymceid');
+            });
 
-            $('#myModal').on('show.bs.modal', function (e) {
-                var x = $(this).parent().find('h4').text();
 
-                alert(x);
-                $('#modal-content').html(x);
+            tinyMCE.execCommand('mceAddEditor', false, 'tinymceid');
 
-            })
 
+            $('body').on('click', '.showcommentmodal', function () {
+                var commentid = $(this).data('commentid');
+                
+                ShowComment(commentid);
+            });
+
+
+            $('body').on('click', '.editcommentmodal', function () {
+                var commentid = $(this).data('commentid');
+
+                EditComment(commentid);
+            });
+
+            function ShowComment(commentId) {
+                $.ajax({
+                    url: getVirtualDir() + "tasks/ShowModalComment",
+                    data: { commentid: commentId },
+                    success: function (data) {
+                        $('#showCommentModal').html(data);
+                        $('#showCommentModal').modal('show');
+                        
+
+                    }
+                });
+            }
+
+            function EditComment(commentId) {
+                $.ajax({
+                    url: getVirtualDir() + "tasks/ShowEditComment",
+                    data: {commentid : commentId },
+                    success: function (data) {
+                        $('#editCommentModal').html(data);
+                        
+                        tinyMCE.execCommand('mceAddEditor', false, '.tinymceid');
+                        $('#editCommentModal').modal('show');
+
+                    }
+                });
+            }
 
 
             $('[data-toggle="tooltip"]').tooltip();
@@ -699,8 +698,8 @@
                     width:'150px'
                 });
 
-            var _minyear = new Date().getFullYear();
-            var _max_year = _minyear + 1;
+            //var _minyear = new Date().getFullYear();
+            //var _max_year = _minyear + 1;
 
             $('body').on('click', '.shownextsection', function () {
 
@@ -754,10 +753,6 @@
 
             });
 
-
-
-
-            
             
             $('body').on('click', '.collapseall', function () {
                 $('.toggleshowhide').text('(more)');
@@ -781,21 +776,30 @@
                 }
             });
 
-            $('.combodate').combodate({
+            //$('.combodate').combodate({
     
-                minYear: _minyear,
-                maxYear: _max_year,
-            });
+            //    minYear: _minyear,
+            //    maxYear: _max_year,
+            //});
        
 
-            $('body').on('click', '#closeAddComment', function () {
-                $('#savestatusbutton').prop('disabled', false);
-                $('#infosave').hide();
-                $(this).closest('section').hide();
-            });
+            //$('body').on('click', '#closeAddComment', function () {
+            //    $('#savestatusbutton').prop('disabled', false);
+            //    $('#infosave').hide();
+            //    $(this).closest('section').hide();
+            //});
 
-            
 
         });
+
+        function initialise() {
+            tinymce.init({
+                selector: '.tinymce',
+                plugins: "textcolor table code advlist emoticons charmap hr image link placeholder",
+                toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
+            });
+
+        }
+
     </script>
 }
