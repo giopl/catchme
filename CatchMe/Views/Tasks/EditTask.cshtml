@@ -14,6 +14,8 @@
     var is_closed = Model.status == 9;
 }
 
+<input id="original_status" type="hidden" value="@Model.status" />
+<button id="test">test</button>
 <br />
 <div class="row">
     <div class="col-md-8">
@@ -326,7 +328,8 @@
 
                 <div class="col-md-8">
 
-                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select submitme" })
+                    @*@Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select submitme" })*@
+                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select statuschange" , @id="reset_statusid"})
                     @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
                     <span class="text-light"><small>&nbsp;<span class="fa fa-info-circle"></span> Only <b>Owner</b> can close task</small></span>
                 </div>
@@ -495,13 +498,13 @@
                             if (!is_readonly)
                             {
 
-            <div class="form-group pad20">
-                <div class="col-md-offset-4 col-md-8 text-center">
+                                <div class="form-group pad20">
+                                    <div class="col-md-offset-4 col-md-8 text-center">
 
-                    <input type="submit" id="savestatusbutton" value="Save" class="btn btn-info" />
-                    <input type="reset" value="Reset" class="btn btn-default" />
-                </div>
-            </div>
+                                        <input type="submit" id="savestatusbutton" value="Save" class="btn btn-info" />
+                                        <input type="reset" value="Reset" class="btn btn-default" />
+                                    </div>
+                                </div>
 
                             }
 
@@ -626,6 +629,64 @@
                         </div>
                     </div>
 
+    <!-- status change modal -->
+<div class="modal fade" id="statusChangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><span class="fa fa-comment"></span> <span id="taskstatuschange_modaltitle"></span></h4>
+            </div>
+            @using (Html.BeginForm("TaskStatusChange", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <input type="hidden" name="taskid" value="@Model.task_id" />
+                        <input type="hidden" name="status" value="-1" id="taskstatuschange_statusid" />
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" name="title" placeholder="Optional"  />
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-md-12">
+                                <textarea name="comment" class="tinymce" cols="20" rows="2" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-1">
+                                <strong>Re-assign:</strong>
+                            </div>
+                            <div class="col-md-8">
+                                @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select-sendto" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Status Change</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
                     <!-- edit comment modal -->
                     <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
                     <!-- show comment modal -->
@@ -644,6 +705,7 @@
                 <script>
 
                     tinymce.init({
+                        
                         selector: '.tinymce',
                         plugins: "textcolor table code advlist emoticons charmap hr image link placeholder",
                         toolbar: "bold italic underline forecolor backcolor table strikethrough  code emoticons bullist numlist  link"
@@ -654,12 +716,23 @@
 
                     $(document).ready(function () {
 
+
+                        $('#test').click(function () {
+                            $('.statuschange').val('0');
+                        })
+
                         $('body').on('click', '.uploadAttachementForComment', function() {                         
                             var commentid = $(this).data('commentid');
                             $('#attachment_comment_id').val(commentid);
                         });
 
-                        $('#uploadAttachmentModal').on('shown.bs.modal', function (e) {
+                        $('#statusChangeModal').on('hide.bs.modal', function (e) {
+
+                            var orig_status = $('#original_status').val();
+
+                            alert(orig_status);
+                            $('.statuschange').val("'"+orig_status+"'");
+
                         });
 
 
@@ -682,11 +755,11 @@
                         });
 
 
-                        $('body').on('click', '.editcommentmodal', function () {
-                            var commentid = $(this).data('commentid');
+                        //$('body').on('click', '.editcommentmodal', function () {
+                        //    var commentid = $(this).data('commentid');
 
-                            EditComment(commentid);
-                        });
+                        //    EditComment(commentid);
+                        //});
 
                         function ShowComment(commentId) {
                             $.ajax({
@@ -701,24 +774,25 @@
                             });
                         }
 
-                        function EditComment(commentId) {
-                            $.ajax({
-                                url: getVirtualDir() + "tasks/ShowEditComment",
-                                data: { commentid: commentId },
-                                success: function (data) {
-                                    $('#editCommentModal').html(data);
+                        //function EditComment(commentId) {
+                        //    $.ajax({
+                        //        url: getVirtualDir() + "tasks/ShowEditComment",
+                        //        data: { commentid: commentId },
+                        //        success: function (data) {
+                        //            $('#editCommentModal').html(data);
 
-                                    tinyMCE.execCommand('mceAddEditor', false, '.tinymceid');
-                                    $('#editCommentModal').modal('show');
+                        //            tinyMCE.execCommand('mceAddEditor', false, '.tinymceid');
+                        //            $('#editCommentModal').modal('show');
 
-                                }
-                            });
-                        }
+                        //        }
+                        //    });
+                        //}
 
 
                         $('[data-toggle="tooltip"]').tooltip();
 
                         $('.chosen-select').chosen();
+                        
 
                         $('.chosen-select-sendto').chosen(
                             {
@@ -745,8 +819,21 @@
 
 
                         $('body').on('change', '.submitme', function () {
+                            //$('#addCommentModal').modal('show');
                             $(this).closest('form').trigger('submit');
+                            
                         });
+
+                        $('body').on('change', '.statuschange', function () {
+                            var status = $(this).val();                           
+                            $('#taskstatuschange_statusid').val(status);                    
+                            var statuses = ["New", "Action", "Investigation", "Completed", "On Hold", "Problem", "No Issue", "Passed", "Failed", "Closed", "For Test"];
+                            var newtitle = "Status Changed:" + statuses[status];
+                            $('#taskstatuschange_modaltitle').html("Status Changed: <b>" + statuses[status]+"</b>");
+                            $('#statusChangeModal').modal('show');
+
+                        });
+
 
 
 

@@ -171,6 +171,7 @@
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\EmailRecipient.cs" />
     <Compile Include="Helpers\SelectItems.cs" />
+    <Compile Include="Models\ViewModel\StatusChangedViewModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\UserSession.cs" />

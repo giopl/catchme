@@ -1186,6 +1186,71 @@ namespace CatchMe.Controllers
             return View(task);
         }
 
+
+        public ActionResult TaskStatusChange(StatusChangedViewModel model)
+        {
+            try
+            {
+                var oldtask = db.tasks.AsNoTracking().Where(x => x.task_id == model.taskId).FirstOrDefault();            
+
+                var _task = db.tasks.Find(model.taskId);
+
+                if(_task == null)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                _task.status = model.status;
+
+                var _statusDesc = _task.StatusDesc;
+
+                _task.assigned_to = model.assigned_to;
+
+                if (!string.IsNullOrWhiteSpace(model.title) || !string.IsNullOrWhiteSpace(model.comment))
+                {
+                    comment _comment = new comment
+                    {
+                        created_on = DateTime.Now,
+                        task_id = model.taskId,
+                        description = model.comment,
+                        title = string.Format("{0}: {1}", _statusDesc, model.title),
+                        user_id = UserSession.Current.UserId
+                    , updated_by = 0, updated_on = DateTime.Now};
+
+                    db.comments.Add(_comment);
+                        db.SaveChanges();
+
+                }
+
+                
+
+                //if the task is marked as completed or No Issue, assign it back to the owner
+                if (_task.status == 3)
+                {
+                    _task.assigned_to = _task.owner;
+                }
+
+                _task.updated_on = DateTime.Now;
+                _task.updated_by = UserSession.Current.UserId;
+                _task.state = 0;
+                db.Entry(_task).State = EntityState.Modified;
+                db.SaveChanges();
+
+                logChanges(oldtask, _task);
+                
+                return RedirectToAction("EditTask", new { id = _task.task_id });
+
+
+                
+            }
+            catch (Exception e)
+            {
+                
+                throw;
+            }
+        }
+
+
         private void logChanges(task oldtask, task newtask)
         {
             try 
