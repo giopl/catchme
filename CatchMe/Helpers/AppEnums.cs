@@ -83,7 +83,8 @@ namespace CatchMe.Helpers
             Bug,
             Failure,
             Test,
-            Investigation
+            Investigation,
+            Configuration
         }
 
 
