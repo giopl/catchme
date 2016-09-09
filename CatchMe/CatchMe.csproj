@@ -336,6 +336,7 @@
     <Content Include="notes\CatchMeDB%2820160826%29.zip" />
     <Content Include="notes\CRM.zip" />
     <Content Include="notes\crm prez infra2.zip" />
+    <Content Include="notes\CRM-final.zip" />
     <None Include="Properties\PublishProfiles\dwh-appsdev %28Debug%29.pubxml" />
     <None Include="Properties\PublishProfiles\local %28www%29.pubxml" />
     <None Include="Properties\PublishProfiles\TestSite %28dwh-appsdev%29.pubxml" />
