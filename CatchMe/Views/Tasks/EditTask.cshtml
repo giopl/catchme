@@ -1,5 +1,6 @@
 ﻿@model CatchMe.Models.task
 @using session = CatchMe.Helpers.UserSession
+
 @{
     ViewBag.Title = "Edit Task";
 
@@ -10,8 +11,16 @@
     var users = ViewBag.EmailTo as List<CatchMe.Models.user>;
 
     var is_readonly = Model.IsReadonly;
+    
+    
 
     var is_closed = Model.status == 9;
+
+    var is_business = session.Current.IsBusiness;
+    if(is_business)
+    {
+        is_readonly = true;
+    }
 }
 
 <input id="original_status" type="hidden" value="@Model.status" />
@@ -52,7 +61,12 @@
         }
 
         <a href="#" class="showsection" data-sectionnum=".section2"><span class="fa fa-envelope"></span>&nbsp;Notify </a>&nbsp;|&nbsp;
-        <a href="#" class="showsection" data-sectionnum=".section3"><span class="fa fa-history"></span>&nbsp;History (@Model.History.Count)</a>&nbsp;|&nbsp;
+    @if(!is_business)
+    {
+
+        <a href="#" class="showsection" data-sectionnum=".section3"><span class="fa fa-history"></span>&nbsp;History (@Model.History.Count)</a>@:&nbsp;|&nbsp;
+    }
+        
         <a href="#" class="showsection" data-sectionnum=".section4"><span class="fa fa-paperclip"></span>&nbsp;<span class="@(Model.attachments.Count>0?"boldme":"")"> Attachments (@Model.attachments.Count)</span></a>&nbsp;|&nbsp;
         <a href="javascript:void(0);" class="expandall" title="show all"><span class="fa fa-expand"></span></a>
         <a href="javascript:void(0);" class="collapseall" title="collapse all"><span class="fa fa-compress"></span></a>
@@ -319,32 +333,36 @@
             @Html.HiddenFor(model => model.created_by)
             @Html.HiddenFor(model => model.description)
 
-            <div class="form-group pad20">
-                @*@Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-4" })*@
-                <div class="col-md-4">
-                    <label for="status" class="control-label">Status <span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
+            if (!is_business)
+            {
+                <div class="form-group pad20">
+                    @*@Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-4" })*@
+                    <div class="col-md-4">
+                        <label for="status" class="control-label">Status <span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
+                    </div>
+
+                    <div class="col-md-8">
+
+                        @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select submitme" })
+                        @*@Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select statuschange" , @id="reset_statusid"})*@
+                        @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
+                        <span class="text-light"><small>&nbsp;<span class="fa fa-info-circle"></span> Only <b>Owner</b> can close task</small></span>
+                    </div>
                 </div>
 
-                <div class="col-md-8">
+                <div class="form-group pad20">
+                    @*@Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-4" })*@
+                    <div class="col-md-4">
+                        <label for="assigned_to" class="control-label">Assigned&nbsp;<span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
+                    </div>
+                    <div class="col-md-8">
 
-                    @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select submitme" })
-                    @*@Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select statuschange" , @id="reset_statusid"})*@
-                    @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
-                    <span class="text-light"><small>&nbsp;<span class="fa fa-info-circle"></span> Only <b>Owner</b> can close task</small></span>
+                        @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select submitme" })
+                        @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
+            }
 
-            <div class="form-group pad20">
-                @*@Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-4" })*@
-                <div class="col-md-4">
-                    <label for="assigned_to" class="control-label">Assigned&nbsp;<span style="color:#31B0D5;font-size:1.2em" class="fa fa-save" data-toggle="tooltip" data-placement="top" title="Auto Saves when value changes"></span></label>
-                </div>
-                <div class="col-md-8">
-
-                    @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select submitme" })
-                    @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
-                </div>
-            </div>
             <div class="form-group pad20">
                 @Html.LabelFor(model => model.owner, htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
