@@ -338,6 +338,8 @@
     <Content Include="notes\crm prez infra2.zip" />
     <Content Include="notes\CRM-final.zip" />
     <Content Include="notes\ibm certification.zip" />
+    <Content Include="notes\DB2-10.5-with-BLU-Acceleration.pdf" />
+    <Content Include="notes\C2090-615_Sample_QA.pdf" />
     <None Include="Properties\PublishProfiles\dwh-appsdev %28Debug%29.pubxml" />
     <None Include="Properties\PublishProfiles\local %28www%29.pubxml" />
     <None Include="Properties\PublishProfiles\TestSite %28dwh-appsdev%29.pubxml" />
