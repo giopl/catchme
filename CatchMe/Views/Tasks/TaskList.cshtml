@@ -8,6 +8,8 @@
 
     ViewBag.Title = "Catch Me";
 
+    var isBusiness = session.Current.IsBusiness;
+    
     var countopen = Model.Where(x => x.status != 9).Count();
     var countme = Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9).Count();
     //var countme = Model.Where(x => (x.assigned_to == session.Current.UserId && x.owner != session.Current.UserId && x.status != 9 && x.status != 3 && x.status != 7) || x.owner == session.Current.UserId && (x.status == 7 || x.status == 3)).Count();
@@ -146,9 +148,16 @@ table.fixed td { overflow: hidden; }
                         <th width="10%">
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
-                        <th width="14%">
-                            Due on
-                        </th>
+
+                        
+
+                        @if (!isBusiness)
+                        {
+                            <th width="14%">
+                                Due on
+                            </th>
+                        }
+                        
 
                         
                         <td><span class="fa fa-paperclip"></span></td>
@@ -179,9 +188,15 @@ table.fixed td { overflow: hidden; }
                             <td data-order="@item.priority">
                                 <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
                             </td>
-                            <td class="@(item.IsOverdue?"red":"")">
-                                @Html.DisplayFor(modelItem => item.due_date)
-                            </td>
+                            
+
+                            @if (!isBusiness)
+                            {
+                                <td class="@(item.IsOverdue?"red":"")">
+                                    @Html.DisplayFor(modelItem => item.due_date)
+                                </td>
+                            }
+                            
                             <td data-order="@(item.HasAttachment?1:0)">
                                 <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
                             </td>
@@ -210,10 +225,14 @@ table.fixed td { overflow: hidden; }
                         <th>
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
-                        <th width="14%">
-                            Due On
-                        </th>
-                        <td></td>
+                        <th>Status</th>
+                        @if (!isBusiness)
+                        {
+                            <th width="14%">Due On</th>
+                            <td>Since</td>
+                        }
+                        
+                        
 
                         <th><span class="fa fa-paperclip"></span></th>
                         <td><span class="fa fa-trash"></span></td>
@@ -244,10 +263,15 @@ table.fixed td { overflow: hidden; }
                             <td data-order="@item.priority">
                                 <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
                             </td>
-                            <td class="@(item.IsOverdue?"red":"")">
-                                @Html.DisplayFor(modelItem => item.due_date)
-                            </td>
-                            <td>@Html.Raw(item.OpenSince)</td>
+                            <td><small><label class="label label-@item.StatusDescLabel">@item.StatusDesc</label></small></td>
+                            @if (!isBusiness)
+                            {
+                                <td class="@(item.IsOverdue?"red":"")">
+                                    @Html.DisplayFor(modelItem => item.due_date)
+                                </td>
+                                <td>@Html.Raw(item.OpenSince)</td>
+                            }
+                            
                             <td data-order="@(item.HasAttachment?1:0)">
                                 <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
                             </td>
@@ -421,12 +445,19 @@ table.fixed td { overflow: hidden; }
                         <th width="10%">
                             @Html.DisplayNameFor(model => model.priority)
                         </th>
+
+                        
                         <th>Updated</th>
+                        @if (!isBusiness)
+                        {
+                            
+                        
                         <th width="14%">
                             Due On
                         </th>
 
                         <th width="1%"></th>
+                        }
                         <td></td>
                     </tr>
                 </thead>
@@ -456,13 +487,17 @@ table.fixed td { overflow: hidden; }
                             <td>
                                 <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
                             </td>
-                            <td>@Html.Raw(item.LastUpdatedSince)</td>
-                            <td class="@(item.IsOverdue?"red":"")">
-                                @Html.DisplayFor(modelItem => item.due_date)
-                            </td>
+                            @if (!isBusiness)
+                            {
+                                <td>@Html.Raw(item.LastUpdatedSince)</td>
+                                <td class="@(item.IsOverdue?"red":"")">
+                                    @Html.DisplayFor(modelItem => item.due_date)
+                                </td>
+                            }
+                            
 
                             <td>
-                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
+                                
                                 <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
                             </td>
@@ -504,11 +539,16 @@ table.fixed td { overflow: hidden; }
                             <th width="10%">
                                 @Html.DisplayNameFor(model => model.priority)
                             </th>
-                            <th width="14%">
-                                Due On
-                            </th>
 
-                            <th width="1%"></th>
+                            @if (!isBusiness)
+                            {
+                                <th width="14%">
+                                    Due On
+                                </th>
+
+                                <th width="1%"></th>
+                            }
+                            
                             <td></td>
                         </tr>
                     </thead>
@@ -537,12 +577,17 @@ table.fixed td { overflow: hidden; }
                                 <td>
                                     <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
                                 </td>
-                                <td class="@(item.IsOverdue?"red":"")">
-                                    @Html.DisplayFor(modelItem => item.due_date)
-                                </td>
+                                @if (!isBusiness)
+                                {
+                                    <td class="@(item.IsOverdue?"red":"")">
+                                        @Html.DisplayFor(modelItem => item.due_date)
+                                    </td>
+                                    <td></td>
+                                }
+                                
 
                                 <td>
-                                    @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
+                                    
                                     <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
                                 </td>
@@ -577,12 +622,16 @@ table.fixed td { overflow: hidden; }
                             Assigned
                         </th>
 
-                        <th width="14%">
-                            Due On
-                        </th>
+                        @if (!isBusiness)
+                        {
+                            <th width="14%">
+                                Due On
+                            </th>
 
-                        <th></th>
-                        <th width="1%"></th>
+                            <th></th>
+                        }
+                        
+                        
                         <td></td>
                     </tr>
                 </thead>
@@ -616,16 +665,15 @@ table.fixed td { overflow: hidden; }
                                 @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
                                 @assignee
                             </td>
-
-                            <td>
-                                @Html.DisplayFor(modelItem => item.due_date)
-                            </td>
-                            <td>@*@Html.Raw(item.TimeTaken)*@</td>
-                            <td>
-                                @*<a href="@Url.Action("EditTask", new {  id = item.task_id})"><span class="fa fa-edit"></span> </a>*@
-                                @*<a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>*@
-
-                            </td>
+                            @if (!isBusiness)
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.due_date)
+                                </td>
+                                <td>@*@Html.Raw(item.TimeTaken)*@</td>
+                            }
+                            
+                          
                             <td>
                                 <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
                             </td>

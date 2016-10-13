@@ -484,6 +484,8 @@
                     <label for="due_date" class="control-label">Due Date <span style="color:#31B0D5;font-size:1.2em" class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="If date is lost, click on RESET"></span></label>
 
                 </div>
+                @if(!is_business)
+                { 
                 <div class="col-md-8">
                     @if (is_readonly)
                                     {
@@ -509,6 +511,7 @@
                     @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
 
                 </div>
+                }
             </div>
 
 
