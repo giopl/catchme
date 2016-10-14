@@ -28,6 +28,7 @@ namespace CatchMe.Models
         public bool is_disabled { get; set; }
         public System.DateTime updated_on { get; set; }
         public int updated_by { get; set; }
+        public bool is_internal { get; set; }
     
         public virtual ICollection<attachment> attachments { get; set; }
         public virtual task task { get; set; }

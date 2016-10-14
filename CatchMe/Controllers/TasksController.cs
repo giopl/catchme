@@ -863,7 +863,7 @@ namespace CatchMe.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateComment([Bind(Include = "task_id,title,description")] comment comment)
+        public ActionResult CreateComment([Bind(Include = "task_id,title,description,is_internal")] comment comment)
         {
             try
             {

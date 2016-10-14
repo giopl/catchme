@@ -218,98 +218,107 @@
 
         @foreach (var comment in Model.comments.OrderByDescending(x => x.created_on))
         {
-
-            <div class="task-title"><span style="font-size:.5em; padding:5px;margin-bottom:10px;" class="alert alert-info">C.@comment.comment_id</span> @(string.IsNullOrWhiteSpace(comment.title) ? "No Title.." : comment.title) - </div>
-
-            if (comment.updated_by > 0)
+            if (is_business && comment.is_internal)
             {
-                <small>@comment.user.fullname on @comment.updated_on.ToString("dd MMM yyyy HH:mm")</small>
+
             }
             else
             {
-                <small>@comment.user1.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
-            }
+                <div class="task-title"><span style="font-size:.5em; padding:5px;margin-bottom:10px;" class="alert alert-info">C.@comment.comment_id</span> <span class="fa fa-@(comment.is_internal?"user-secret":"")"></span> @(string.IsNullOrWhiteSpace(comment.title) ? "No Title.." : comment.title) - </div>
 
-            if (comment.attachments.Count > 0)
-            {
-                <a href="javascript:void(0);" class="shownextsection"><span class="fa fa-paperclip"></span> (@comment.attachments.Count)</a>
-            }
-
-            <section style="display:none">
-                @foreach (var att in comment.attachments)
+                if (comment.updated_by > 0)
                 {
-                <div class="col-md-12">
-                    <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
-                    @if (session.Current.UserId == att.user_id || session.Current.IsAdmin || !is_readonly)
-                    {
-                        <a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash"></span></a>
-                    }
-                </div>
+                    <small>@comment.user.fullname on @comment.updated_on.ToString("dd MMM yyyy HH:mm")</small>
                 }
-            </section>
+                else
+                {
+                    <small>@comment.user1.fullname on @comment.created_on.Value.ToString("dd MMM yyyy HH:mm")</small>
+                }
 
-            <a href="javascript:void(0);" class="shownextsection toggleshowhide">@(cnt < 3 ? "(hide)" : "[more]")</a>
-                            <section class="allcomments" style="display:@(cnt<3?"block":"none")">
-                                <h4 style="word-break:break-all">
-                                    <span class="commentcontent-@comment.comment_id" style="word-wrap:break-word">
-                                        @if (!string.IsNullOrWhiteSpace(comment.description))
-                                        {
-                                            @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
+                if (comment.attachments.Count > 0)
+                {
+                    <a href="javascript:void(0);" class="shownextsection"><span class="fa fa-paperclip"></span> (@comment.attachments.Count)</a>
+                }
 
-                                        }
-                                    </span>
-                                </h4>
-                                @if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
-                                {
-                                    <a href="javascript:void(0);" class="showcommentmodal" data-commentid="@comment.comment_id"><span class="fa fa-external-link"></span><small>&nbsp;Show</small></a>
-                                    @:&nbsp;|&nbsp;<a href="javascript:void(0);" class="shownextsection hidecomment" data-commentid="@comment.comment_id"><span class="fa fa-edit"></span>&nbsp;edit</a>
-                                }
+                <section style="display:none">
+                    @foreach (var att in comment.attachments)
+                    {
+                        <div class="col-md-12">
+                            <a href="@Url.Content(string.Format("~/uploads/{0}", att.filepath))" target="_blank"><span class="fa fa-@(att.icon)"></span> @att.filename (@att.size)</a>
+                            @if (session.Current.UserId == att.user_id || session.Current.IsAdmin || !is_readonly)
+                            {
+                                <a href="@Url.Action("DeleteAttachment",new { id = att.attachment_id, taskid = Model.task_id})" onclick="return confirm('Are you sure?')"><span class="fa fa-trash"></span></a>
+                            }
+                        </div>
+                    }
+                </section>
 
-                                <section style="display:none">
-                                    @Html.Partial("_EditComment", comment)
-                                </section>
+                <a href="javascript:void(0);" class="shownextsection toggleshowhide">@(cnt < 3 ? "(hide)" : "[more]")</a>
+                <section class="allcomments" style="display:@(cnt<3?"block":"none")">
+                    <h4 style="word-break:break-all">
+                        <span class="commentcontent-@comment.comment_id" style="word-wrap:break-word">
+                            @if (!string.IsNullOrWhiteSpace(comment.description))
+                            {
+                                @Html.Raw(comment.description.Replace(Environment.NewLine, "<br/>"))
 
-                                &nbsp;|&nbsp;<a href="javascript:void(0);" class="uploadAttachementForComment" data-toggle="modal" data-target="#uploadAttachmentModal" data-commentid="@comment.comment_id" ><small>Add <span class="fa fa-paperclip"></span> </small></a>
-                                <section style="display:none">
-                                    <div class="row">
+                            }
+                        </span>
+                    </h4>
+                    @if (session.Current.IsAdmin || session.Current.UserId == comment.user_id || !is_readonly)
+                    {
+                        <a href="javascript:void(0);" class="showcommentmodal" data-commentid="@comment.comment_id"><span class="fa fa-external-link"></span><small>&nbsp;Show</small></a>
+                        @:&nbsp;|&nbsp;<a href="javascript:void(0);" class="shownextsection hidecomment" data-commentid="@comment.comment_id"><span class="fa fa-edit"></span>&nbsp;edit</a>
+                                
 
-                                        <hr />
-                                        @*     @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))*@
-                                        @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                                        {
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="taskId" value="@Model.task_id" />
-                                        <input type="hidden" name="projectId" value="@Model.project_id" />
-                                        <input type="hidden" name="comment_id" value="@comment.comment_id" />
-                                        <div class="row">
-                                            <div class="col-md-offset-1 col-md-4">
-                                                <input type="file" required name="file" />
+                    <section style="display:none">
+                        @Html.Partial("_EditComment", comment)
+                    </section>
 
-                                            </div>
-                                            <div class="col-md-4">
-                                                <input type="submit" class="btn btn-info" value="Attach" />
+                    @:&nbsp;|&nbsp;<a href="javascript:void(0);" class="uploadAttachementForComment" data-toggle="modal" data-target="#uploadAttachmentModal" data-commentid="@comment.comment_id"><small>Add <span class="fa fa-paperclip"></span> </small></a>
+                        }
+                    <section style="display:none">
+                        <div class="row">
 
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-offset-1 col-md-8">
-                                                <small class="text-muted">Files accepted: excel, word, powerpoint, text, jpeg, png</small>
-                                            </div>
-                                        </div>
+                            <hr />
+                            @*     @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { @class = "form-horizontal" }))*@
+                            @using (Html.BeginForm("UploadFile", "Tasks", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="taskId" value="@Model.task_id" />
+                                <input type="hidden" name="projectId" value="@Model.project_id" />
+                                <input type="hidden" name="comment_id" value="@comment.comment_id" />
+                                <div class="row">
+                                    <div class="col-md-offset-1 col-md-4">
+                                        <input type="file" required name="file" />
 
-                                        }
-                                        <hr />
                                     </div>
+                                    <div class="col-md-4">
+                                        <input type="submit" class="btn btn-info" value="Attach" />
 
-                                </section>
-                            </section>
-                            
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-offset-1 col-md-8">
+                                        <small class="text-muted">Files accepted: excel, word, powerpoint, text, jpeg, png</small>
+                                    </div>
+                                </div>
+
+                            }
+                            <hr />
+                        </div>
+
+                    </section>
+                </section>
+
+
+    <hr>
+
+            }
 
 
 
-                            
 
-                            <hr>
+
             { cnt++; }
         }
 
@@ -477,15 +486,15 @@
                     @Html.ValidationMessageFor(model => model.complexity, "", new { @class = "text-danger" })
                 </div>
             </div>
-
+    if (!is_business)
+    {
             <div class="form-group pad20">
 
                 <div class="col-md-4">
                     <label for="due_date" class="control-label">Due Date <span style="color:#31B0D5;font-size:1.2em" class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="If date is lost, click on RESET"></span></label>
 
                 </div>
-                @if(!is_business)
-                { 
+                
                 <div class="col-md-8">
                     @if (is_readonly)
                                     {
@@ -511,8 +520,8 @@
                     @Html.ValidationMessageFor(model => model.due_date, "", new { @class = "text-danger" })
 
                 </div>
-                }
             </div>
+                }
 
 
                             if (!is_readonly)
@@ -630,14 +639,23 @@
                                                     <input type="text" class="form-control" name="title" placeholder="add your title here" />
                                                 </div>
                                             </div>
+
+
+
                                             <div class="form-group">
 
                                                 <div class="col-md-12">
                                                     <textarea name="description" class="tinymce" cols="20" rows="2" placeholder="add your description here"></textarea>
                                                 </div>
                                             </div>
-
-                                        </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    Is internal
+                                                    <input id="is_internal" class="check-box" type="checkbox" value="true" name="is_internal" data-val-required="The is_internal field is required." data-val="true" >
+                                                    <input type="hidden" value="false" name="is_internal">
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                     </div>
                                     <div class="modal-footer">

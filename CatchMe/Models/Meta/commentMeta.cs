@@ -18,6 +18,9 @@ namespace CatchMe.Models
         [DisplayName("Title")]
         public string title { get; set; }
 
+        [DisplayName("Is Internal")]
+        public bool is_internal { get; set; }
+
 
         [AllowHtml]
         [DataType(DataType.MultilineText)]
