@@ -42,6 +42,7 @@
           <Property Name="is_disabled" Type="bit" Nullable="false" />
           <Property Name="updated_on" Type="datetime" Nullable="false" />
           <Property Name="updated_by" Type="int" Nullable="false" />
+          <Property Name="is_internal" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -106,6 +107,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.employee' does not have a primary ke
           <Property Name="sent_on" Type="datetime" />
           <Property Name="recipients_id" Type="nvarchar" MaxLength="500" />
           <Property Name="send_to_id" Type="int" />
+          <Property Name="comment" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="project">
           <Key>
@@ -1404,6 +1406,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <Property Name="recipients_id" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="send_to_id" Type="Int32" />
           <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_notification_task_id" FromRole="notification" ToRole="task" />
+          <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_notification_task_id">
           <End Type="CatchMeDBModel.task" Role="task" Multiplicity="1" />
@@ -1556,6 +1559,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <Property Name="is_disabled" Type="Boolean" Nullable="false" />
           <Property Name="updated_on" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="updated_by" Type="Int32" Nullable="false" />
+          <Property Name="is_internal" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="attachments" Relationship="CatchMeDBModel.FK_attachment_comment_id" FromRole="comment" ToRole="attachment" />
           <NavigationProperty Name="task" Relationship="CatchMeDBModel.FK_comment_task_id" FromRole="comment" ToRole="task" />
           <NavigationProperty Name="user" Relationship="CatchMeDBModel.FK_comment_updated_by" FromRole="comment" ToRole="user" />
@@ -1874,6 +1878,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <EntitySetMapping Name="notifications">
             <EntityTypeMapping TypeName="CatchMeDBModel.notification">
               <MappingFragment StoreEntitySet="notification">
+                <ScalarProperty Name="comment" ColumnName="comment" />
                 <ScalarProperty Name="send_to_id" ColumnName="send_to_id" />
                 <ScalarProperty Name="recipients_id" ColumnName="recipients_id" />
                 <ScalarProperty Name="sent_on" ColumnName="sent_on" />
@@ -1935,6 +1940,7 @@ warning 6002: The table/view 'CatchMeDB.dbo.v_visit' does not have a primary key
           <EntitySetMapping Name="comments">
             <EntityTypeMapping TypeName="CatchMeDBModel.comment">
               <MappingFragment StoreEntitySet="comment">
+                <ScalarProperty Name="is_internal" ColumnName="is_internal" />
                 <ScalarProperty Name="updated_by" ColumnName="updated_by" />
                 <ScalarProperty Name="updated_on" ColumnName="updated_on" />
                 <ScalarProperty Name="is_disabled" ColumnName="is_disabled" />

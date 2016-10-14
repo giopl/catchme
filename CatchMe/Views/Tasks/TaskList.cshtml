@@ -91,40 +91,55 @@ table.fixed td { overflow: hidden; }
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        @if (countme > 0)
-        {
-            <li role="presentation" class="active assignedcolor"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me (@countme)</a></li>
-        }
-        <li role="presentation" class="@(countme>0?"":"active") opencolor"><a href="#open" aria-controls="settings"  role="tab" data-toggle="tab">Open (@countopen)</a></li>
 
-        @if(countclosed>0)
+        @if (isBusiness)
         {
-                    <li role="presentation" class="closecolor"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed (@countclosed)</a></li>
+
+            <li role="presentation" class="active assignedcolor"><a href="#business" aria-controls="business" role="tab" data-toggle="tab">Summary (@Model.Count())</a></li>
         }
-        @if(countopenbyme>0)
+        else
         {
-            <li role="presentation" class="ownedcolor"><a href="#openbyme" aria-controls="openbyme" role="tab" data-toggle="tab">Owned By Me (@countopenbyme)</a></li>
+
+            if (countme > 0)
+            {
+                <li role="presentation" class="active assignedcolor"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me (@countme)</a></li>
+            }
+            <li role="presentation" class="@(countme>0?"":"active") opencolor"><a href="#open" aria-controls="settings" role="tab" data-toggle="tab">Open (@countopen)</a></li>
+
+            if (countclosed > 0)
+            {
+                <li role="presentation" class="closecolor"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed (@countclosed)</a></li>
+            }
+            if (countopenbyme > 0)
+            {
+                <li role="presentation" class="ownedcolor"><a href="#openbyme" aria-controls="openbyme" role="tab" data-toggle="tab">Owned By Me (@countopenbyme)</a></li>
+            }
+            if (latest10.Count > 0)
+            {
+                <li role="presentation" class="recentcolor"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Recent updates (@latest10.Count())</a></li>
+            }
+
+            if (countsearched > 0)
+            {
+                <li role="presentation" class="searchedcolor"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab"><b><span class="fa fa-files-o"></span> Searched</b> (@countsearched)</a></li>
+            }
+            if (countnotifications > 0)
+            {
+                <li role="presentation" class="notifiedcolor"><a href="#notified" aria-controls="notified" role="tab" data-toggle="tab"> <span class="fa fa-envelope"></span> Received (@countnotifications)</a></li>
+
+            }
+
+            if (countinfos > 0)
+            {
+                <li role="presentation" class="infocolor"><a href="#info" aria-controls="info" role="tab" data-toggle="tab"> <span class="fa fa-info-circle"></span> informational (@countinfos)</a></li>
+
+            }
+
         }
-        @if (latest10.Count>0)
-        {
-            <li role="presentation" class="recentcolor"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Recent updates (@latest10.Count())</a></li>
-        }
+
         
-        @if (countsearched > 0)
-        {
-            <li role="presentation" class="searchedcolor"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab"><b><span class="fa fa-files-o"></span> Searched</b> (@countsearched)</a></li>
-        }
-        @if (countnotifications > 0)
-        {
-            <li role="presentation" class="notifiedcolor"><a href="#notified" aria-controls="notified" role="tab" data-toggle="tab"> <span class="fa fa-envelope"></span> Received (@countnotifications)</a></li>
 
-        }
-
-        @if (countinfos > 0)
-        {
-            <li role="presentation" class="infocolor"><a href="#info" aria-controls="info" role="tab" data-toggle="tab"> <span class="fa fa-info-circle"></span> informational (@countinfos)</a></li>
-
-        }
+        
 
 
     </ul>
@@ -132,395 +147,290 @@ table.fixed td { overflow: hidden; }
     <!-- Tab panes -->
     <div class="tab-content">
 
-        <div role="tabpanel" class="tab-pane @(countme > 0?"active":"" )" id="home">
+        @if (isBusiness)
+        {
 
-            <div class="gap"></div>
+            <div role="tabpanel" class="tab-pane active" id="business">
+
+                <div class="gap"></div>
 
 
-            <table class="table table-striped" id="tableme" style="width:100%">
-                <thead>
-                    <tr>
-                        <th width="5%">Id</th>
-                        <th></th>
-                        <th width="45%">Title</th>
-                        <th>Assigned</th>
-                        <th>Owner</th>
-                        <th width="10%">
-                            @Html.DisplayNameFor(model => model.priority)
-                        </th>
-
-                        
-
-                        @if (!isBusiness)
-                        {
-                            <th width="14%">
-                                Due on
+                <table class="table table-striped" id="tablebusiness" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th width="5%">Id</th>
+                            <th></th>
+                            <th width="45%">Title</th>
+                            <th>Assigned</th>
+                            <th>Owner</th>
+                            <th width="10%">
+                                @Html.DisplayNameFor(model => model.priority)
                             </th>
-                        }
-                        
+                            <th>
+                                Requested by
+                            </th>
 
-                        
-                        <td><span class="fa fa-paperclip"></span></td>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    
-                    @*@foreach (var item in Model.Where(x => (x.assigned_to == session.Current.UserId && x.owner != session.Current.UserId && x.status != 9 && x.status != 3 && x.status != 7) || x.owner == session.Current.UserId && (x.status == 7 || x.status == 3)).OrderBy(x=>x.priority))*@
-                    @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9))
-                    {
-                        <tr>
-                            <td style="width:20px">
-                                <span class="text-muted fa-15x">@item.task_id</span>
-                            </td>
-                            <td style="width:20px">
-                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
-                            </td>
-                            <td class="">
-                                <div class="readmore">
-                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                                </div>
 
-                            </td> 
-                            <td>@item.user.firstname</td>
-                            <td>@item.user1.firstname</td>
                             
-                            <td data-order="@item.priority">
-                                <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
-                            </td>
-                            
-
-                            @if (!isBusiness)
-                            {
-                                <td class="@(item.IsOverdue?"red":"")">
-                                    @Html.DisplayFor(modelItem => item.due_date)
-                                </td>
-                            }
-                            
-                            <td data-order="@(item.HasAttachment?1:0)">
-                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
-                            </td>
                         </tr>
-                                    }
-                </tbody>
-            </table>
+                    </thead>
 
-        </div>
+                    <tbody>
 
-        <div role="tabpanel" class="tab-pane @(countme > 0?"":"active" )" id="open">
-
-            <div class="gap"></div>
-
-
-            <table class="table table-responsive table-condensed table-striped" id="tableopen" data-column-defs='[{"sortable": false, "targets": [1,8]}]' style="width:100%">
-                
-                <thead>
-                    <tr>
-                        <th width="20px">
-                            Id
-                        </th>
-                        <td width="20px"></td>
-                        <th class="title-col">Title</th>
-                        <th>Assigned</th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.priority)
-                        </th>
-                        <th>Status</th>
-                        @if (!isBusiness)
+                        @*@foreach (var item in Model.Where(x => (x.assigned_to == session.Current.UserId && x.owner != session.Current.UserId && x.status != 9 && x.status != 3 && x.status != 7) || x.owner == session.Current.UserId && (x.status == 7 || x.status == 3)).OrderBy(x=>x.priority))*@
+                        @foreach (var item in Model)
                         {
-                            <th width="14%">Due On</th>
-                            <td>Since</td>
+                            <tr>
+                                <td style="width:20px">
+                                    <span class="text-muted fa-15x">@item.task_id</span>
+                                </td>
+                                <td style="width:20px">
+                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                </td>
+                                <td class="">
+                                    <div class="readmore">
+                                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                    </div>
+
+                                </td>
+                                <td>@item.user.firstname</td>
+                                <td>@item.user1.firstname</td>
+
+                                <td data-order="@item.priority">
+                                    <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
+                                </td>
+
+                                <td>@item.initiator</td>
+
+                                <td data-order="@(item.HasAttachment?1:0)">
+                                    <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                                </td>
+                            </tr>
                         }
-                        
-                        
+                    </tbody>
+                </table>
 
-                        <th><span class="fa fa-paperclip"></span></th>
-                        <td><span class="fa fa-trash"></span></td>
-                    </tr>
-                </thead>
+            </div>
+        }
+        else
+        {
 
-                <tbody>
-                    @foreach (var item in Model.Where(x => x.status != 9))
-                    {
+
+            <div role="tabpanel" class="tab-pane @(countme > 0?"active":"" )" id="home">
+
+                <div class="gap"></div>
+
+
+                <table class="table table-striped" id="tableme" style="width:100%">
+                    <thead>
                         <tr>
-                            <td data-order="@item.task_id">
-                                <span class="text-muted fa-15x">@item.task_id</span>&nbsp;
-                            </td>
-                            <td data-order="@item.status">
-                            <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                            <th width="5%">Id</th>
+                            <th></th>
+                            <th width="45%">Title</th>
+                            <th>Assigned</th>
+                            <th>Owner</th>
+                            <th width="10%">
+                                @Html.DisplayNameFor(model => model.priority)
+                            </th>
 
-                            </td>
-                            <td>
-                                <div class="readmore">                                  
-                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                                </div>
 
-                            </td>
-                            <td>
-                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                @assignee
-                            </td>
-                            <td data-order="@item.priority">
-                                <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
-                            </td>
-                            <td><small><label class="label label-@item.StatusDescLabel">@item.StatusDesc</label></small></td>
+
                             @if (!isBusiness)
                             {
-                                <td class="@(item.IsOverdue?"red":"")">
-                                    @Html.DisplayFor(modelItem => item.due_date)
-                                </td>
-                                <td>@Html.Raw(item.OpenSince)</td>
+                                <th width="14%">
+                                    Due on
+                                </th>
                             }
-                            
-                            <td data-order="@(item.HasAttachment?1:0)">
-                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
-                            </td>
-                            <td>
-                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
-                            </td>
 
+
+
+                            <td><span class="fa fa-paperclip"></span></td>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
 
-        </div>        
-      
-        <div role="tabpanel" class="tab-pane" id="closed">
-            <div class="gap"></div>
-            <table class="table table-responsive table-condensed table-striped" id="tableclose" style="width:100%">
+                    <tbody>
 
-                <thead>
-                    <tr>
-                        <th width="5%">
-                            Id
-                        </th>
-                        <th></th>
-                        <th></th>
-                        <th class="title-col">Title</th>
-                        <th>Owner</th>
-                        <th>Opened</th>
-                        <th>Closed</th>
-                        <th>Days</th>
-
-                        <th><span class="fa fa-paperclip"></span></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach (var item in Model.Where(x => x.status == 9))
-                    {
-                        <tr>
-                            <td>
-                                <span class="text-muted fa-15x">@item.task_id</span>
-                            </td>
-                            <td>
-                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
-                            </td>
-
-                            <td data-order="@item.priority"><span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp;</td>
-                            <td>
-                                <div class="readmore">
-                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                                </div>
-
-                            </td>
-                            
-                            <td>@item.user1.firstname</td>
-                            <td>@item.created_on.Value.ToString("dd-MMM-yy")</td>
-                            <td>@item.updated_on.Value.ToString("dd-MMM-yy")</td>
-                            <td>@Html.Raw(item.TimeTaken)</td>
-                            
-                            <td data-order="@(item.HasAttachment?1:0)">
-                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-        <div role="tabpanel" class="tab-pane" id="openbyme">
-
-            <div class="gap"></div>
-
-
-            <table class="table table-condensed table-responsive table-striped" data-column-defs='[{"sortable": false, "targets": [7]}]' id="tableopenbyme" style="width:100%">
-
-                <thead>
-                    <tr>
-                        <th width="5%">
-                            Id
-                        </th>
-                        <td></td>
-
-                        <td class="title-col">
-                            Title
-                        </td>
-
-                        <th width="20%">
-                            Assigned
-                        </th>
-                        <th width="10%">
-                            @Html.DisplayNameFor(model => model.priority)
-                        </th>
-                        <th width="14%">
-                            Due On
-                        </th>
-
-                        <th style="width:30px;"><span class="fa fa-paperclip"></span></th>
-                        <td style="width:30px;"><span class="fa fa-trash-o"></span></td>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach (var item in Model.Where(x => x.owner == session.Current.UserId && x.status != 9))
-                    {
-                        <tr>
-                            <td>
-                                <span class="text-muted fa-15x">@item.task_id</span>
-                            </td>
-                            <td>
-                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
-                            </td>
-
-                            <td>
-                                <div class="readmore">
-                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                                </div>
-
-                            </td>
-                            <td>
-                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                @assignee
-                            </td>
-                            <td data-order="@item.priority">
-                                <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
-                            </td>
-                            <td class="@(item.IsOverdue?"red":"")">
-                                @Html.DisplayFor(modelItem => item.due_date)
-                            </td>
-
-
-                            <td data-order="@(item.HasAttachment?1:0)">
-                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
-                            </td>
-                            <td>
-
-                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
-
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-
-        </div>
-
-        <div role="tabpanel" class="tab-pane" id="recent">
-
-            <div class="gap"></div>
-
-
-            <table class="table  table-condensed table-responsive table-striped" id="tablerecent" style="width:100%">
-
-                <thead>
-                    <tr>
-                        <th width="5%">
-                            Id
-                        </th>
-                        <td></td>
-
-                        <td width="45%">
-                            Title
-                        </td>
-
-                        <th width="10%">
-                            Assigned
-                        </th>
-                        <th width="10%">
-                            Updated By
-                        </th>
-                        <th width="10%">
-                            @Html.DisplayNameFor(model => model.priority)
-                        </th>
-
-                        
-                        <th>Updated</th>
-                        @if (!isBusiness)
+                        @*@foreach (var item in Model.Where(x => (x.assigned_to == session.Current.UserId && x.owner != session.Current.UserId && x.status != 9 && x.status != 3 && x.status != 7) || x.owner == session.Current.UserId && (x.status == 7 || x.status == 3)).OrderBy(x=>x.priority))*@
+                        @foreach (var item in Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9))
                         {
-                            
-                        
-                        <th width="14%">
-                            Due On
-                        </th>
+                            <tr>
+                                <td style="width:20px">
+                                    <span class="text-muted fa-15x">@item.task_id</span>
+                                </td>
+                                <td style="width:20px">
+                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                </td>
+                                <td class="">
+                                    <div class="readmore">
+                                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                    </div>
 
-                        <th width="1%"></th>
+                                </td>
+                                <td>@item.user.firstname</td>
+                                <td>@item.user1.firstname</td>
+
+                                <td data-order="@item.priority">
+                                    <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
+                                </td>
+
+
+                                @if (!isBusiness)
+                                {
+                                    <td class="@(item.IsOverdue?"red":"")">
+                                        @Html.DisplayFor(modelItem => item.due_date)
+                                    </td>
+                                }
+
+                                <td data-order="@(item.HasAttachment?1:0)">
+                                    <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                                </td>
+                            </tr>
                         }
-                        <td></td>
-                    </tr>
-                </thead>
+                    </tbody>
+                </table>
 
-                <tbody>
-                    @foreach (var item in latest10)
-                    {
+            </div>
+
+            <div role="tabpanel" class="tab-pane @(countme > 0?"":"active" )" id="open">
+
+                <div class="gap"></div>
+
+
+                <table class="table table-responsive table-condensed table-striped" id="tableopen" data-column-defs='[{"sortable": false, "targets": [1,8]}]' style="width:100%">
+
+                    <thead>
                         <tr>
-                            <td>
-                                <span class="text-muted fa-15x">@item.task_id</span>
-                            </td>
-                            <td>
-                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
-                            </td>
-
-                            <td>
-                                <div class="readmore">
-                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                                </div>
-
-                            </td>
-                            <td>
-                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                @assignee
-                            </td>
-                            <td>@item.user2.firstname</td>
-                            <td>
-                                <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
-                            </td>
+                            <th width="20px">
+                                Id
+                            </th>
+                            <td width="20px"></td>
+                            <th class="title-col">Title</th>
+                            <th>Assigned</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.priority)
+                            </th>
+                            <th>Status</th>
                             @if (!isBusiness)
                             {
-                                <td>@Html.Raw(item.LastUpdatedSince)</td>
-                                <td class="@(item.IsOverdue?"red":"")">
-                                    @Html.DisplayFor(modelItem => item.due_date)
-                                </td>
+                                <th width="14%">Due On</th>
+                                <td>Since</td>
                             }
-                            
 
-                            <td>
-                                
-                                <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
-                            </td>
-                            <td>
-                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
-                            </td>
+
+                            <th><span class="fa fa-paperclip"></span></th>
+                            <td><span class="fa fa-trash"></span></td>
                         </tr>
-                                    }
-                </tbody>
-            </table>
+                    </thead>
 
-        </div>
+                    <tbody>
+                        @foreach (var item in Model.Where(x => x.status != 9))
+                        {
+                            <tr>
+                                <td data-order="@item.task_id">
+                                    <span class="text-muted fa-15x">@item.task_id</span>&nbsp;
+                                </td>
+                                <td data-order="@item.status">
+                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
 
-        <div role="tabpanel" class="tab-pane" id="searched">
+                                </td>
+                                <td>
+                                    <div class="readmore">
+                                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                    </div>
 
-            <div class="gap"></div>
-            @if(session.Current.searchFilter != null)
-            { 
-            @:&nbsp;&nbsp;Keyword: <b>@session.Current.searchFilter.keywords</b> (<a href="@Url.Action("ClearFilter")">clear</a>)
-            }
-            
-            <div id="searchtext">
-                <table class="table  table-condensed table-responsive table-striped" id="tablesearched" style="width:100%">
+                                </td>
+                                <td>
+                                    @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
+                                    @assignee
+                                </td>
+                                <td data-order="@item.priority">
+                                    <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
+                                </td>
+                                <td><small><label class="label label-@item.StatusDescLabel">@item.StatusDesc</label></small></td>
+                                @if (!isBusiness)
+                                {
+                                    <td class="@(item.IsOverdue?"red":"")">
+                                        @Html.DisplayFor(modelItem => item.due_date)
+                                    </td>
+                                    <td>@Html.Raw(item.OpenSince)</td>
+                                }
+
+                                <td data-order="@(item.HasAttachment?1:0)">
+                                    <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="closed">
+                <div class="gap"></div>
+                <table class="table table-responsive table-condensed table-striped" id="tableclose" style="width:100%">
+
+                    <thead>
+                        <tr>
+                            <th width="5%">
+                                Id
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th class="title-col">Title</th>
+                            <th>Owner</th>
+                            <th>Opened</th>
+                            <th>Closed</th>
+                            <th>Days</th>
+
+                            <th><span class="fa fa-paperclip"></span></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.Where(x => x.status == 9))
+                        {
+                            <tr>
+                                <td>
+                                    <span class="text-muted fa-15x">@item.task_id</span>
+                                </td>
+                                <td>
+                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                </td>
+
+                                <td data-order="@item.priority"><span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp;</td>
+                                <td>
+                                    <div class="readmore">
+                                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                    </div>
+
+                                </td>
+
+                                <td>@item.user1.firstname</td>
+                                <td>@item.created_on.Value.ToString("dd-MMM-yy")</td>
+                                <td>@item.updated_on.Value.ToString("dd-MMM-yy")</td>
+                                <td>@Html.Raw(item.TimeTaken)</td>
+
+                                <td data-order="@(item.HasAttachment?1:0)">
+                                    <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="openbyme">
+
+                <div class="gap"></div>
+
+
+                <table class="table table-condensed table-responsive table-striped" data-column-defs='[{"sortable": false, "targets": [7]}]' id="tableopenbyme" style="width:100%">
 
                     <thead>
                         <tr>
@@ -529,8 +439,8 @@ table.fixed td { overflow: hidden; }
                             </th>
                             <td></td>
 
-                            <td width="45%">
-                                Desc
+                            <td class="title-col">
+                                Title
                             </td>
 
                             <th width="20%">
@@ -539,22 +449,17 @@ table.fixed td { overflow: hidden; }
                             <th width="10%">
                                 @Html.DisplayNameFor(model => model.priority)
                             </th>
+                            <th width="14%">
+                                Due On
+                            </th>
 
-                            @if (!isBusiness)
-                            {
-                                <th width="14%">
-                                    Due On
-                                </th>
-
-                                <th width="1%"></th>
-                            }
-                            
-                            <td></td>
+                            <th style="width:30px;"><span class="fa fa-paperclip"></span></th>
+                            <td style="width:30px;"><span class="fa fa-trash-o"></span></td>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @foreach (var item in Model.Where(x => x.IsFilteredOn).ToList())
+                        @foreach (var item in Model.Where(x => x.owner == session.Current.UserId && x.status != 9))
                         {
                             <tr>
                                 <td>
@@ -574,20 +479,110 @@ table.fixed td { overflow: hidden; }
                                     @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
                                     @assignee
                                 </td>
+                                <td data-order="@item.priority">
+                                    <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
+                                </td>
+                                <td class="@(item.IsOverdue?"red":"")">
+                                    @Html.DisplayFor(modelItem => item.due_date)
+                                </td>
+
+
+                                <td data-order="@(item.HasAttachment?1:0)">
+                                    <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                                </td>
+                                <td>
+
+                                    <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="recent">
+
+                <div class="gap"></div>
+
+
+                <table class="table  table-condensed table-responsive table-striped" id="tablerecent" style="width:100%">
+
+                    <thead>
+                        <tr>
+                            <th width="5%">
+                                Id
+                            </th>
+                            <td></td>
+
+                            <td width="45%">
+                                Title
+                            </td>
+
+                            <th width="10%">
+                                Assigned
+                            </th>
+                            <th width="10%">
+                                Updated By
+                            </th>
+                            <th width="10%">
+                                @Html.DisplayNameFor(model => model.priority)
+                            </th>
+
+
+                            <th>Updated</th>
+                            @if (!isBusiness)
+                            {
+
+
+                                <th width="14%">
+                                    Due On
+                                </th>
+
+                                <th width="1%"></th>
+                            }
+                            <td></td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in latest10)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="text-muted fa-15x">@item.task_id</span>
+                                </td>
+                                <td>
+                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                </td>
+
+                                <td>
+                                    <div class="readmore">
+                                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                    </div>
+
+                                </td>
+                                <td>
+                                    @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
+                                    @assignee
+                                </td>
+                                <td>@item.user2.firstname</td>
                                 <td>
                                     <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
                                 </td>
                                 @if (!isBusiness)
                                 {
+                                    <td>@Html.Raw(item.LastUpdatedSince)</td>
                                     <td class="@(item.IsOverdue?"red":"")">
                                         @Html.DisplayFor(modelItem => item.due_date)
                                     </td>
-                                    <td></td>
                                 }
-                                
+
 
                                 <td>
-                                    
+
                                     <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
 
                                 </td>
@@ -598,146 +593,238 @@ table.fixed td { overflow: hidden; }
                         }
                     </tbody>
                 </table>
+
             </div>
 
-        </div>
+            <div role="tabpanel" class="tab-pane" id="searched">
 
-        <div role="tabpanel" class="tab-pane" id="notified">
-            <div class="gap"></div>
-            <table class="table" id="tablenotification" style="width:100%">
+                <div class="gap"></div>
+                @if (session.Current.searchFilter != null)
+                {
+                    @:&nbsp;&nbsp;Keyword: <b>@session.Current.searchFilter.keywords</b> (<a href="@Url.Action("ClearFilter")">clear</a>)
+            }
 
-                <thead>
-                    <tr>
-                        <th width="5%">
-                            Id
-                        </th>
-                        <td></td>
+                <div id="searchtext">
+                    <table class="table  table-condensed table-responsive table-striped" id="tablesearched" style="width:100%">
 
-                        <td width="45%">
-                            Title
-                        </td>
-                        <td>
+                        <thead>
+                            <tr>
+                                <th width="5%">
+                                    Id
+                                </th>
+                                <td></td>
+
+                                <td width="45%">
+                                    Desc
+                                </td>
+
+                                <th width="20%">
+                                    Assigned
+                                </th>
+                                <th width="10%">
+                                    @Html.DisplayNameFor(model => model.priority)
+                                </th>
+
+                                @if (!isBusiness)
+                                {
+                                    <th width="14%">
+                                        Due On
+                                    </th>
+
+                                    <th width="1%"></th>
+                                }
+
+                                <td></td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model.Where(x => x.IsFilteredOn).ToList())
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="text-muted fa-15x">@item.task_id</span>
+                                    </td>
+                                    <td>
+                                        <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                    </td>
+
+                                    <td>
+                                        <div class="readmore">
+                                            <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
+                                        @assignee
+                                    </td>
+                                    <td>
+                                        <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
+                                    </td>
+                                    @if (!isBusiness)
+                                    {
+                                        <td class="@(item.IsOverdue?"red":"")">
+                                            @Html.DisplayFor(modelItem => item.due_date)
+                                        </td>
+                                        <td></td>
+                                    }
+
+
+                                    <td>
+
+                                        <a href="@Url.Action("DeleteTask", new {  id = item.task_id})"><span class="fa fa-trash"></span> </a>
+
+                                    </td>
+                                    <td>
+                                        <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="notified">
+                <div class="gap"></div>
+                <table class="table" id="tablenotification" style="width:100%">
+
+                    <thead>
+                        <tr>
+                            <th width="5%">
+                                Id
+                            </th>
+                            <td></td>
+
+                            <td width="45%">
+                                Title
+                            </td>
+                            <td>
                             <th width="20%">From</th>
-                        <th width="20%">
-                            Assigned
-                        </th>
-
-                        @if (!isBusiness)
-                        {
-                            <th width="14%">
-                                Due On
+                            <th width="20%">
+                                Assigned
                             </th>
 
-                            <th></th>
-                        }
-                        
-                        
-                        <td></td>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach (var item in Model.Where(x => x.isInNotificationList).OrderByDescending(x => x.updated_on))
-                    {
-                        <tr>
-                            <td>
-                                <span class="text-muted fa-15x">@item.task_id</span>
-                            </td>
-                            <td>
-                                <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
-                            </td>
-
-                            <td>
-                                <div class="readmore">
-                                    <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
-                                </div>
-
-                            </td>
-                            <td><span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp;</td>
-
-                            <td>
-                            @if(item.notifications.Count>0)
-                            {                                
-                                @item.notifications.OrderByDescending(x=>x.sent_on).FirstOrDefault().sender_firstname
-                            }
-                            </td>
-                            <td>
-                                @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                @assignee
-                            </td>
                             @if (!isBusiness)
                             {
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.due_date)
-                                </td>
-                                <td>@*@Html.Raw(item.TimeTaken)*@</td>
+                                <th width="14%">
+                                    Due On
+                                </th>
+
+                                <th></th>
                             }
-                            
-                          
-                            <td>
-                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
-                            </td>
+
+
+                            <td></td>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
 
-        <div role="tabpanel" class="tab-pane" id="info">
-            <div class="gap"></div>
-            <table class="table" id="tableinfo" style="width:100%">
+                    <tbody>
+                        @foreach (var item in Model.Where(x => x.isInNotificationList).OrderByDescending(x => x.updated_on))
+                        {
+                            <tr>
+                                <td>
+                                    <span class="text-muted fa-15x">@item.task_id</span>
+                                </td>
+                                <td>
+                                    <span style="padding:7px 2px;" class="label label-@(item.StatusDescLabel)" data-toggle="tooltip" data-placement="left" title="@item.TypeDesc - @item.StatusDesc"><span style="font-size:1.5em" class="fa fa-fw fa-@(item.typeIcon)"></span></span>
+                                </td>
 
-                <thead>
-                    <tr>
-                        <th>
-                            Id
-                        </th>
-                        
-                        <th width="45%">
-                            Title
-                        </th>
-                        
-                        <th>
-                            Opened on
-                        </th>
-                        
-                        <th>Updated by</th>
-                        <th>Updated on</th>
-                        <th>Importance</th>
-                        
-                        <td></td>
-                    </tr>
-                </thead>
+                                <td>
+                                    <div class="readmore">
+                                        <a href="@Url.Action("EditTask", new { id = item.task_id })">@Html.DisplayFor(modelItem => item.title)</a> (@item.TypeDesc)
+                                    </div>
 
-                <tbody>
-                    @foreach (var item in infoitems.OrderBy(i=>i.importance))
-                    {
+                                </td>
+                                <td><span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp;</td>
+
+                                <td>
+                                    @if (item.notifications.Count > 0)
+                                    {
+                                        @item.notifications.OrderByDescending(x => x.sent_on).FirstOrDefault().sender_firstname
+                                    }
+                                </td>
+                                <td>
+                                    @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
+                                    @assignee
+                                </td>
+                                @if (!isBusiness)
+                                {
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.due_date)
+                                    </td>
+                                    <td>@*@Html.Raw(item.TimeTaken)*@</td>
+                                }
+
+
+                                <td>
+                                    <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="info">
+                <div class="gap"></div>
+                <table class="table" id="tableinfo" style="width:100%">
+
+                    <thead>
                         <tr>
-                            <td>
-                                <span class="text-muted fa-15x">@item.information_id</span>
-                            </td>
-                            <td>
-                                <span class="fa fa-15x fa-info-circle color-@item.ImportanceDesc.ToLower()"></span> <a href="@Url.Action("ShowInfo", new { id = item.information_id })">@item.title</a> 
-                            </td>
-                            <td>@item.created_on.Value.ToString("dd MMM yyyy HH:mm") </td>
+                            <th>
+                                Id
+                            </th>
 
-                            <td>@item.user.firstname</td>
-                            
-                            <td>@item.updated_on.Value.ToString("dd MMM yyyy HH:mm")</td>
+                            <th width="45%">
+                                Title
+                            </th>
 
-                            <td><span class="fa fa-circle color-@item.ImportanceDesc.ToLower()"></span>&nbsp; @item.ImportanceDesc</td>
-                            
-                            <td>
-                                <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
-                            </td>
-                            
+                            <th>
+                                Opened on
+                            </th>
+
+                            <th>Updated by</th>
+                            <th>Updated on</th>
+                            <th>Importance</th>
+
+                            <td></td>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
 
+                    <tbody>
+                        @foreach (var item in infoitems.OrderBy(i => i.importance))
+                        {
+                            <tr>
+                                <td>
+                                    <span class="text-muted fa-15x">@item.information_id</span>
+                                </td>
+                                <td>
+                                    <span class="fa fa-15x fa-info-circle color-@item.ImportanceDesc.ToLower()"></span> <a href="@Url.Action("ShowInfo", new { id = item.information_id })">@item.title</a>
+                                </td>
+                                <td>@item.created_on.Value.ToString("dd MMM yyyy HH:mm") </td>
+
+                                <td>@item.user.firstname</td>
+
+                                <td>@item.updated_on.Value.ToString("dd MMM yyyy HH:mm")</td>
+
+                                <td><span class="fa fa-circle color-@item.ImportanceDesc.ToLower()"></span>&nbsp; @item.ImportanceDesc</td>
+
+                                <td>
+                                    <span class="fa fa-@(item.HasAttachment?"paperclip":"")"></span>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        }
         
+
     </div>
 
 </div>
@@ -748,8 +835,6 @@ table.fixed td { overflow: hidden; }
 
 @section scripts {
  
-    
-
     @*@Scripts.Render("~/bundles/datatables")*@
 
     <script src="@Url.Content("~/Scripts/plugins/datatables.min.js")"></script> 
@@ -824,6 +909,13 @@ table.fixed td { overflow: hidden; }
 
 
             //$('td').highlight('MTP');
+
+
+            $('#tablebusiness').DataTable({
+                "pageLength": 50,
+                "order": [[0, "desc"]]
+            });
+
 
 
             $('#tableopen').DataTable({
