@@ -31,6 +31,11 @@ namespace CatchMe.Controllers
 
             var backlogs = GetBacklog(proj);
 
+            if (backlogs.Count == 0)
+            {
+                return RedirectToAction("Index", "Tasks");
+            }
+
             var lastbacklogdate = backlogs.LastOrDefault().fulldate;
             StringBuilder sb = new StringBuilder();
 

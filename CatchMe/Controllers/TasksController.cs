@@ -44,12 +44,77 @@ namespace CatchMe.Controllers
             UserSession.Current.searchFilter = searchFilter;
 
 
-            log log = new log(AppEnums.LogOperationEnum.SEARCH, AppEnums.LogTypeEnum.PROJECT, string.Format("Searching project [{0}] for keyword [{1}]", UserSession.Current.CurrentProject, searchFilter.keywords), -1);
+            log log = new log(AppEnums.LogOperationEnum.SEARCH, AppEnums.LogTypeEnum.PROJECT, string.Format("Searching project [{0}] for keyword [{1}]", UserSession.Current.CurrentProject, searchFilter.keywords));
             CreateLog(log);
 
 
             return RedirectToAction("TaskList");
         }
+
+
+        public ActionResult InfoList(int? id = null)
+        {
+            try
+            {
+                //find current user
+                var user_id = UserSession.Current.UserId;
+                if (user_id == 0)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                var user = db.users.Find(user_id);
+
+                //find user's active project
+                var active_project = user.active_project.HasValue ? user.active_project.Value : 0;
+
+                //find user's projects
+                var myprojects = user.projects;
+
+
+                // if no project found set user's active project by using the first one on the list
+                if (!user.active_project.HasValue)
+                {
+                    if (myprojects.Count > 0)
+                    {
+                        active_project = myprojects.FirstOrDefault().project_id;
+                        SetActiveProject(active_project);
+                    }
+                    //if no  projects found for user redirect to page NoProject
+                    else
+                    {
+
+                        return RedirectToAction("NoProject");
+                    }
+                }
+
+
+                if (id.HasValue && id.Value != active_project)
+                {
+                    SetActiveProject(id.Value);
+                    active_project = id.Value;
+                }
+
+
+                //return list of projects for user
+                ViewBag.project_id = new SelectList(myprojects, "project_id", "name", active_project);
+
+
+
+                // find list of tasks for active project
+                var infos = db.information.Include(t => t.project).Where(p => p.project_id == active_project && p.state == 0).ToList();
+
+                return View(infos);
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+    
 
         // GET: Tasks
         public ActionResult TaskList(int? id=null)
@@ -61,6 +126,13 @@ namespace CatchMe.Controllers
             {
                return    RedirectToAction("Index", "Home");
             }
+
+            //check if the current project has info items to display the info item logo in the menu
+            if (id.HasValue)
+            {
+                UserSession.Current.HasInformational = db.information.Where(x => x.project_id == id.Value).Count() > 0;
+            }
+
 
             var user = db.users.Find(user_id);
 
@@ -988,7 +1060,7 @@ namespace CatchMe.Controllers
                     db.SaveChanges();
 
 
-                    log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.INFO, string.Format("Info Item {0}-{1} created for project {2}",info.information_id, info.title, info.project_id), -1);
+                    log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.INFO, string.Format("Info Item {0}-{1} created for project {2}",info.information_id, info.title, info.project_id));
                     CreateLog(log);
 
                     return RedirectToAction("ShowInfo", new { id = info.information_id});

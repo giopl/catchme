@@ -31,7 +31,7 @@ namespace CatchMe.Controllers
                     db.SaveChanges();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 throw;

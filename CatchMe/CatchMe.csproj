@@ -575,6 +575,7 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Tasks\_ShowComment.cshtml" />
     <Content Include="Views\Tasks\_EditCommentModal.cshtml" />
+    <Content Include="Views\Tasks\InfoList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

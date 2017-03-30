@@ -30,6 +30,8 @@ namespace CatchMe.Helpers
             ImpersonatedUser = string.Empty;
             SearchFilter searchFilter = new SearchFilter();
             Browser = string.Empty;
+            HasInformational = false;
+
             
         }
 
@@ -75,6 +77,8 @@ namespace CatchMe.Helpers
         public string Firstname { get; set; }
         public string CurrentProject { get; set; }
         public int CurrentProjectRole { get; set; }
+
+        public bool HasInformational { get; set; }
 
 
         public string UserImage { get; set; }

@@ -1,0 +1,355 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">
+  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+    <Author>Streamserve</Author>
+    <LastAuthor>Streamserve</LastAuthor>
+    <Created>2015-12-24T07:20:35Z</Created>
+    <LastSaved>2015-12-24T07:23:01Z</LastSaved>
+    <Version>15.00</Version>
+  </DocumentProperties>
+  <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+    <AllowPNG/></OfficeDocumentSettings>
+  <Styles>
+    <Style ss:ID="Default" ss:Name="Normal">
+      <Alignment ss:Vertical="Bottom"/>
+      <Borders/>
+      <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+      <Interior/>
+      <NumberFormat/>
+      <Protection/></Style>
+    <Style ss:ID="s16" ss:Name="Comma">
+      <NumberFormat ss:Format="_(* #,##0.00_);_(* \(#,##0.00\);_(* &#34;-&#34;??_);_(@_)"/></Style>
+    <Style ss:ID="s62">
+      <Font ss:FontName="Arial" x:Family="Swiss"/></Style>
+    <Style ss:ID="s63" ss:Parent="s16">
+      <Font ss:FontName="Arial" x:Family="Swiss" ss:Bold="1"/></Style>
+    <Style ss:ID="s64">
+      <Alignment ss:Vertical="Bottom" ss:WrapText="1"/>
+      <Font ss:FontName="Arial" x:Family="Swiss"/></Style>
+    <Style ss:ID="s65" ss:Parent="s16">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+      <Borders>
+        <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+        <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+        <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/></Borders>
+      <Font ss:FontName="Arial" x:Family="Swiss"/>
+      <Interior ss:Color="#C0C0C0" ss:Pattern="Solid"/></Style>
+    <Style ss:ID="s66" ss:Parent="s16">
+      <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+      <Borders>
+        <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+        <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+        <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+        <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/></Borders>
+      <Font ss:FontName="Book Antiqua" x:Family="Roman"/></Style>
+  </Styles>
+  <Worksheet ss:Name="CMREP015AO">
+    <Table>
+      <Column ss:AutoFitWidth="0" ss:Width="57.75"/>
+      <Column ss:AutoFitWidth="0" ss:Width="93.75"/>
+      <Column ss:Width="75"/>
+      <Column ss:Width="93.75" ss:Span="2"/>
+      <Column ss:Index="7" ss:Width="58.5"/>
+      <Column ss:Width="79.5"/>
+      <Column ss:Width="93.75" ss:Span="4"/>
+      <Column ss:Index="14" ss:Width="84"/>
+      <Row>
+        <Cell ss:StyleID="s62">
+          <Data ss:Type="String">Overdraft facilities with Reducing Schedule as at 01/07/2016</Data>
+        </Cell>
+        <Cell ss:StyleID="s63"/>
+        <Cell ss:StyleID="s63"/>
+        <Cell ss:StyleID="s63"/>
+        <Cell ss:StyleID="s63"/>
+        <Cell ss:StyleID="s63"/>
+        <Cell ss:StyleID="s63"/>
+        <Cell ss:StyleID="s64"/>
+        <Cell ss:StyleID="s64"/>
+        <Cell ss:StyleID="s64"/>
+        <Cell ss:StyleID="s64"/>
+        <Cell ss:StyleID="s64"/>
+        <Cell ss:StyleID="s64"/>
+        <Cell ss:StyleID="s62"/></Row>
+      <Row ss:Height="25.5">
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Customer No.</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Customer  Name</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Profit Centre</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">CO</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">AO</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Alt AO</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Limit ID</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Limit Ccy</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Limit Amount (advised limit) </Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Limit Utilisation</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Accounts attached to limit</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Reducing Schedule</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Repay Amount</Data>
+        </Cell>
+        <Cell ss:StyleID="s65">
+          <Data ss:Type="String">Repay End Date</Data>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">1200144</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">SUGAR CANE CONTRACTING SE</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">01GS0101</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3002</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3200</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3201</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">1200144.0101000.01</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">MUR</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3,000,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">-7,565,086.24</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">000011679964</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">SINGLE</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">4,000,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">05 AUG 2016</Data>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">1200144</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">SUGAR CANE CONTRACTING SE</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">01GS0101</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3002</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3200</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3201</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">1200144.0101000.01</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">MUR</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3,000,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">-7,565,086.24</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">000011679964</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">SINGLE</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">4,000,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">05 JUL 2016</Data>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">14122</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">RAMDENEE EDIBLE OIL PROD</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">01GS0101</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3002</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3200</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3447</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">14122.0101000.01</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">MUR</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">18,800,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">-19,788,654.88</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">000010336079</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">SINGLE</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3,800,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">01 AUG 2016</Data>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">715147</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">DATA COMMUNICATIONS LTD</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">01GS0101</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3002</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3200</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3447</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">715147.0101000.01</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">MUR</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">11,000,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">-12,872,472.27</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">000011502177_000011734337_000011734345</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">SINGLE</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">4,000,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">16 JUL 2016</Data>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">985757</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">MC EASY FREIGHT CO LTD</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">01GS0101</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3002</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3200</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3201</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">985757.0101000.01</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">MUR</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">8,500,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">-11,382,664.95</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">000011838183_000011838191_000011859016_000280704364_000280706383</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">SINGLE</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">3,500,000.00</Data>
+        </Cell>
+        <Cell ss:StyleID="s66">
+          <Data ss:Type="String">01 AUG 2016</Data>
+        </Cell>
+      </Row>
+    </Table>
+    <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+      <PageSetup>
+        <Header x:Margin="0.3"/>
+        <Footer x:Margin="0.3"/>
+        <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/></PageSetup>
+      <Selected/>
+      <Panes>
+        <Pane>
+          <Number>3</Number>
+          <ActiveRow>12</ActiveRow>
+          <ActiveCol>2</ActiveCol>
+        </Pane>
+      </Panes>
+      <ProtectObjects>False</ProtectObjects>
+      <ProtectScenarios>False</ProtectScenarios>
+    </WorksheetOptions>
+  </Worksheet>
+</Workbook>
