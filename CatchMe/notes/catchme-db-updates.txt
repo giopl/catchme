@@ -1,0 +1,53 @@
+
+--log
+alter table [log] alter column task_id int null
+update log set task_id = null where task_id = -1
+update log set user_id = 105 where user_id = 0
+
+
+--attachment
+alter table attachment alter column task_id int null
+alter table attachment alter column information_id int null
+alter table attachment alter column comment_id int null
+
+update attachment set information_id = null 
+where information_id = -1
+
+
+update attachment set task_id = null 
+where task_id = -1
+
+update attachment set comment_id = null 
+where comment_id = -1
+
+--comment
+delete from [comment] where comment_id = -1
+update comment set updated_by = user_id where updated_by = 0
+update comment set user_id = 105 , updated_by = 105 where comment_id in (319,330)
+update comment set user_id = 100 , updated_by = 100 where comment_id in (320,325)
+update comment set updated_by = user_id where updated_by = 0
+
+
+
+--task
+delete from task where task_id = -1
+alter table task alter column assigned_to int null
+alter table task alter column created_by int not null
+alter table task alter column updated_by int not null
+update task set assigned_to = null where assigned_to = 0
+
+
+
+--information
+delete from information where information_id = -1
+
+--project
+delete from [project] where project_id = -1
+
+--user
+delete from project_user where user_id = 0
+delete from [user] where user_id = 0
+
+
+
+regression testing
