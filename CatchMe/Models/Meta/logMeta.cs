@@ -44,6 +44,19 @@ namespace CatchMe.Models
         
         }
 
+        //constructor to use when logging in no task id
+        public log(AppEnums.LogOperationEnum operation, AppEnums.LogTypeEnum type, string description)
+        {
+
+            this.user_id = UserSession.Current.UserId;            
+            this.operation = operation.ToString();
+            this.type = type.ToString();
+            this.description = description;
+            this.logtime = DateTime.Now;
+
+        }
+
+
         public log(AppEnums.LogOperationEnum operation, AppEnums.LogTypeEnum type, string description, string oldval, string newval , int task_id = 0)
         {
 

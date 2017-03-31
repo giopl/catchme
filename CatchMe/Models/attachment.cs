@@ -15,7 +15,7 @@ namespace CatchMe.Models
     public partial class attachment
     {
         public int attachment_id { get; set; }
-        public int task_id { get; set; }
+        public Nullable<int> task_id { get; set; }
         public int user_id { get; set; }
         public string filename { get; set; }
         public string mimetype { get; set; }
@@ -23,12 +23,12 @@ namespace CatchMe.Models
         public Nullable<System.DateTime> created_on { get; set; }
         public bool is_disabled { get; set; }
         public string filepath { get; set; }
-        public int comment_id { get; set; }
-        public int information_id { get; set; }
+        public Nullable<int> comment_id { get; set; }
+        public Nullable<int> information_id { get; set; }
     
-        public virtual task task { get; set; }
-        public virtual user user { get; set; }
         public virtual information information { get; set; }
         public virtual comment comment { get; set; }
+        public virtual task task { get; set; }
+        public virtual user user { get; set; }
     }
 }

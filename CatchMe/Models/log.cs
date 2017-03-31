@@ -16,7 +16,7 @@ namespace CatchMe.Models
     {
         public int log_id { get; set; }
         public int user_id { get; set; }
-        public int task_id { get; set; }
+        public Nullable<int> task_id { get; set; }
         public string operation { get; set; }
         public string type { get; set; }
         public Nullable<System.DateTime> logtime { get; set; }
@@ -24,7 +24,7 @@ namespace CatchMe.Models
         public string old_val { get; set; }
         public string new_val { get; set; }
     
-        public virtual user user { get; set; }
         public virtual task task { get; set; }
+        public virtual user user { get; set; }
     }
 }

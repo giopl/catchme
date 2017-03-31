@@ -76,6 +76,11 @@ namespace CatchMe.Controllers
                 UserSession.Current.Firstname = founduser.firstname;
                 UserSession.Current.CurrentProjectId = founduser.active_project.HasValue?founduser.active_project.Value:0;
 
+
+                UserSession.Current.HasInformational = db.information.Where(x => x.project_id == UserSession.Current.CurrentProjectId).Count() > 0;
+
+
+
                 var myProjects = founduser.projects.ToList();
 
                 //find browser
@@ -87,7 +92,7 @@ namespace CatchMe.Controllers
                 var Browser = string.Format("{0} {1}", userBrowser.Browser, userBrowser.Version);
                 UserSession.Current.Browser = Browser;
 
-                log alog = new log(AppEnums.LogOperationEnum.LOGIN, AppEnums.LogTypeEnum.USER, string.Format("{0} {1}", UserSession.Current.Username, UserSession.Current.Browser ), -1);
+                log alog = new log(AppEnums.LogOperationEnum.LOGIN, AppEnums.LogTypeEnum.USER, string.Format("{0} {1}", UserSession.Current.Username, UserSession.Current.Browser ));
                 CreateLog(alog);
 
                 UserSession.Current.MyProjects = myProjects;

@@ -45,7 +45,7 @@
                     @Html.LabelFor(model => model.assigned_to, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-6">
 
-                        @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select" })
+                        @Html.DropDownListFor(model => model.assigned_to,(SelectList)ViewBag.assigned_to, "Unassigned", new { @class = "form-control chosen-select" })
                         @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
                     </div>
                 </div>

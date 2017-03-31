@@ -12,17 +12,11 @@ namespace CatchMe.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class category
+    public partial class optionset
     {
-        public category()
-        {
-            this.tasks = new HashSet<task>();
-        }
-    
-        public int category_id { get; set; }
-        public string description { get; set; }
-        public Nullable<int> display_order { get; set; }
-    
-        public virtual ICollection<task> tasks { get; set; }
+        public int optionset_id { get; set; }
+        public string option_type { get; set; }
+        public int code { get; set; }
+        public string name { get; set; }
     }
 }

@@ -171,6 +171,12 @@
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\EmailRecipient.cs" />
     <Compile Include="Helpers\SelectItems.cs" />
+    <Compile Include="Models\date.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\optionset.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModel\StatusChangedViewModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Helpers\Utils.cs" />
@@ -297,6 +303,7 @@
     <Content Include="Images\dropdown.png" />
     <Content Include="Images\dropdown32.png" />
     <Content Include="Images\tfs-defect-screen.PNG" />
+    <Content Include="notes\catchme-db-updates.txt" />
     <Content Include="notes\catchme_create.sql" />
     <EntityDeploy Include="Models\CatchMe.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -575,6 +582,7 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Tasks\_ShowComment.cshtml" />
     <Content Include="Views\Tasks\_EditCommentModal.cshtml" />
+    <Content Include="Views\Tasks\InfoList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

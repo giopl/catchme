@@ -1,0 +1,560 @@
+select to_char(client_no) client_no                        ,
+       to_char(limit_code) limt_code                       ,
+   case when (to_char(limit_currency)) IS NULL then '~' else to_char(limit_currency) end limit_currency,
+       sum(advised_amt) advised_amt     ,
+                   sum(advised_amt_mur) advised_amt_mur     ,
+       sum(balance)balance,
+       sum(cr_balance) cr_balance
+from
+
+(
+
+--Advised /Debit balance overdrafts
+select client_no,
+       '1000' limit_code,
+                   limit_currency,
+       sum(advised_amt)advised_amt,
+                   sum(advised_amt_mur)advised_amt_mur,
+       sum(balance) balance,
+       sum(cr_balance) cr_balance
+from
+(
+
+select distinct client_no,
+                                                                limit_currency,
+                advised_amt,
+               advised_amt_mur,
+              0 balance,
+              0 cr_balance
+      from   mu_gcp_eom_dtl_tab
+      where   mth_end_date =TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    prod_order between 1 and 11
+      and    prod_order not in (5,6,7,8)
+      and    CREDIT_LINE_NO IS NOT NULL
+
+union all
+
+select         client_no,
+               limit_currency,
+                                                                0 advised_amt,
+                0 advised_amt_mur,
+               sum(case when balance_mur < 0 then balance_mur else 0 end) * -1  balance,
+               sum(case when balance_mur > 0 then balance_mur else 0 end) cr_balance
+      from   mu_gcp_eom_dtl_tab
+      where  mth_end_date =TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    prod_order between 1 and 11
+      and    prod_order not in (5,6,7,8)
+      and    CREDIT_LINE_NO IS NOT NULL
+      group by client_no, limit_currency
+
+)
+
+group by client_no, limit_currency
+
+
+union all
+
+
+--Advised /Debit balance Credit cards
+
+select
+               client_no,
+               '2000'limit_code,
+                                                   a.acct_ccy limit_currency,
+                                                   sum(advised_amt)advised_amt,
+               sum(A.advised_amt_mur)advised_amt_mur,
+               sum(dr_int)balance,
+               sum(abs(cr_int))cr_balance
+      from   mu_gcp_eom_dtl_tab A, mu_pwc_shadow_account_dtl_eom B
+      where A.mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    A.product ='CC'
+      AND    A.ACCT_NO = B.shadow_account_nbr
+      AND    B.primary_shadow_account_nbr IS NULL
+  --    and client_no = 6388
+      group by client_no, acct_ccy
+
+union all
+
+-- Advised import line/shipping guarantee/advised lc/import loan/advised sight/advised usance/advised stand-by/Advised export line/advised avals
+-- Advised  OPEN ACCOUNT/aval mix/doc col sight/lc/bg/doc col usance
+
+select      customer_no,
+            limit_product,
+                                                limit_currency,
+                                                sum(advised_amount) advised_amt,
+            sum(advised_amount) advised_amt_mur,
+            0 balance,
+            0 cr_balance
+            from mu_gcp_limit_eom
+            where  mth_end_Date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+            and limit_product in (4000,4020,4010, 4040, 4011, 4012, 4013, 5000, 4030, 5050, 5040, 5020, 5010, 7000, 5030)
+            and nvl(advised_amount,0) >= 0
+            and limit_currency =  'MUR'
+            group by customer_no, limit_product, limit_currency
+
+union all
+
+  select
+            customer_no,
+            limit_product,
+                                                limit_currency,
+                                                sum(advised_amount) advised_amt,
+            sum(advised_amount * (DECODE(QUOTATION_CODE ,2,REVAL_RATE/100,REVAL_RATE)))advised_amt_mur,
+            0 balance,
+            0 cr_balance
+
+            from mu_gcp_limit_eom , MU_CURRENCY_MRKT_DTL_eom A, MU_CURRENCY_DTL_eom B
+            where A.ID = B.ID
+            AND A.ID = mu_gcp_limit_eom.limit_currency
+            AND   a.extract_date = b.extract_date
+            and a.extract_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+            and mth_end_Date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+            and limit_product in (4000,4020,4010, 4040, 4011, 4012, 4013, 5000, 4030, 5050, 5040, 5020, 5010, 7000, 5030)
+            and nvl(advised_amount,0) >= 0
+            and currency_market = 1
+            and limit_currency <> 'MUR'
+            group by customer_no, limit_product, limit_currency
+
+union all
+-- Debit balance import line
+
+select client_no,
+       '4000',
+                   limit_currency,
+       0 advised_amt,
+                   0 advised_amt_mur,
+       sum(bal),
+       0 cr_balance
+FROM
+(
+      select  client_no, limit_currency, a.balance_mur bal
+      from   mu_gcp_eom_dtl_tab a, MU_TF_LC_TYPES_DTL C
+
+      where  a.mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    a.product_desc <> 'XXXXX'
+      and    a.prod_order in (20,25, 22, 21, 23, 24)
+      and    a.balance_mur > 0
+      and    A.product = C.lc_type_code
+      and    C.import_export = 'I'
+   --   and   a.client_no = 6388
+
+
+        union all
+
+      select  client_no, limit_currency,
+              decode(substr(c.acct_no,1,4),'PDPD',0, c.balance_mur) + nvl(c.pd_pri_mur, 0) + nvl(c.pd_int_mur, 0)
+
+      from   mu_gcp_eom_dtl_tab c
+      where   mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    product_desc <> 'XXXXX'
+      and    prod_order in (29,30)
+      --and client_no = 6388
+
+)
+
+GROUP BY client_no, limit_currency
+
+
+
+
+union all
+-- debit balance shipping guarantee
+
+select client_no,
+       '4020',
+                   limit_currency,
+       0 advised_amt,
+                   0 advised_amt_mur,
+       sum(balance_mur),
+       0 cr_balance
+
+  from   mu_gcp_eom_dtl_tab
+  where mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+  and product_desc <> 'XXXXX'
+  and prod_order =23
+  and balance_mur > 0
+  --and  client_no = '6388'
+  group by client_no, limit_currency
+
+
+
+union all
+
+-- debit balance lc
+--------------
+      select client_no,
+             '4010' limit_code,
+             limit_currency,
+                                                0 advised_amt,
+                                                0 advised_amt_mur,
+             nvl(sum(a.balance_mur),0),
+             0 cr_balance
+      from   mu_gcp_eom_dtl_tab a, MU_TF_LC_TYPES_DTL C
+      where    a.mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    a.product_desc <> 'XXXXX'
+      and    a.prod_order in (20,25, 22, 21)
+      and    a.balance_mur > 0
+      and    A.product = C.lc_type_code
+      and    C.import_export = 'I'
+      --and client_no = 6388
+      group by client_no, limit_currency
+
+
+union all
+
+-- debit balamce import loan - FB
+
+      select  client_no,
+              '4040' limit_code,
+              limit_currency,
+                                                  0 advised_amt,
+                                                  0 advised_amt_mur,
+              sum( decode(substr(c.acct_no,1,4),'PDPD',0, c.balance_mur)) +  sum(nvl(c.pd_pri_mur, 0)) + sum(nvl(c.pd_int_mur, 0)) balance,
+              0 cr_balance
+
+      from   mu_gcp_eom_dtl_tab c
+      where   mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    product_desc <> 'XXXXX'
+      and    prod_order in (29,30)
+    --  and client_no = '6388'
+      group by client_no, limit_currency
+
+union all
+
+--------------------
+-- debit balance sight
+
+      select  client_no,
+             '4011',
+             limit_currency,
+                                                0 advised_amt,
+                                                0 advised_amt_mur,
+             sum(nvl(a.balance_mur, 0)),
+             0 cr_balance
+      from   mu_gcp_eom_dtl_tab a, MU_TF_LC_TYPES_DTL C
+
+      where    a.mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    a.product_desc <> 'XXXXX'
+      and    a.prod_order in (20,25)
+      and    a.balance_mur > 0
+      and    A.product = C.lc_type_code
+      and    C.import_export = 'I'
+   --   and client_no = '6388'
+      group by client_no, limit_currency
+
+union all
+
+--------------------------
+-- debit balance usance
+
+     select
+client_no,
+'4012',
+limit_currency,
+0 advised_amt,
+0 advised_amt_mur,
+sum(bal),
+0 cr_balance
+
+from
+(
+
+
+
+      select
+      client_no,limit_currency,
+
+             nvl(sum(a.balance_mur),0) bal
+      from   mu_gcp_eom_dtl_tab a , MU_TF_LC_TYPES_DTL C
+      where    a.mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    a.product_desc <> 'XXXXX'
+      and    a.prod_order = 22
+      and    a.balance_mur > 0
+      and    A.product = C.lc_type_code
+      and    C.import_export = 'I'
+            group by client_no,limit_currency
+
+      union all
+
+      select    client_no,limit_currency,
+
+             nvl(sum(a.balance_mur),0) bal
+      from   mu_gcp_eom_dtl_tab a , MU_TF_LC_TYPES_DTL C
+      where    a.mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    a.product_desc <> 'XXXXX'
+      and    a.prod_order = 26
+      and    a.balance_mur > 0
+      and    A.product = C.lc_type_code
+      and    C.import_export = 'I'
+      and substr(acct_no,1, 12) not in
+      (
+       select  acct_no
+      from   mu_gcp_eom_dtl_tab a , MU_TF_LC_TYPES_DTL C
+      where    a.mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    a.product_desc <> 'XXXXX'
+      and    a.prod_order = 22
+      and    a.balance_mur > 0
+      and    A.product = C.lc_type_code
+      and    C.import_export = 'I'
+
+      )
+      group by client_no,limit_currency
+
+)
+
+group by client_no,limit_currency
+--
+
+union all
+---------------------
+-- debit balance stand-by
+
+      select client_no,
+             '4013',
+             limit_currency,
+                                                0 advised_amt,
+                                                0 advised_amt_mur,
+             nvl(sum(a.balance_mur),0),
+             0 cr_balance
+
+      from   mu_gcp_eom_dtl_tab a, MU_TF_LC_TYPES_DTL C
+      where    a.mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    a.product_desc <> 'XXXXX'
+      and    a.prod_order = 21
+      and    a.balance_mur > 0
+      and    A.product = C.lc_type_code
+      and    C.import_export = 'I'
+    --  and client_no = '6388'
+      group by client_no,limit_currency
+union all
+-------------------------
+
+--debit_balance avals
+
+select client_no,
+       '4030' limit_code,
+       limit_currency,
+                                0 advised_amt,
+                                0 advised_amt_mur,
+       sum(balance_mur),
+       0 cr_balance
+
+  from   mu_gcp_eom_dtl_tab
+
+  where mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+  and product_desc <> 'XXXXX'
+  and prod_order =24
+  and balance_mur > 0
+-- and client_no = 6388
+  group by client_no, limit_currency
+------
+UNION ALL
+
+-- DEBIT BAL export line
+
+        select client_no,
+        '5000' limit_code,
+                                limit_currency,
+        0 advised_amt,
+                                0 advised_amt_mur,
+        sum(nvl(balance_mur,0)) + sum(nvl(pd_pri_mur,0)) + sum(nvl(pd_int_mur,0)) balance,
+        0 cr_balance
+  from   mu_gcp_eom_dtl_tab
+  where mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+  and nvl(balance_mur, 0) + nvl(pd_pri_mur, 0) + nvl(pd_int_mur, 0) <> 0
+  and product_desc <> 'XXXXX'
+  and prod_order in (35,39, 32,37, 31,36, 33, 34, 38, 39)
+--  and client_no = 6388
+  group by client_no,limit_currency
+
+
+union all
+-- DEIT BAL Open account - FB
+
+        select client_no,
+        '5050' limit_code,
+                                limit_currency,
+        0 advised_amt,
+                                0 advised_amt_mur,
+        sum(nvl(balance_mur,0)) + sum(nvl(pd_pri_mur,0)) + sum(nvl(pd_int_mur,0))balance,
+        0 cr_balance
+  from   mu_gcp_eom_dtl_tab
+  where mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+  and nvl(balance_mur, 0) + nvl(pd_pri_mur, 0) + nvl(pd_int_mur, 0) <> 0
+  and product_desc <> 'XXXXX'
+  and prod_order in (35,39)
+  --and client_no = 6388
+  group by client_no, limit_currency
+
+--
+
+union all
+--aval mix
+
+  select client_no,
+         '5040',
+         limit_currency,
+        0 advised_amt,
+                                0 advised_amt_mur,
+         sum(nvl(balance_mur,0)) + sum(nvl(pd_pri_mur,0)) + sum(nvl(pd_int_mur,0)),
+         0 cr_balance
+
+  from   mu_gcp_eom_dtl_tab
+where mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+  and nvl(balance_mur, 0) + nvl(pd_pri_mur, 0) + nvl(pd_int_mur, 0) <> 0
+  and product_desc <> 'XXXXX'
+  and prod_order in (32,37)
+--and   client_no = 6388
+  group by client_no, limit_currency
+
+--
+union all
+--lc
+select  client_no,
+        '5010',
+        limit_currency,
+        0 advised_amt,
+                                0 advised_amt_mur,
+        sum(nvl(balance_mur,0)) + sum(nvl(pd_pri_mur,0)) + sum(nvl(pd_int_mur,0)),
+        0 cr_balance
+
+  from   mu_gcp_eom_dtl_tab
+  where mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+   and nvl(balance_mur, 0) + nvl(pd_pri_mur, 0) + nvl(pd_int_mur, 0) <> 0
+  and product_desc <> 'XXXXX'
+  and prod_order = 31
+--  and   client_no = 6388
+  group by client_no, limit_currency
+
+
+-- doc col sight
+
+union all
+
+select client_no,
+       '5020',
+       limit_currency,
+        0 advised_amt,
+                                0 advised_amt_mur,
+       sum(nvl(balance_mur,0)) + sum(nvl(pd_pri_mur,0)) + sum(nvl(pd_int_mur,0)),
+       0 cr_balance
+
+
+  from   mu_gcp_eom_dtl_tab
+where mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+  and nvl(balance_mur, 0) + nvl(pd_pri_mur, 0) + nvl(pd_int_mur, 0) <> 0
+  and product_desc <> 'XXXXX'
+  and prod_order in (33,38)
+  --and  client_no = 6388
+  group by client_no, limit_currency
+
+
+--
+union all
+-- doc col usance
+select   client_no,
+         '5030',
+         limit_currency,
+        0 advised_amt,
+                                0 advised_amt_mur,
+        sum(nvl(balance_mur,0)) + sum(nvl(pd_pri_mur,0)) + sum(nvl(pd_int_mur,0)),
+        0 cr_balance
+
+
+  from   mu_gcp_eom_dtl_tab
+  where mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+  and nvl(balance_mur, 0) + nvl(pd_pri_mur, 0) + nvl(pd_int_mur, 0) <> 0
+  and product_desc <> 'XXXXX'
+  and prod_order in(34,39)
+  --and client_no = 6388
+  group by client_no, limit_currency
+
+
+
+
+
+
+union all
+-- Bank gaurantee NFB balance
+
+select client_no,
+       '7000'limit_code,
+       limit_currency,
+        0 advised_amt,
+                                0 advised_amt_mur,
+       sum(balance_mur)balance,
+        0 cr_balance
+
+  from   mu_gcp_eom_dtl_tab
+  where mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+  and product_desc <> 'XXXXX'
+  and prod_order =43
+  and product not in ('FISTN', 'FISTC')
+-- and client_no = '6388'
+  group by client_no, limit_currency
+
+union all
+-- Total outstanding balance/ advsied_amt -- TERM LOANS
+
+select
+             client_no,
+             to_char(a.limit_Ref) limit_code,
+                                                limit_currency,
+             sum(c.advised_amt) advised_amt, --TO CHECK
+                                                sum(c.advised_amt_mur) advised_amt_mur,
+             sum( decode(substr(c.acct_no,1,4),'PDPD',0, c.balance_mur)) +  sum(nvl(c.pd_pri_mur, 0)) + sum(nvl(c.pd_int_mur, 0))balance,
+            0 cr_balance
+
+
+      from   mu_gcp_limit_struct a, mu_limit_Ref_dtl b, mu_gcp_eom_dtl_tab c
+      where a.limit_ref  = b.limit_reference
+      and   a.limit_ref = substr(c.limit_Ref,3,3)
+      and   a.parent_limit_ref = 10000
+      and   a.level_From_parent = 3
+      and   c.mth_end_Date= TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and   c.limit_ref <> 'NOSTRO'
+    --  and client_no = '6388'
+      group by to_char(a.limit_Ref), client_no,limit_currency
+
+union all
+
+-- Deb
+
+select       c.client_no,
+             '200'limit_code,
+                                                limit_currency,
+             sum(c.advised_amt) advised_amt, --TO CHECK
+                                                sum(c.advised_amt_mur) advised_amt_mur,
+             sum( decode(substr(c.acct_no,1,4),'PDPD',0, c.balance_mur)) +  sum(nvl(c.pd_pri_mur, 0)) + sum(nvl(c.pd_int_mur, 0))balance,
+             0 cr_balance
+      from  mu_gcp_eom_dtl_tab c
+      where substr(c.limit_Ref,3,3) ='200'
+      and   c.mth_end_Date= TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and   c.limit_ref <> 'NOSTRO'
+    --AND CLIENT_NO = '6388'
+      group by c.client_no, limit_currency
+
+union all
+-- accounts not linked to limit
+
+      select  client_no,
+             '~' limit_code,
+                                                limit_currency,
+                                                sum(advised_amt)advised_amt,
+             sum(advised_amt_mur)advised_amt_mur,
+             sum(case when balance_mur < 0 then balance_mur else 0 end) balance,
+             sum(case when balance_mur > 0 then balance_mur else 0 end) cr_balance
+     from   mu_gcp_eom_dtl_tab
+      where   mth_end_date = TO_DATE(#DTRUN#, 'YYYYMMDD')
+      and    prod_order between 1 and 11
+      and    prod_order not in (5,6,7,8)
+      and    CREDIT_LINE_NO IS NULL
+      group by client_no, limit_currency
+)
+
+group by
+to_char(client_no),
+to_char(limit_code),
+to_char(limit_currency)
+
+

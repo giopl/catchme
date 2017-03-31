@@ -19,6 +19,5 @@ namespace CatchMe.Models
         public int role { get; set; }
     
         public virtual project project { get; set; }
-        public virtual user user { get; set; }
     }
 }
