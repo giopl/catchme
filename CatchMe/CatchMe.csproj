@@ -171,6 +171,12 @@
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\EmailRecipient.cs" />
     <Compile Include="Helpers\SelectItems.cs" />
+    <Compile Include="Models\date.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\optionset.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModel\StatusChangedViewModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Helpers\Utils.cs" />

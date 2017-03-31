@@ -407,8 +407,8 @@ table.fixed td { overflow: hidden; }
 
                                 </td>
                                 <td>
-                                    @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                    @assignee
+                                    @*@{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }*@
+                                    @(item.user == null?"Unassigned":item.user.firstname)
                                 </td>
                                 <td data-order="@item.priority">
                                     <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
@@ -541,8 +541,9 @@ table.fixed td { overflow: hidden; }
 
                                 </td>
                                 <td>
-                                    @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                    @assignee
+                                    @*@{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }*@
+                                    @(item.user==null?"Unassigned":item.user.firstname)
+                                    
                                 </td>
                                 <td data-order="@item.priority">
                                     <span class="fa fa-circle color-@item.PriorityDesc.ToLower()"></span>&nbsp; <span class="text-muted">@Html.DisplayFor(modelItem => item.PriorityDesc)</span>
@@ -630,8 +631,9 @@ table.fixed td { overflow: hidden; }
 
                                 </td>
                                 <td>
-                                    @{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }
-                                    @assignee
+                                    @*@{ var assignee = item.user.user_id == 0 ? "Unassigned" : item.user.firstname; }*@
+                                    @(item.user == null ? "Unassigned" : item.user.firstname)
+                                    
                                 </td>
                                 <td>@item.user2.firstname</td>
                                 <td>

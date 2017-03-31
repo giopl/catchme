@@ -12,17 +12,8 @@ namespace CatchMe.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class category
+    public partial class date
     {
-        public category()
-        {
-            this.tasks = new HashSet<task>();
-        }
-    
-        public int category_id { get; set; }
-        public string description { get; set; }
-        public Nullable<int> display_order { get; set; }
-    
-        public virtual ICollection<task> tasks { get; set; }
+        public System.DateTime fulldate { get; set; }
     }
 }

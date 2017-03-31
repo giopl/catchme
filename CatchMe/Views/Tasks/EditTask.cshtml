@@ -87,7 +87,7 @@
 
                         foreach (var u in users.Where(u=>u.user_id !=0).ToList())
                             {
-                    <input type="checkbox" class="notification" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
+                                <input type="checkbox" class="notification" name="notify" value="@u.user_id" />@:&nbsp;@u.fullname &nbsp;
                             }
 
                         if (session.Current.UserId == Model.assigned_to)
@@ -332,7 +332,7 @@
         <h4 class="text-right"><span class="text-muted">Assigned to: </span><span class="label label-@(notassigned?"default":"info")"><span class="fa fa-user"></span>&nbsp; @assignee</span></h4>
 
         @using (Html.BeginForm())
-                        {
+            {
             @Html.AntiForgeryToken()
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -352,7 +352,17 @@
 
                     <div class="col-md-8">
 
-                        @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select submitme" })
+                        @if (Model.assigned_to == null)
+                        {
+                            <input type="text" class="form-control" readonly value="@Model.StatusDesc" />
+                            <input type="hidden" name="status" value="@Model.status" />
+                        }
+                        else
+                        {
+                            @Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select submitme" })
+                        }
+
+                        
                         @*@Html.DropDownList("status", null, htmlAttributes: new { @class = "form-control chosen-select statuschange" , @id="reset_statusid"})*@
                         @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
                         <span class="text-light"><small>&nbsp;<span class="fa fa-info-circle"></span> Only <b>Owner</b> can close task</small></span>
@@ -366,7 +376,8 @@
                     </div>
                     <div class="col-md-8">
 
-                        @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select submitme" })
+                        @*@Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select submitme" })*@
+                        @Html.DropDownListFor(model => model.assigned_to, (SelectList)ViewBag.assignees, "Unassigned", new { @class = "form-control chosen-select submitme" })
                         @Html.ValidationMessageFor(model => model.assigned_to, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -704,7 +715,8 @@
                                 <strong>Re-assign:</strong>
                             </div>
                             <div class="col-md-8">
-                                @Html.DropDownList("assigned_to", null, new { @class = "form-control chosen-select-sendto" })
+                                @Html.DropDownList("assignees", null, new { @class = "form-control chosen-select-sendto" })
+                                @Html.DropDownList("assigned_to", (SelectList)ViewBag.assignees, new  { @class = "form-control chosen-select-sendto" })
                             </div>
                         </div>
 
@@ -733,8 +745,8 @@
             }
 
 
-            @section Scripts {
-                @Scripts.Render("~/bundles/jqueryval")
+                                @section Scripts {
+                                    @Scripts.Render("~/bundles/jqueryval")
                 @*@Scripts.Render("~/bundles/nicedit")*@
 
 

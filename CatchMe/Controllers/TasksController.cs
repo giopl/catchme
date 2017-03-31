@@ -912,13 +912,13 @@ namespace CatchMe.Controllers
             //http://stackoverflow.com/questions/13405568/linq-unable-to-create-a-constant-value-of-type-xxx-only-primitive-types-or-enu
             var users = db.users.Where(x=>x.projects.Select(p=>p.project_id).Contains(currentprojectid)).ToList();
 
-            var unassigned = new user { user_id = 0, firstname = "Unassigned" };
+            //var unassigned = new user { user_id = 0, firstname = "Unassigned" };
             //users.Add(unassigned) ;
 
             //Where(l => l.Courses.Select(c => c.CourseId).Contains(courseId)
 
             
-            ViewBag.assigned_to = new SelectList(users, "user_id", "firstname", unassigned);
+            ViewBag.assigned_to = new SelectList(users, "user_id", "firstname");
             
 
             //ViewBag.status = new SelectList(getStatuses(), "value", "name");
@@ -1088,11 +1088,11 @@ namespace CatchMe.Controllers
                     comment _comment = new comment
                     {
                         task_id = task.task_id,
-                        user_id = task.created_by.Value,
+                        user_id = task.created_by,
                         title = task.title,
                         created_on = task.created_on,
                         updated_on = task.created_on.Value,
-                        updated_by = 0,
+                        updated_by = task.updated_by,
                         description = task.description
                     };
 
@@ -1166,7 +1166,7 @@ namespace CatchMe.Controllers
             var unassigned = new user { user_id = 0, firstname = "Unassigned" };
             //users.Add(unassigned);
 
-            ViewBag.assigned_to = new SelectList(users, "user_id", "firstname", task.assigned_to);
+            ViewBag.assignees = new SelectList(users, "user_id", "firstname", task.assigned_to);
 
             var listwithoutunassigned = users.ToList();
             listwithoutunassigned.Remove(new user { user_id = 0 });
@@ -1342,10 +1342,13 @@ namespace CatchMe.Controllers
                         string.Format("{0} changed", Utils.EnumToString(AppEnums.LogTypeEnum.ASSIGNEE.ToString(), true))
                         , oldtask.assigned_to.ToString(), newtask.assigned_to.ToString(), newtask.task_id);
                     CreateLog(log);
+                    if (newtask.assigned_to != null)
+                    {
                     var recipient = db.users.Find(newtask.assigned_to);
                         
                         var message = string.Format("Hi {0}, you have been assigned a new task from {1}: \"{2}\"", recipient.firstname, UserSession.Current.Firstname, newtask.title);
                     SendMessage(recipient.username,message,"assigned");
+                    }
                 }
 
 

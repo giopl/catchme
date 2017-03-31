@@ -10,7 +10,7 @@
     [type]        INT            NULL,
     [severity]    INT            NULL,
     [priority]    INT            NULL,
-    [created_by]  INT            NULL,
+    [created_by]  INT            NOT NULL,
     [created_on]  DATETIME       DEFAULT (getdate()) NULL,
     [assigned_to] INT            NULL,
     [updated_on]  DATETIME       DEFAULT (getdate()) NULL,
@@ -23,6 +23,8 @@
     CONSTRAINT [FK_task_updated_by_user_id] FOREIGN KEY ([updated_by]) REFERENCES [dbo].[user] ([user_id]),
     CONSTRAINT [FK_task_user_id] FOREIGN KEY ([created_by]) REFERENCES [dbo].[user] ([user_id])
 );
+
+
 
 
 
