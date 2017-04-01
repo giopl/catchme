@@ -10,15 +10,12 @@ alter table attachment alter column task_id int null
 alter table attachment alter column information_id int null
 alter table attachment alter column comment_id int null
 
-update attachment set information_id = null 
-where information_id = -1
+update attachment set information_id = null where information_id = -1
 
 
-update attachment set task_id = null 
-where task_id = -1
+update attachment set task_id = null where task_id = -1
 
-update attachment set comment_id = null 
-where comment_id = -1
+update attachment set comment_id = null where comment_id = -1
 
 --comment
 delete from [comment] where comment_id = -1
