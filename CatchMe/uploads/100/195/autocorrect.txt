@@ -1,0 +1,76 @@
+op.. operation
+admn administration
+admr.. administrator
+admv.. administrative
+adv.. advanced
+appl.. application
+auth.. authentication
+
+an.. ASP.NET
+anm.. ASP.NET MVC
+
+attr.. attribute
+cfg.. configuration
+comm.. communication
+conf.. configure
+confg.. configuration
+
+conn.. connection
+db.. database
+defn definition
+dir.. directory
+dw.. data warehouse
+env.. environment
+feat.. feature
+fx.. function
+std.. standard
+stdn.. stardardization
+impl.. implement
+impln.. implementation
+
+fxl.. functional
+prgg.. programming
+lang.. language
+req.. requirement
+reqm..requirement
+doc.. document
+arg.. argument
+obj.. object
+prp.. property
+prps.. properties
+cont.. controller
+bus.. business
+
+hw.. hardware
+info.. information
+mgmt.. management
+mgr.. manager
+mgt.. management
+nw.. network
+op.. operation
+org.. organization
+os.. operating system
+param.. parameter
+proc.. procedure
+res.. resource
+soln.. solution
+sp.. stored procedure
+stmt.. statement
+sw.. software
+sys.. system
+syst.. system
+tech.. technology
+techq.. technique
+tx.. transaction
+var.. variable
+win.. windows
+
+prj.. project
+
+dev.. develop
+devm.. development
+devg.. developing
+ms.. Microsoft
+
+ef.. Entity Framework
+vs.. Visual Studio

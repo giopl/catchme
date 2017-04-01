@@ -21,6 +21,13 @@ namespace CatchMe.Helpers
         #endregion
 
 
+        public enum TabEnum {
+            Me = 0,
+            Open,
+            Closed,
+            Searched
+        }
+
         public enum StatusEnum
         {
             

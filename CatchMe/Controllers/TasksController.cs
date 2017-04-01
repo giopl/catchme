@@ -566,12 +566,16 @@ namespace CatchMe.Controllers
                 {
 
                     log.Info("Saving resource to disk - Resource file found");
-                    var projectid = db.tasks.Find(taskid).project_id;
+                    var projectid = 0;
 
                     //if item is info derive project id from information instead
-                    if(informationid > 0)
+                    if (informationid > 0)
                     {
                         projectid = db.information.Find(informationid).project_id;
+                    }
+                    else
+                    {
+                        projectid = db.tasks.Find(taskid).project_id;
                     }
 
                     var serverpathprod = Helpers.ConfigurationHelper.GetServerPathProd();
@@ -640,7 +644,7 @@ namespace CatchMe.Controllers
             catch (Exception e)
             {
                 log.ErrorFormat("Error saving resource to disk {0}", e.ToString());
-                return false;
+                throw;
     
             }
         }

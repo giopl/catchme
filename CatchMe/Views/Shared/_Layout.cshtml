@@ -50,7 +50,7 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" style="background:#ddd;width:300px;" name="keywords" placeholder="Advanced Search enter keywords">
                                                     <span class="input-group-btn">
-                                                        <button class="btn btn-primary" type="submit"><span class="fa fa-search"></span></button>
+                                                        <button class="btn btn-primary" onclick="setSearchTab()" type="submit"><span class="fa fa-search"></span></button>
                                                     </span>
                                                 </div><!-- /input-group -->
                         }
@@ -116,6 +116,7 @@
         $(function () {
 
             $('body').on('click', '.opensearch', function () {
+//                alert('opening search');
                 $('.showadvancedsearch').toggle();
             });
             // Reference the auto-generated proxy for the hub.
@@ -154,6 +155,15 @@
             });
         });
         
+        //when search clicked, set the search tab as default in localstorage
+        function setSearchTab()
+        {
+            if (Modernizr.localstorage) {
+                var localCustomerProfile = window.localStorage;
+                localCustomerProfile.setItem("Tab", "#searched");
+            }
+        }
+
         function notifyfunc(message,classname)
         {
 

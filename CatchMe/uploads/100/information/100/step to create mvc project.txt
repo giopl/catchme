@@ -1,0 +1,57 @@
+1. create a project in MVC 
+type:Web
+template MVC
+Authentication Individual Users
+
+2. compile and run project
+
+3. create model
+a. Restaurant
+b. fod
+
+4. Create Controller
+Food 
+Choose ApplicationDbContext
+
+5. create controller: Restaurant
+
+6. check IdentityModel to check that two models have been added to context
+
+6a open the web.config and change the name of the datbase
+
+7. run application use url to navigate to /Restaurants
+8. add a restaurant
+9. create foods
+
+10. add range validaton
+[Range(1,5,ErrorMessage ="Must be between 1 and 5")]
+
+10. Check databse open SQL Explorer
+
+11. Add an Initializer class 
+
+12. add entry in global.asax
+Database.SetInitializer<ApplicationDbContext>(new Initializer());
+
+13. modify the index home page and _layout
+_layout
+change title 
+change application name
+change ActionLink Menus
+change footer
+
+14. modify the index page of home controler
+
+15. Add [Authorize] to Edit and Create in Restaurant
+
+16. when adding a new field the database wil break
+open package manager consoel
+type
+enable-migrations
+add-Migration addUserToRestaurant
+update-database
+
+17. delete the restaurant controller and the restaurant view folder
+
+18. add new controller restaurant
+

@@ -3,13 +3,14 @@
 @using session = CatchMe.Helpers.UserSession
 @using appenums = CatchMe.Helpers.AppEnums
 
+
 @{
     session.count++;
 
     ViewBag.Title = "Catch Me";
 
     var isBusiness = session.Current.IsBusiness;
-    
+
     var countopen = Model.Where(x => x.status != 9).Count();
     var countme = Model.Where(x => x.assigned_to == session.Current.UserId && x.status != 9).Count();
     //var countme = Model.Where(x => (x.assigned_to == session.Current.UserId && x.owner != session.Current.UserId && x.status != 9 && x.status != 3 && x.status != 7) || x.owner == session.Current.UserId && (x.status == 7 || x.status == 3)).Count();
@@ -36,7 +37,7 @@
 
     }
 
-
+    var tab = session.Current.Tab;
 
 }
 <style>
@@ -49,7 +50,7 @@
 
 </style>
 
-
+@*<h1>@tab.ToString()</h1>*@
 @*<a href="#" class="notify">show notification @session.count</a>
 <a href="#" class="sendtestnotif">show notification @session.count</a>*@
 
@@ -103,12 +104,15 @@ table.fixed td { overflow: hidden; }
 
             if (countme > 0)
             {
-                <li role="presentation" class="active assignedcolor"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me (@countme)</a></li>
+                @*<li role="presentation" class="@(tab==CatchMe.Helpers.AppEnums.TabEnum.Me?"":"active") assignedcolor"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me (@countme)</a></li>*@
+                <li role="presentation" class="assignedcolor"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Assigned To Me (@countme)</a></li>
             }
-            <li role="presentation" class="@(countme>0?"":"active") opencolor"><a href="#open" aria-controls="settings" role="tab" data-toggle="tab">Open (@countopen)</a></li>
+            @*<li role="presentation" class="@(tab==CatchMe.Helpers.AppEnums.TabEnum.Open?"":"active") opencolor"><a href="#open" aria-controls="settings" role="tab" data-toggle="tab">Open (@countopen)</a></li>*@
+            <li role="presentation" class="active opencolor"><a href="#open" aria-controls="settings" role="tab" data-toggle="tab">Open (@countopen)</a></li>
 
             if (countclosed > 0)
             {
+                @*<li role="presentation" class="@(tab==CatchMe.Helpers.AppEnums.TabEnum.Closed?"":"active") closecolor"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed (@countclosed)</a></li>*@
                 <li role="presentation" class="closecolor"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed (@countclosed)</a></li>
             }
             if (countopenbyme > 0)
@@ -122,6 +126,7 @@ table.fixed td { overflow: hidden; }
 
             if (countsearched > 0)
             {
+                @*<li role="presentation" class="@(tab==CatchMe.Helpers.AppEnums.TabEnum.Searched?"":"active") searchedcolor"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab"><b><span class="fa fa-files-o"></span> Searched</b> (@countsearched)</a></li>*@
                 <li role="presentation" class="searchedcolor"><a href="#searched" aria-controls="messages" role="tab" data-toggle="tab"><b><span class="fa fa-files-o"></span> Searched</b> (@countsearched)</a></li>
             }
             if (countnotifications > 0)
@@ -282,7 +287,7 @@ table.fixed td { overflow: hidden; }
         {
 
 
-            <div role="tabpanel" class="tab-pane @(countme > 0?"active":"" )" id="home">
+            <div role="tabpanel" class="tab-pane" id="home">
 
                 <div class="gap"></div>
 
@@ -357,7 +362,7 @@ table.fixed td { overflow: hidden; }
 
             </div>
 
-            <div role="tabpanel" class="tab-pane @(countme > 0?"":"active" )" id="open">
+            <div role="tabpanel" class="tab-pane active" id="open">
 
                 <div class="gap"></div>
 
@@ -669,7 +674,8 @@ table.fixed td { overflow: hidden; }
                 @if (session.Current.searchFilter != null)
                 {
                     @:&nbsp;&nbsp;Keyword: <b>@session.Current.searchFilter.keywords</b> (<a href="@Url.Action("ClearFilter")">clear</a>)
-            }
+                    <input type="hidden" id="highlightme" value="@session.Current.searchFilter.keywords" />
+                }
 
                 <div id="searchtext">
                     <table class="table  table-condensed table-responsive table-striped" id="tablesearched" style="width:100%">
@@ -899,22 +905,56 @@ table.fixed td { overflow: hidden; }
 
 
 
-
 @section scripts {
  
     @*@Scripts.Render("~/bundles/datatables")*@
 
     <script src="@Url.Content("~/Scripts/plugins/datatables.min.js")"></script> 
+    
+    @Scripts.Render("~/bundles/highlight")
 
     <script>
         $(document).ready(function () {
+
+            //on loading checks if a saved tab (from localStorage) exists
+            if (Modernizr.localstorage) {
+                var localData = window.localStorage;
+                var custTab = localData.getItem("Tab");
+                if (custTab)
+                {
+                    $('.nav-tabs a[href="' + custTab + '"]').tab('show');
+                }
+            }
+
+            var wordtohighlight = $('#highlightme').val();
+            $(".highlight").css({ backgroundColor: "#FFFF88" });
+
+            if (wordtohighlight) {
+                var fields = wordtohighlight.split(' ');
+                fields.forEach(function (entry) {
+                    $('#searched').highlight(entry);
+                });
+            }
+            
+            //when tabs are changed, the value is saved in local storage to be re-used when reloading the page
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).attr("href") // activated tab
+                //alert(target);
+                if (Modernizr.localstorage) {
+                    var localCustomerProfile = window.localStorage;
+                    localCustomerProfile.setItem("Tab", target);
+                }
+            });
+
+            
+
             var welcome = 'welcome back ' + '@session.Current.Firstname' + '!';
+            
             @if(session.count==1)
             {
                 @: $.notify(welcome, "success");
+            }           
 
-            }
-           
 
             $.notify.addStyle('happyblue', {
                 html: "<div>☺<span data-notify-text/>☺</div>",
@@ -945,7 +985,7 @@ table.fixed td { overflow: hidden; }
                 $.notify(
                 'Are you looking for Facebook UI features, \this post will explain you how to create a Facebook style notifications popup using Jquery, HTML and CSS, you will understand how CSS elements will helps to improve better web design.\n This is the most needed feature for social networking web projects to minimize and enrich the UX elements.',
                 {
-                    className:'gradientblue',
+                    className: 'gradientblue',
                     // whether to hide the notification on click
                     clickToHide: false,
                     // whether to auto-hide the notification
@@ -958,7 +998,7 @@ table.fixed td { overflow: hidden; }
                     arrowSize: 5,
                     position: "bottom-right",
                     clickToHide: true,
-                    className:'info',
+                    className: 'info',
                     // show animation
                     showAnimation: 'slideDown',
                     // show animation duration
@@ -967,11 +1007,11 @@ table.fixed td { overflow: hidden; }
                     hideAnimation: 'slideUp',
                     // hide animation duration
                     hideDuration: 200,
-                    gap:0
+                    gap: 0
                 }
 
                 );
-            })
+            });
             
 
 
@@ -1075,4 +1115,5 @@ table.fixed td { overflow: hidden; }
         }
 
     
+
 

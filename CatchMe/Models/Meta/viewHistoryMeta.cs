@@ -191,57 +191,57 @@ namespace CatchMe.Models
 
                 if (type=="STATUS" && operation=="UPDATE")
                 {
-                    if(new_val.ToLower()=="new")
+                    if(new_val != null &&  new_val.ToLower()=="new")
                     {
                         return string.Format("Task reset to <b>new</b>");
                     }
 
-                    if (new_val.ToLower() == "action")
+                    if (new_val != null && new_val.ToLower() == "action")
                     {
                         return string.Format("<span class='label label-warning'>Development</span> in progress");
                     }
 
-                    if (new_val.ToLower() == "closed")
+                    if (new_val != null && new_val.ToLower() == "closed")
                     {
                         return string.Format("Task <span class='label label-default'>closed</span>");
                     }
 
-                    if (new_val.ToLower() == "completed")
+                    if (new_val != null && new_val.ToLower() == "completed")
                     {
                         return string.Format("Task <span class='label label-primary'>Completed</span>");
                     }
 
 
-                    if (new_val.ToLower() == "investigation")
+                    if (new_val != null && new_val.ToLower() == "investigation")
                     {
                         return string.Format("<span class='label label-warning'>Investigation</span> in progress");
                     }
 
-                    if (new_val.ToLower() == "failed")
+                    if (new_val != null && new_val.ToLower() == "failed")
                     {
                         return string.Format("Test <span class='label label-danger'>Failed</span>");
                     }
 
-                    if (new_val.ToLower() == "passed")
+                    if (new_val != null && new_val.ToLower() == "passed")
                     {
                         return string.Format("Test <span class='label label-success'>Passed</span>");
                     }
 
-                    if (new_val.ToLower() == "no issue")
+                    if (new_val != null && new_val.ToLower() == "no issue")
                     {
                         return string.Format("<span class='label label-success'>No Issue</span>found");
                     }
 
-                    if (new_val.ToLower() == "on hold")
+                    if (new_val != null && new_val.ToLower() == "on hold")
                     {
                         return string.Format("Task placed <span class='label label-default'>On Hold</span>");
                     }
 
-                    if (new_val.ToLower() == "problem")
+                    if (new_val != null && new_val.ToLower() == "problem")
                     {
                         return string.Format("Task changed to <span class='label label-danger'>Problem</span>");
                     }
-                    if (new_val.ToLower() == "for test")
+                    if (new_val != null && new_val.ToLower() == "for test")
                     {
                         return string.Format("Task changed to <span class='label label-warning'>For Test</span>");
                     }

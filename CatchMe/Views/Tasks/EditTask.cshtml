@@ -24,10 +24,15 @@
 }
 
 <input id="original_status" type="hidden" value="@Model.status" />
-@*<button id="test">test</button>*@
+@if (session.Current.searchFilter != null)
+{
+    @:&nbsp;&nbsp;Keyword: <b>@session.Current.searchFilter.keywords</b> (<a href="@Url.Action("ClearFilter")">clear</a>)
+    <input type="hidden" id="highlightme" value="@session.Current.searchFilter.keywords" />
+}
+
 <br />
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-8" id="highlightsection">
 
         <div class="task-title2">
             <div class="taskid">
@@ -325,8 +330,6 @@
 
 
     </div> <!-- fisrt col -->
-
-
 
     <div class="col-md-4">
         <h4 class="text-right"><span class="text-muted">Assigned to: </span><span class="label label-@(notassigned?"default":"info")"><span class="fa fa-user"></span>&nbsp; @assignee</span></h4>
@@ -745,13 +748,12 @@
             }
 
 
-                                @section Scripts {
-                                    @Scripts.Render("~/bundles/jqueryval")
-                @*@Scripts.Render("~/bundles/nicedit")*@
-
-
+@section Scripts {
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/highlight")
+  
                 <script src="@Url.Content("~/Scripts/plugins/tinymce/tinymce.min.js")"></script>
-
+                
                 <script>
 
                     tinymce.init({
@@ -765,6 +767,17 @@
 
 
                     $(document).ready(function () {
+
+
+                        var wordtohighlight = $('#highlightme').val();
+                        $(".highlight").css({ backgroundColor: "#FFFF88" });
+
+                        if (wordtohighlight) {
+                            var fields = wordtohighlight.split(' ');
+                            fields.forEach(function (entry) {
+                                $('#highlightsection').highlight(entry);
+                            });
+                        }
 
 
                         $('#test').click(function () {

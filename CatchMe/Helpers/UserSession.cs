@@ -15,7 +15,7 @@ namespace CatchMe.Helpers
 
         private UserSession()
         {
-         
+
             IsValid = false;
             Username = string.Empty;
             Fullname = string.Empty;
@@ -31,11 +31,13 @@ namespace CatchMe.Helpers
             SearchFilter searchFilter = new SearchFilter();
             Browser = string.Empty;
             HasInformational = false;
+            Tab = AppEnums.TabEnum.Open;
 
-            
         }
 
         public static int count { get; set; }
+
+        public Helpers.AppEnums.TabEnum Tab {get;set;}
 
         public SearchFilter searchFilter { get; set; }
 

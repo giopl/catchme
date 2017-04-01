@@ -17,6 +17,10 @@ body {
     
 }
 
+.highlight {
+    background-color: #FFFF88;
+}
+
 .red {
     color:red;
 }
