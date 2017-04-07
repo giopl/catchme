@@ -347,6 +347,7 @@
     <Content Include="notes\db2cgf.pdf" />
     <None Include="Properties\PublishProfiles\dwh-appsdev %28Debug%29.pubxml" />
     <None Include="Properties\PublishProfiles\local %28www%29.pubxml" />
+    <None Include="Properties\PublishProfiles\Local Release.pubxml" />
     <None Include="Properties\PublishProfiles\TestSite %28dwh-appsdev%29.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="notes\todo.txt" />
