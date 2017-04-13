@@ -345,6 +345,7 @@
     <Content Include="notes\C2090-615_Sample_QA.pdf" />
     <Content Include="notes\CatchMeDB.zip" />
     <Content Include="notes\db2cgf.pdf" />
+    <Content Include="notes\MVC Team Topics Cookbook.zip" />
     <None Include="Properties\PublishProfiles\dwh-appsdev %28Debug%29.pubxml" />
     <None Include="Properties\PublishProfiles\local %28www%29.pubxml" />
     <None Include="Properties\PublishProfiles\Local Release.pubxml" />

@@ -396,6 +396,10 @@ namespace CatchMe.Controllers
                     _filepath = string.Format("{0}/information/{1}/{2}", projectid, information_id, file.FileName);
                 }
 
+                int? _information_id = information_id == -1 ? null : (int?)information_id;
+                int? _comment_id = comment_id == -1 ? null : (int?)comment_id;
+
+
                 attachment attachment = new attachment
                 {
                     filename = file.FileName,
@@ -404,8 +408,8 @@ namespace CatchMe.Controllers
                     created_on = DateTime.Now,
                     task_id = taskid,
                     user_id = UserSession.Current.UserId,
-                  comment_id = comment_id,
-                    information_id = information_id,
+                    comment_id = _comment_id,
+                    information_id = _information_id,
                     filepath = _filepath
 
 
@@ -946,7 +950,7 @@ namespace CatchMe.Controllers
                 comment.user_id = UserSession.Current.UserId;
                 comment.created_on = DateTime.Now;
                 comment.updated_on = DateTime.Now;
-                comment.updated_by = 0; 
+                comment.updated_by = UserSession.Current.UserId;
 
                 if (!string.IsNullOrWhiteSpace(comment.description) || !string.IsNullOrWhiteSpace(comment.title))
                 { 
