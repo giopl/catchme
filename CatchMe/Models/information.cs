@@ -30,9 +30,9 @@ namespace CatchMe.Models
         public Nullable<System.DateTime> updated_on { get; set; }
         public int state { get; set; }
     
-        public virtual ICollection<attachment> attachments { get; set; }
         public virtual project project { get; set; }
         public virtual user user { get; set; }
         public virtual user user1 { get; set; }
+        public virtual ICollection<attachment> attachments { get; set; }
     }
 }

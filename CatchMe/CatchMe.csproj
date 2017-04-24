@@ -177,6 +177,9 @@
     <Compile Include="Models\optionset.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\projectUserRole.cs">
+      <DependentUpon>CatchMe.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModel\StatusChangedViewModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Helpers\Utils.cs" />
@@ -237,9 +240,6 @@
     </Compile>
     <Compile Include="Models\OptionItem.cs" />
     <Compile Include="Models\project.cs">
-      <DependentUpon>CatchMe.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\projectUserRole.cs">
       <DependentUpon>CatchMe.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\task.cs">

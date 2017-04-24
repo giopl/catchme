@@ -30,9 +30,9 @@ namespace CatchMe.Models
         public int updated_by { get; set; }
         public bool is_internal { get; set; }
     
-        public virtual ICollection<attachment> attachments { get; set; }
-        public virtual task task { get; set; }
         public virtual user user { get; set; }
         public virtual user user1 { get; set; }
+        public virtual ICollection<attachment> attachments { get; set; }
+        public virtual task task { get; set; }
     }
 }

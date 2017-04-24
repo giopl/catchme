@@ -137,7 +137,7 @@
                                 
                               @using (Html.BeginForm("UpdateProjectUserRole", "Admin", FormMethod.Get, new { @class = "form-inline" }))
                               {
-                                  <input type="hidden" name="user_id" value="@item.user.user_id" />
+                                  <input type="hidden" name="user_id" value="@item.user_id" />
                                 <input type="hidden" name="project_id" value="@item.project_id" />
 
                                 <select name="role" class="form-control submitme">
@@ -151,7 +151,7 @@
                                 
                             
                             </td>
-                            <td><a href="@Url.Action("RemoveUserFromProject", new  { project_id = Model.project_id, user_id = item.user.user_id })" onclick="return confirm('Are you sure?')">Remove</a></td>
+                            <td><a href="@Url.Action("RemoveUserFromProject", new  { project_id = Model.project_id, user_id = item.user_id })" onclick="return confirm('Are you sure?')">Remove</a></td>
                         </tr>
                     }
                 </tbody>

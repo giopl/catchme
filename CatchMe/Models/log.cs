@@ -24,7 +24,7 @@ namespace CatchMe.Models
         public string old_val { get; set; }
         public string new_val { get; set; }
     
-        public virtual task task { get; set; }
         public virtual user user { get; set; }
+        public virtual task task { get; set; }
     }
 }

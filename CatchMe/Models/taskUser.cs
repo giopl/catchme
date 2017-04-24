@@ -18,7 +18,7 @@ namespace CatchMe.Models
         public int task_id { get; set; }
         public Nullable<int> role { get; set; }
     
-        public virtual task task { get; set; }
         public virtual user user { get; set; }
+        public virtual task task { get; set; }
     }
 }

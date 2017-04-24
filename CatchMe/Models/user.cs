@@ -16,17 +16,18 @@ namespace CatchMe.Models
     {
         public user()
         {
-            this.attachments = new HashSet<attachment>();
             this.comments = new HashSet<comment>();
             this.comments1 = new HashSet<comment>();
+            this.logs = new HashSet<log>();
+            this.task_user = new HashSet<taskUser>();
+            this.projects = new HashSet<project>();
             this.information = new HashSet<information>();
             this.information1 = new HashSet<information>();
-            this.logs = new HashSet<log>();
+            this.project_user_role = new HashSet<projectUserRole>();
+            this.attachments = new HashSet<attachment>();
             this.tasks = new HashSet<task>();
             this.tasks1 = new HashSet<task>();
             this.tasks2 = new HashSet<task>();
-            this.task_user = new HashSet<taskUser>();
-            this.projects = new HashSet<project>();
         }
     
         public int user_id { get; set; }
@@ -42,16 +43,17 @@ namespace CatchMe.Models
         public Nullable<int> active_project { get; set; }
         public string nickname { get; set; }
     
-        public virtual ICollection<attachment> attachments { get; set; }
         public virtual ICollection<comment> comments { get; set; }
         public virtual ICollection<comment> comments1 { get; set; }
+        public virtual ICollection<log> logs { get; set; }
+        public virtual ICollection<taskUser> task_user { get; set; }
+        public virtual ICollection<project> projects { get; set; }
         public virtual ICollection<information> information { get; set; }
         public virtual ICollection<information> information1 { get; set; }
-        public virtual ICollection<log> logs { get; set; }
+        public virtual ICollection<projectUserRole> project_user_role { get; set; }
+        public virtual ICollection<attachment> attachments { get; set; }
         public virtual ICollection<task> tasks { get; set; }
         public virtual ICollection<task> tasks1 { get; set; }
         public virtual ICollection<task> tasks2 { get; set; }
-        public virtual ICollection<taskUser> task_user { get; set; }
-        public virtual ICollection<project> projects { get; set; }
     }
 }
