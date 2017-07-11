@@ -507,8 +507,8 @@ namespace CatchMe.Controllers
 
                     db.SaveChanges();
 
-
-                    log log = new log(AppEnums.LogOperationEnum.DELETE, AppEnums.LogTypeEnum.ATTACHMENT, filename, taskid);
+                    int? _taskId = taskid < 0 ? null : (int?)taskid;
+                    log log = new log(AppEnums.LogOperationEnum.DELETE, AppEnums.LogTypeEnum.ATTACHMENT, filename, _taskId);
                     
                     CreateLog(log);
 
