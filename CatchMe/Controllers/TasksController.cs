@@ -398,7 +398,7 @@ namespace CatchMe.Controllers
 
                 int? _information_id = information_id == -1 ? null : (int?)information_id;
                 int? _comment_id = comment_id == -1 ? null : (int?)comment_id;
-
+                int? _task_id = taskid == -1 ? null: (int?)taskid;
 
                 attachment attachment = new attachment
                 {
@@ -406,7 +406,7 @@ namespace CatchMe.Controllers
                     content_length = file.ContentLength,
                     mimetype = file.ContentType,
                     created_on = DateTime.Now,
-                    task_id = taskid,
+                    task_id = _task_id,
                     user_id = UserSession.Current.UserId,
                     comment_id = _comment_id,
                     information_id = _information_id,
@@ -426,7 +426,7 @@ namespace CatchMe.Controllers
 
                         if(information_id > 0)
                         {
-                            log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.ATTACHMENT, string.Format("{0} for info id {1} ",file.FileName, information_id), taskid);
+                            log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.ATTACHMENT, string.Format("{0} for info id {1} ",file.FileName, information_id), _task_id);
                             CreateLog(log);
 
                             //updateTask(taskid);
@@ -434,7 +434,7 @@ namespace CatchMe.Controllers
                         }
                         else
                         {
-                            log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.ATTACHMENT, file.FileName, taskid);
+                            log log = new log(AppEnums.LogOperationEnum.CREATE, AppEnums.LogTypeEnum.ATTACHMENT, file.FileName, _task_id);
                             CreateLog(log);
 
                             updateTask(taskid);

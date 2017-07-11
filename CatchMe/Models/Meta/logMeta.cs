@@ -32,7 +32,7 @@ namespace CatchMe.Models
         public log()
         { 
         }
-        public log(AppEnums.LogOperationEnum operation, AppEnums.LogTypeEnum type,  string description, int task_id = 0)
+        public log(AppEnums.LogOperationEnum operation, AppEnums.LogTypeEnum type,  string description, int? task_id)
         {
 
             this.user_id = UserSession.Current.UserId;
@@ -57,7 +57,7 @@ namespace CatchMe.Models
         }
 
 
-        public log(AppEnums.LogOperationEnum operation, AppEnums.LogTypeEnum type, string description, string oldval, string newval , int task_id = 0)
+        public log(AppEnums.LogOperationEnum operation, AppEnums.LogTypeEnum type, string description, string oldval, string newval , int? task_id )
         {
 
             this.user_id = UserSession.Current.UserId;
